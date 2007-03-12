@@ -1,0 +1,10 @@
+#Discussão sobre como as requisições devem ser tratadas.
+
+= Introduction =
+
+Discussão sobre como as requisições devem ser tratadas. Supondo que um browser precise conversar com a rede Webp2p, como também conversar com servidores web comuns.
+
+Duas soluções foram propostas:
+
+   1 Usar um proxy que intercepta mensagens e "adivinha" se estas devem ser enviadas para a rede webp2p ou para um servidor web comun.
+   1 Rodar um outro servidor web que será utilizado so para o webp2p.
