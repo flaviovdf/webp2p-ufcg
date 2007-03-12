@@ -8,5 +8,7 @@ Duas soluções foram propostas:
    1 Colocar um serviço em determinada porta para que o cliente (browser) possa acessá-lo
    1 Este serviço aceitaria mensagens HTTP
    1 A mensagem recebida teria no seu cabeçalho um identificador, como por exemplo uma tag <webp2p> que denotaria o uso do serviço.
+   1 Ao receber a mensagem, o serviço será capaz de identificá-la e redirecioná-la para um servidor web comum ou utilizar a overlay para descubrir um servidor nela presente.
+= Segunda solução =
 Usar um proxy que intercepta mensagens e "adivinha" se estas devem ser enviadas para a rede webp2p ou para um servidor web comun.
    1 Rodar um outro servidor web que será utilizado so para o webp2p.
