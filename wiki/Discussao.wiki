@@ -12,3 +12,4 @@ Duas soluções foram propostas:
 
 == Segunda solução ==
    1 Rodar um serviço em uma determinada porta que transfira todas as requisições feitas para a _overlay_.
+   1 Configurar um proxy no browser para usar o serviço de redirecionamento.
