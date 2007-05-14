@@ -6,6 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import ds.DiscoveryService;
+
+import edu.uah.math.distributions.ExponentialDistribution;
+import edu.uah.math.distributions.NormalDistribution;
+
 import junit.framework.TestCase;
 
 public class WebServerFactoryTest extends TestCase {
@@ -19,7 +24,7 @@ public class WebServerFactoryTest extends TestCase {
 	}
 	
 	public void testCreateServers() {
-		WebServerFactory factory = new WebServerFactory(null, null);
+		WebServerFactory factory = new WebServerFactory(new ExponentialDistribution(2), new DiscoveryService(new NormalDistribution(0, 0)));
 		List<WebServer> servers = new LinkedList<WebServer>(factory.createServers(new File("topology.xml")));
 		
 		assertEquals(3, servers.size());
