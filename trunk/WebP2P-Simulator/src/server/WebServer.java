@@ -11,7 +11,6 @@ import java.util.Set;
 import proxy.HereIsContentMessage;
 import proxy.ProxyImpl;
 
-import common.InfinitTimeToLive;
 import common.TimeToLive;
 
 import core.entity.SimpleQueuedEntity;
@@ -39,10 +38,14 @@ public class WebServer extends SimpleQueuedEntity {
 		this.files = new HashMap<String, TimeToLive>();
 	}
 
-	void loadFile(String url, int size) {
-		this.files.put(url, new InfinitTimeToLive());
-		this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL));
-		this.discoveryService.sendMessage(new PutFileRequest(url, this));
+	void loadFile(String url, int size, TimeToLive ttl) {
+		TimeToLive olderTTL = this.files.get(url);
+		
+		if (olderTTL == null || olderTTL.remaining() < ttl.remaining()) {
+			this.files.put(url, ttl);
+			this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL));
+			this.discoveryService.sendMessage(new PutFileRequest(url, this));
+		}
 	}
 	
 	Set<String> getFiles() {
@@ -113,11 +116,12 @@ public class WebServer extends SimpleQueuedEntity {
 		ReplicationInfo info = this.replicationMap.get(url);
 		if (info != null) {
 			info.replicationRequested(server, DEFAULT_REPLICATION_TTL);
-			server.sendMessage(new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL));
+			//FIXME size = 1?!
+			server.sendMessage(new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, 1));
 		}
 	}
 
-	void hereIsReplicaOfUrl(String url, int replicationTTL) {
-		loadFile(url, 0);
+	void hereIsReplicaOfUrl(String url, int replicationTTL, int size) {
+		loadFile(url, size, new TimeToLive(replicationTTL));
 	}
 }

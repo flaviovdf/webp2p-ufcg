@@ -3,7 +3,7 @@ package common;
 public class InfinitTimeToLive extends TimeToLive {
 
 	public InfinitTimeToLive() {
-		super(1);
+		super(Integer.MAX_VALUE);
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
+import common.InfinitTimeToLive;
 
 import ds.DiscoveryService;
 import edu.uah.math.distributions.ExponentialDistribution;
@@ -53,7 +54,7 @@ public class WebServerFactory {
 							Element fileElement = (Element) fileNode;
 							String path = fileElement.getElementsByTagName("path").item(0).getTextContent();
 							
-							server.loadFile(url + path, 1);
+							server.loadFile(url + path, 1, new InfinitTimeToLive());
 						}
 					}
 					
