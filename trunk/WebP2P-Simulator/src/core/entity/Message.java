@@ -9,4 +9,5 @@ public interface Message extends TimedEntity {
 	public void setEntity(QueuedEntity entity);
 
 	public void setProcessTime(double processTime);
+
 }
