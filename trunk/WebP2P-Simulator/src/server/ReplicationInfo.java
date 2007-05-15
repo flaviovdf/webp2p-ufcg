@@ -15,19 +15,27 @@ class ReplicationInfo implements TimedEntity {
 	
 	private int numGets;
 	private int ticks;
-	private Map<WebServer, TimeToLive> replicaTTLMap;
+	private Map<WebServer, ReplicationStatus> replicaTTLMap;
 	
 	public ReplicationInfo(int threshold, int thresholdTTL) {
 		this.threshold = threshold;
 		this.thresholdTTL = thresholdTTL;
 		this.numGets = 0;
 		this.ticks = 0;
-		this.replicaTTLMap = new HashMap<WebServer, TimeToLive>();
+		this.replicaTTLMap = new HashMap<WebServer, ReplicationStatus>();
 	}
 	
 	
-	public void replicationRequested(WebServer server, int replicationTTL) {
-		replicaTTLMap.put(server, new TimeToLive(replicationTTL));
+	public void replicationRequested(WebServer server) {
+		this.numGets = 0;
+		replicaTTLMap.put(server, new ReplicationStatus());
+	}
+	
+	public void replicationDone(WebServer server, int replicationTTL) {
+		ReplicationStatus status = replicaTTLMap.get(server);
+		if (status != null) {
+			status.setAsDone(new TimeToLive(replicationTTL));
+		}
 	}
 	
 	public void urlRequested() {
@@ -48,8 +56,8 @@ class ReplicationInfo implements TimedEntity {
 		Iterator<WebServer> servers = replicaTTLMap.keySet().iterator();
 		while (servers.hasNext()) {
 			WebServer server = servers.next();
-			TimeToLive ttl = replicaTTLMap.get(server);
-			if (ttl.decrease() == 0) {
+			ReplicationStatus status = replicaTTLMap.get(server);
+			if (status.isDone() && status.getTTL().decrease() == 0) {
 				servers.remove();
 				replicaTTLMap.remove(server);
 			}
@@ -61,8 +69,4 @@ class ReplicationInfo implements TimedEntity {
 		return replicaTTLMap.containsKey(server);
 	}
 
-
-	public void resetGets() {
-		this.numGets = 0;
-	}
 }

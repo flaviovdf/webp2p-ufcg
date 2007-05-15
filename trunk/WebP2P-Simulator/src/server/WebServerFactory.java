@@ -1,7 +1,9 @@
 package server;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -29,7 +31,7 @@ public class WebServerFactory {
 	}
 
 	public Set<WebServer> createServers(File topologyFile) {
-		Set<WebServer> servers = new HashSet<WebServer>();
+		Map<String, WebServer> servers = new HashMap<String, WebServer>();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		
 		try {
@@ -42,9 +44,9 @@ public class WebServerFactory {
 				Node serverNode = serversList.item(i);
 				if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
 					
-					WebServer server = new WebServer(distribution, this.discoveryService);
 					Element serverElement = (Element) serverNode;
 					String url = serverElement.getElementsByTagName("url").item(0).getTextContent();
+					WebServer server = new WebServer(distribution, url, this.discoveryService);
 					
 					NodeList filesList = XPathAPI.selectNodeList(serverElement, "file");
 					for (int j = 0; j < filesList.getLength(); j++) {
@@ -58,7 +60,23 @@ public class WebServerFactory {
 						}
 					}
 					
-					servers.add(server);
+					servers.put(url, server);
+				}
+			}
+			
+			NodeList linksList = root.getElementsByTagName("link");
+			for (int i = 0; i < linksList.getLength(); i++) {
+				Node linkNode = linksList.item(i);
+				if (linkNode.getNodeType() == Node.ELEMENT_NODE) {
+					
+					Element linkElement = (Element) linkNode;
+					String server1url = linkElement.getElementsByTagName("server1").item(0).getTextContent();
+					String server2url = linkElement.getElementsByTagName("server2").item(0).getTextContent();
+					
+					WebServer server1 = servers.get( server1url );
+					WebServer server2 = servers.get( server2url );
+					server1.addAdj( server2 );
+					server2.addAdj( server1 );
 				}
 			}
 			
@@ -66,7 +84,7 @@ public class WebServerFactory {
 			throw new IllegalArgumentException("Invalid xml file: " + topologyFile.getName(), e);
 		}
 		
-		return servers;
+		return new HashSet<WebServer>(servers.values());
 	}
 
 }
