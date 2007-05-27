@@ -2,9 +2,9 @@ package proxy;
 
 import java.io.File;
 
-import junit.framework.TestCase;
+import org.easymock.classextension.EasyMock;
 
-import org.easymock.EasyMock;
+import junit.framework.TestCase;
 
 public class RequestGeneratorTest extends TestCase {
 

@@ -16,7 +16,7 @@ public class GetResponse extends AbstractMessage {
 	}
 
 	public void process() {
-		((ProxyImpl) entity).hereAreServers(requestID, servers);
+		((Proxy) entity).hereAreServers(requestID, servers);
 	}
 
 }

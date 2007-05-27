@@ -1,5 +1,6 @@
 package core;
 
+
 import junit.framework.TestCase;
 
 import org.easymock.EasyMock;
@@ -13,7 +14,7 @@ public class ClockTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		this.clock = new Clock();
+		this.clock = Clock.getInstance();
 	}
 
 	protected void tearDown() throws Exception {
@@ -34,7 +35,7 @@ public class ClockTest extends TestCase {
 		entityMock1.tickOcurred();
 		
 		EasyMock.replay(entityMock1);
-		this.clock.addEntity(entityMock1);
+		this.clock.addEntities(entityMock1);
 		this.clock.countTick();
 		EasyMock.verify(entityMock1);
 	}
@@ -47,8 +48,8 @@ public class ClockTest extends TestCase {
 		entityMock2.tickOcurred();
 		
 		EasyMock.replay(entityMock1, entityMock2);
-		this.clock.addEntity(entityMock1);
-		this.clock.addEntity(entityMock2);
+		this.clock.addEntities(entityMock1);
+		this.clock.addEntities(entityMock2);
 		this.clock.countTick();
 		EasyMock.verify(entityMock1, entityMock2);
 	}
@@ -60,8 +61,8 @@ public class ClockTest extends TestCase {
 		entityMock2.tickOcurred();
 		
 		EasyMock.replay(entityMock1, entityMock2);
-		this.clock.addEntity(entityMock1);
-		this.clock.addEntity(entityMock2);
+		this.clock.addEntities(entityMock1);
+		this.clock.addEntities(entityMock2);
 		this.clock.removeEntity(entityMock1);
 		this.clock.countTick();
 		EasyMock.verify(entityMock1, entityMock2);

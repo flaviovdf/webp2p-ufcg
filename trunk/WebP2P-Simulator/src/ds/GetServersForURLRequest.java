@@ -1,15 +1,15 @@
 package ds;
 
-import proxy.ProxyImpl;
+import proxy.Proxy;
 import core.entity.AbstractMessage;
 
 public class GetServersForURLRequest extends AbstractMessage {
 
 	private final long requestID;
 	private final String url;
-	private final ProxyImpl callback;
+	private final Proxy callback;
 
-	public GetServersForURLRequest(long requestID, String url, ProxyImpl callback) {
+	public GetServersForURLRequest(long requestID, String url, Proxy callback) {
 		this.requestID = requestID;
 		this.url = url;
 		this.callback = callback;

@@ -14,7 +14,7 @@ public class HereIsContentMessage extends AbstractMessage implements Message {
 	}
 
 	public void process() {
-		((ProxyImpl) entity).hereIsContent(request, result);
+		((Proxy) entity).hereIsContent(request, result);
 	}
 
 }

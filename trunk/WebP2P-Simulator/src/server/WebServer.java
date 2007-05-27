@@ -11,7 +11,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import proxy.HereIsContentMessage;
-import proxy.ProxyImpl;
+import proxy.Proxy;
 
 import common.TimeToLive;
 
@@ -95,7 +95,7 @@ public class WebServer extends SimpleQueuedEntity {
 
 	//called by proxies
 	
-	void getContent(long request, String url, ProxyImpl callback) {
+	void getContent(long request, String url, Proxy callback) {
 		LOG.debug( "Content for " + url + " requested by " + callback + " request number " + request );
 		
 		int result;

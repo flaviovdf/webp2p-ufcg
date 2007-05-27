@@ -1,15 +1,15 @@
 package server;
 
-import proxy.ProxyImpl;
+import proxy.Proxy;
 import core.entity.AbstractMessage;
 
 public class GetContentRequest extends AbstractMessage {
 
 	private long request;
 	private String url;
-	private ProxyImpl callback;
+	private Proxy callback;
 
-	public GetContentRequest(long request, String url, ProxyImpl callback) {
+	public GetContentRequest(long request, String url, Proxy callback) {
 		this.request = request;
 		this.url = url;
 		this.callback = callback;

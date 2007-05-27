@@ -10,7 +10,7 @@ public class TimeToLive {
 	}
 	
 	public int decrease() {
-		ttl = Math.max(0, ttl--);
+		ttl = Math.max(0, ttl - 1);
 		return ttl;
 	}
 	

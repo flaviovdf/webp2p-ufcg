@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,15 +12,31 @@ public class Clock {
 	private List<TimedEntity> entities;
 	private long ticks;
 	
-	public Clock() {
+	private static Clock instance = null;
+	
+	private Clock() {
 		this.entities = new LinkedList<TimedEntity>();
 		this.ticks = 0;
 	}
 	
-	public void addEntity(TimedEntity... timedEntity) {
-		for (TimedEntity entity : timedEntity) {
-			entities.add(entity);
+	public static Clock getInstance() {
+		if (instance == null) {
+			instance = new Clock();
 		}
+		
+		return instance;
+	}
+	
+	public static void reset() {
+		Clock.instance = null;
+	}
+	
+	public void addEntities(TimedEntity... timedEntity) {
+		addEntities(Arrays.asList(timedEntity));
+	}
+	
+	public void addEntities(Collection<TimedEntity> timedEntities) {
+		entities.addAll(timedEntities);
 	}
 	
 	public void removeEntity(TimedEntity timedEntity) {
