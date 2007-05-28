@@ -20,8 +20,8 @@ public class Proxy extends SimpleQueuedEntity {
 	private final DiscoveryService discoveryService;
 	private Map<Long, String> requests; 
 		
-	public Proxy(Distribution distribution, DiscoveryService discoveryService) {
-		super(distribution);
+	public Proxy(String name, Distribution distribution, DiscoveryService discoveryService) {
+		super(name, distribution);
 		this.requests = new HashMap<Long, String>();
 		this.discoveryService = discoveryService;
 	}

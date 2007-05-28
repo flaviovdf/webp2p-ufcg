@@ -46,7 +46,7 @@ public class WebServerFactory {
 					
 					Element serverElement = (Element) serverNode;
 					String url = serverElement.getElementsByTagName("url").item(0).getTextContent();
-					WebServer server = new WebServer(distribution, url, this.discoveryService);
+					WebServer server = new WebServer(url, distribution, this.discoveryService);
 					
 					NodeList filesList = XPathAPI.selectNodeList(serverElement, "file");
 					for (int j = 0; j < filesList.getLength(); j++) {

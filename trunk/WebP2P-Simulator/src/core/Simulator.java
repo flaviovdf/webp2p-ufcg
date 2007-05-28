@@ -22,10 +22,10 @@ public class Simulator {
 	public Simulator(File inputFile, File topologyFile, int maxTicks) {
 		this.maxTicks = maxTicks;
 		
-		DiscoveryService ds = new DiscoveryService(new ExponentialDistribution(2));
+		DiscoveryService ds = new DiscoveryService("Discovery Service", new ExponentialDistribution(2));
 		WebServerFactory webServerFactory = new WebServerFactory(new ExponentialDistribution(2), ds);
 		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
-		Proxy proxy = new Proxy(new ExponentialDistribution(2), ds);
+		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds);
 		RequestGenerator req = new RequestGenerator(proxy);
 		req.loadFile(inputFile);
 		

@@ -14,7 +14,10 @@ public class SimpleQueuedEntity implements QueuedEntity, TimedEntity {
 
 	private Message currentMessage;
 
-	public SimpleQueuedEntity(Distribution distribution) {
+	private String name;
+
+	public SimpleQueuedEntity(String name, Distribution distribution) {
+		this.name = name;
 		this.rv = new RandomVariable(distribution);
 		this.queue = new LinkedList<Message>();
 		this.currentMessage = null;
@@ -37,5 +40,9 @@ public class SimpleQueuedEntity implements QueuedEntity, TimedEntity {
 			currentMessage.process();
 			currentMessage = queue.poll();
 		}
+	}
+	
+	public String toString() {
+		return name;
 	}
 }

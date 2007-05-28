@@ -6,8 +6,7 @@ Ant build file for WebP2P-Simulator
 
 <project basedir="." default="build" name="WebP2P-Simulator">
 	<property file="build.properties" />
-	<taskdef name="junit" classpath="${ant-junit.jar}" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
-	
+
 	<!-- CLEAN -->
 	<target name="clean">
 		<delete dir="${jar.dir}" />
@@ -26,7 +25,10 @@ Ant build file for WebP2P-Simulator
 			optimize="on">
 			<include name="**" />
 		</javac>
-		
+		<javac classpath="${java.classpath}" srcdir="${testsrc.dir}" destdir="${classes.dir}" optimize="on">
+			<include name="**" />
+		</javac>
+
 		<jar destfile="${dist.jar}">
 			<fileset dir="${classes.dir}">
 				<include name="**/*.class" />
@@ -37,21 +39,15 @@ Ant build file for WebP2P-Simulator
 
 	<!-- TEST -->
 	<target name="test" depends="build">
-		<javac 
-			classpath="${java.classpath}" 
-			srcdir="${testsrc.dir}"
-			destdir="${classes.dir}" 
-			optimize="on">
-			<include name="**" />
-		</javac>
-		
+
+
 		<junit>
 			<formatter type="brief" usefile="false" />
 
 			<classpath>
-                <pathelement path="${java.classpath}" />
-            </classpath>
-			
+				<pathelement path="${java.classpath}" />
+			</classpath>
+
 			<batchtest>
 				<fileset dir="${classes.dir}" includes="**/*Test.class" />
 			</batchtest>

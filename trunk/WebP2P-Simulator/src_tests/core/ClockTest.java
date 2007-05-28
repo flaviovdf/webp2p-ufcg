@@ -1,13 +1,12 @@
 package core;
 
 
-import junit.framework.TestCase;
-
 import org.easymock.EasyMock;
 
+import util.SmartTestCase;
 import core.entity.TimedEntity;
 
-public class ClockTest extends TestCase {
+public class ClockTest extends SmartTestCase {
 
 	private Clock clock;
 

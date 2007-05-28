@@ -28,16 +28,16 @@ public class WebServer extends SimpleQueuedEntity {
 	private static final int DEFAULT_THRESHOLD_TTL = 50;
 	private static final int DEFAULT_REPLICATION_TTL = 100;
 	
-	private String url;
+	private String name;
 	private DiscoveryService discoveryService;
 	private List<WebServer> adj;
 
 	private Map<String, TimeToLive> files;
 	private Map<String, ReplicationInfo> replicationMap;
 	
-	public WebServer(Distribution distribution, String url, DiscoveryService discoveryService) {
-		super(distribution);
-		this.url = url;
+	public WebServer(String name, Distribution distribution, DiscoveryService discoveryService) {
+		super(name, distribution);
+		this.name = name;
 		this.discoveryService = discoveryService;
 		this.adj = new LinkedList<WebServer>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();
@@ -45,7 +45,7 @@ public class WebServer extends SimpleQueuedEntity {
 	}
 
 	void loadFile(String url, int size, TimeToLive ttl) {
-		LOG.debug( "Loading file " + url + " in server " + this.url );
+		LOG.debug( "Loading file " + url + " in server " + this.name );
 		
 		TimeToLive olderTTL = this.files.get(url);
 		
@@ -79,7 +79,7 @@ public class WebServer extends SimpleQueuedEntity {
 			String url = urls.next();
 			TimeToLive ttl = files.get(url);
 			if (ttl.decrease() == 0) {
-				LOG.debug( "Removing page " + url + " from server " + this.url );
+				LOG.debug( "Removing page " + url + " from server " + this.name );
 				
 				urls.remove();
 				files.remove(url);
@@ -143,9 +143,4 @@ public class WebServer extends SimpleQueuedEntity {
 		LOG.debug( "Replica for url " + url + " recevied  ttl " + DEFAULT_REPLICATION_TTL);
 		loadFile(url, size, new TimeToLive(replicationTTL));
 	}
-	
-	public String toString() {
-		return this.url;
-	}
-
 }

@@ -4,9 +4,11 @@ import java.io.File;
 
 import org.easymock.classextension.EasyMock;
 
+import util.SmartTestCase;
+
 import junit.framework.TestCase;
 
-public class RequestGeneratorTest extends TestCase {
+public class RequestGeneratorTest extends SmartTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();

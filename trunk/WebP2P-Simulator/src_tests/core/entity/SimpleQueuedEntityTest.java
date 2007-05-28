@@ -1,16 +1,16 @@
 package core.entity;
 
+import util.SmartTestCase;
 import edu.uah.math.distributions.ContinuousUniformDistribution;
 import junit.framework.TestCase;
 
-public class SimpleQueuedEntityTest extends TestCase {
+public class SimpleQueuedEntityTest extends SmartTestCase {
 
 	private SimpleQueuedEntity simpleQueue;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		this.simpleQueue = new SimpleQueuedEntity(new ContinuousUniformDistribution(0, 0));
+		this.simpleQueue = new SimpleQueuedEntity("SQE", new ContinuousUniformDistribution(0, 0));
 	}
 
 	protected void tearDown() throws Exception {

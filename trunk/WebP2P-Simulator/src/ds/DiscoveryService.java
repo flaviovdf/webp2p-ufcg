@@ -19,8 +19,8 @@ public class DiscoveryService extends SimpleQueuedEntity {
 
 	private Map<String, Set<WebServer>> url2servers;
 	
-	public DiscoveryService(Distribution distribution) {
-		super(distribution);
+	public DiscoveryService(String name, Distribution distribution) {
+		super(name, distribution);
 		this.url2servers = new HashMap<String, Set<WebServer>>();
 	}
 	
