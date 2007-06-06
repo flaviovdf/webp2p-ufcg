@@ -3,7 +3,7 @@ package webp2p_sim.util;
 import java.io.File;
 import java.util.Set;
 
-import designwizard.design.entity.ClassNode;
+import designwizard.design.ClassNode;
 import designwizard.main.DesignWizard;
 
 public class DesignTest extends SmartTestCase {
@@ -27,28 +27,28 @@ public class DesignTest extends SmartTestCase {
 		}
 	}
 	
-	/*public void testAllEntitiesCommunicateThroughSendMessage() throws InexistentEntityException {
-		
-		MethodNode testedMethod = dw.getMethod("core.entity.SimpleQueuedEntity.sendMessage(core.entity.Message)");
-		ClassNode simpleQueued = this.dw.getClass(SimpleQueuedEntity.class);
-		
-		Set<MethodNode> constructors = simpleQueued.getConstructors();
-		
-		Set<ClassNode> subClasses = simpleQueued.getSubClasses();
-		for (ClassNode subClass : subClasses) {
-			
-			Set<MethodNode> methods = subClass.getAllMethods();
-			for (MethodNode method: methods) {
-			
-				Set<MethodNode> called = method.getCalledMethods();
-				for (MethodNode calledMethod: called) {
-				
-					if (calledMethod.getParentClass().equals(simpleQueued)) {
-						assertTrue("The method "+ method.getName() + " calls " + calledMethod.getName(),
-								calledMethod.equals(testedMethod) || constructors.contains(calledMethod));
-					}
-				}
-			}
-		}
-	}*/
+	public void testAllEntitiesCommunicateThroughSendMessage() throws Exception {
+//		
+//		MethodNode testedMethod = dw.getMethod("core.entity.SimpleQueuedEntity.sendMessage(core.entity.Message)");
+//		ClassNode simpleQueued = this.dw.getClass(SimpleQueuedEntity.class);
+//		
+//		Set<MethodNode> constructors = simpleQueued.getConstructors();
+//		
+//		Set<ClassNode> subClasses = simpleQueued.getSubClasses();
+//		for (ClassNode subClass : subClasses) {
+//			
+//			Set<MethodNode> methods = subClass.getAllMethods();
+//			for (MethodNode method: methods) {
+//			
+//				Set<MethodNode> called = method.getCalledMethods();
+//				for (MethodNode calledMethod: called) {
+//				
+//					if (calledMethod.getParentClass().equals(simpleQueued)) {
+//						assertTrue("The method "+ method.getName() + " calls " + calledMethod.getName(),
+//								calledMethod.equals(testedMethod) || constructors.contains(calledMethod));
+//					}
+//				}
+//			}
+//		}
+	}
 }

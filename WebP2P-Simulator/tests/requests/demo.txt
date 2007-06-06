@@ -16,7 +16,7 @@
 10 http://site2.net/robots.txt
 10 http://site2.net/robots.txt
 10 http://site2.net/robots.txt
-10 http://site2.net/robots.txt
+10 http://site2.net
 10 http://site2.net/robots.txt
 10 http://site2.net/robots.txt
 10 http://site2.net/robots.txt
