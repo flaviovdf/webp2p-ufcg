@@ -37,8 +37,6 @@ Ant build file for WebP2P-Simulator
 
 	<!-- TEST -->
 	<target name="test" depends="build">
-
-
 		<junit>
 			<formatter type="brief" usefile="false" />
 
