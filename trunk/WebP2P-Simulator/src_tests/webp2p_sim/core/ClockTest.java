@@ -1,7 +1,7 @@
 package webp2p_sim.core;
 
 
-import org.easymock.EasyMock;
+import org.easymock.classextension.EasyMock;
 
 import webp2p_sim.core.entity.TimedEntity;
 import webp2p_sim.util.SmartTestCase;
