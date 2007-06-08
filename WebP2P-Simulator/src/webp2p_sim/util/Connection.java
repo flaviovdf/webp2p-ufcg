@@ -1,7 +1,5 @@
 package webp2p_sim.util;
 
-
-
 public class Connection {
 
 	private final Address clientAddress;
@@ -15,6 +13,14 @@ public class Connection {
 	@Override
 	public String toString() {
 		return "Client: " + clientAddress.toString() + " - Host:" + hostAddress.toString();
+	}
+	
+	public Address getClientAddress() {
+		return clientAddress;
+	}
+	
+	public Address getHostAddress() {
+		return hostAddress;
 	}
 	
 	@Override
@@ -47,7 +53,5 @@ public class Connection {
 			return false;
 		return true;
 	}
-
-
 	
 }
