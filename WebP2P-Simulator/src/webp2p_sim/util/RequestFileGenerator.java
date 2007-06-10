@@ -80,7 +80,9 @@ public class RequestFileGenerator {
 		for (Pair pair: values) {
 			//TODO com os arredondamentos, nem todos as requisições são distribuídas para os arquivos.
 			times = Math.round(pair.getParetoValue()*result/total);
-			resultValue.append(tick+" "+times+" "+pair.getFileName()+"\n");
+			for (int k = 0; k<times; k++) {
+				resultValue.append(tick+" "+pair.getFileName()+"\n");
+			}
 		}
 		return resultValue.toString();
 	}
