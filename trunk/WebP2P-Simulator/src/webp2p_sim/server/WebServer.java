@@ -1,6 +1,7 @@
 package webp2p_sim.server;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -54,8 +55,8 @@ public class WebServer extends SimpleQueuedEntity {
 		}
 	}
 	
-	Set<String> getFiles() {
-		return this.files.keySet();
+	public Set<String> getFiles() {
+		return Collections.unmodifiableSet(this.files.keySet());
 	}
 	
 	void addAdj(WebServer server) {
