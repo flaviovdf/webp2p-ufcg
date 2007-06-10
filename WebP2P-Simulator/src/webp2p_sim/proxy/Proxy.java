@@ -14,7 +14,7 @@ import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RandomLongGenerator;
 import edu.uah.math.distributions.Distribution;
 
-public class Proxy extends SimpleQueuedEntity implements GeneratorInterested {
+public class Proxy extends SimpleQueuedEntity {
 
 	private static Logger LOG = Logger.getLogger( Proxy.class );
 	
@@ -22,11 +22,11 @@ public class Proxy extends SimpleQueuedEntity implements GeneratorInterested {
 	private Map<Long, String> requests; 
 	private RandomLongGenerator requestIDGenerator;
 		
-	public Proxy(String name, Distribution distribution, DiscoveryService discoveryService, RandomLongGenerator generator) {
+	public Proxy(String name, Distribution distribution, DiscoveryService discoveryService, RandomLongGenerator requestIDGenerator) {
 		super(name, distribution);
 		this.requests = new HashMap<Long, String>();
 		this.discoveryService = discoveryService;
-		this.requestIDGenerator = generator;
+		this.requestIDGenerator = requestIDGenerator;
 	}
 	
 	public void sendRequest(String url) {
@@ -54,7 +54,7 @@ public class Proxy extends SimpleQueuedEntity implements GeneratorInterested {
 		LOG.debug( "Request " + request + " completed with result " + result );
 	}
 	
-	//just for test,
+	//just for test
 	Map<Long, String> getRequestsMap() {
 		return this.requests;
 	}

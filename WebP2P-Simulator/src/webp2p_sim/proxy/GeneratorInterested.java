@@ -2,6 +2,6 @@ package webp2p_sim.proxy;
 
 public interface GeneratorInterested {
 
-	void sendRequest(String url);
+	void generateRequest(String url);
 
 }
