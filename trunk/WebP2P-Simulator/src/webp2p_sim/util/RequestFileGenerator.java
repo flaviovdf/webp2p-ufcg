@@ -77,8 +77,8 @@ public class RequestFileGenerator {
 		StringBuffer resultValue = new StringBuffer();
 		long times = 0;
 		for (Pair pair: values) {
-			times = pair.getParetoValue()*result/total;
-			resultValue.append(result+" "+tick+" "+times+" "+pair.getFileName()+"\n");
+			times = Math.round(pair.getParetoValue()*result/total);
+			resultValue.append(tick+" "+times+" "+pair.getFileName()+"\n");
 		}
 		return resultValue.toString();
 	}

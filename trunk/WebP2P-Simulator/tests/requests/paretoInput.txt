@@ -1,120 +1,120 @@
-2 1 0 http://site2.net/path/to/images
-2 1 0 http://site2.net/test.jpg
-2 1 0 http://site2.net/robots.txt
-2 1 0 http://site2.net/help.txt
-2 2 0 http://site2.net/path/to/images
-2 2 0 http://site2.net/test.jpg
-2 2 0 http://site2.net/robots.txt
-2 2 0 http://site2.net/help.txt
-3 3 0 http://site2.net/path/to/images
-3 3 0 http://site2.net/test.jpg
-3 3 1 http://site2.net/robots.txt
-3 3 1 http://site2.net/help.txt
-1 4 0 http://site2.net/path/to/images
-1 4 0 http://site2.net/test.jpg
-1 4 0 http://site2.net/robots.txt
-1 4 0 http://site2.net/help.txt
-1 5 0 http://site2.net/path/to/images
-1 5 0 http://site2.net/test.jpg
-1 5 0 http://site2.net/robots.txt
-1 5 0 http://site2.net/help.txt
-5 6 0 http://site2.net/path/to/images
-5 6 0 http://site2.net/test.jpg
-5 6 4 http://site2.net/robots.txt
-5 6 0 http://site2.net/help.txt
-1 7 0 http://site2.net/path/to/images
-1 7 0 http://site2.net/test.jpg
-1 7 0 http://site2.net/robots.txt
-1 7 0 http://site2.net/help.txt
-1 8 0 http://site2.net/path/to/images
-1 8 0 http://site2.net/test.jpg
-1 8 0 http://site2.net/robots.txt
-1 8 0 http://site2.net/help.txt
-2 9 0 http://site2.net/path/to/images
-2 9 0 http://site2.net/test.jpg
-2 9 0 http://site2.net/robots.txt
-2 9 0 http://site2.net/help.txt
-7 10 0 http://site2.net/path/to/images
-7 10 0 http://site2.net/test.jpg
-7 10 0 http://site2.net/robots.txt
-7 10 4 http://site2.net/help.txt
-1 1 0 http://site1.com/test.jpg
-1 1 0 http://site1.com/readme.txt
-1 1 0 http://site1.com/path/to/file
-1 2 0 http://site1.com/test.jpg
-1 2 0 http://site1.com/readme.txt
-1 2 0 http://site1.com/path/to/file
-7 3 1 http://site1.com/test.jpg
-7 3 3 http://site1.com/readme.txt
-7 3 1 http://site1.com/path/to/file
-1 4 0 http://site1.com/test.jpg
-1 4 0 http://site1.com/readme.txt
-1 4 0 http://site1.com/path/to/file
-2 5 0 http://site1.com/test.jpg
-2 5 1 http://site1.com/readme.txt
-2 5 0 http://site1.com/path/to/file
-3 6 1 http://site1.com/test.jpg
-3 6 0 http://site1.com/readme.txt
-3 6 1 http://site1.com/path/to/file
-11 7 2 http://site1.com/test.jpg
-11 7 2 http://site1.com/readme.txt
-11 7 5 http://site1.com/path/to/file
-2 8 1 http://site1.com/test.jpg
-2 8 0 http://site1.com/readme.txt
-2 8 0 http://site1.com/path/to/file
-2 9 1 http://site1.com/test.jpg
-2 9 0 http://site1.com/readme.txt
-2 9 0 http://site1.com/path/to/file
-1 10 0 http://site1.com/test.jpg
-1 10 0 http://site1.com/readme.txt
-1 10 0 http://site1.com/path/to/file
-1 1 0 http://192.168.1.1/img.jpg
-1 1 0 http://192.168.1.1/info/robots.txt
-1 1 0 http://192.168.1.1/robots.txt
-1 1 0 http://192.168.1.1/files
-1 1 0 http://192.168.1.1/one/two/three/four.bat
-1 2 0 http://192.168.1.1/img.jpg
-1 2 0 http://192.168.1.1/info/robots.txt
-1 2 0 http://192.168.1.1/robots.txt
-1 2 0 http://192.168.1.1/files
-1 2 0 http://192.168.1.1/one/two/three/four.bat
-6 3 1 http://192.168.1.1/img.jpg
-6 3 0 http://192.168.1.1/info/robots.txt
-6 3 0 http://192.168.1.1/robots.txt
-6 3 0 http://192.168.1.1/files
-6 3 2 http://192.168.1.1/one/two/three/four.bat
-3 4 0 http://192.168.1.1/img.jpg
-3 4 0 http://192.168.1.1/info/robots.txt
-3 4 0 http://192.168.1.1/robots.txt
-3 4 0 http://192.168.1.1/files
-3 4 1 http://192.168.1.1/one/two/three/four.bat
-1 5 0 http://192.168.1.1/img.jpg
-1 5 0 http://192.168.1.1/info/robots.txt
-1 5 0 http://192.168.1.1/robots.txt
-1 5 0 http://192.168.1.1/files
-1 5 0 http://192.168.1.1/one/two/three/four.bat
-2 6 1 http://192.168.1.1/img.jpg
-2 6 0 http://192.168.1.1/info/robots.txt
-2 6 0 http://192.168.1.1/robots.txt
-2 6 0 http://192.168.1.1/files
-2 6 0 http://192.168.1.1/one/two/three/four.bat
-6 7 0 http://192.168.1.1/img.jpg
-6 7 0 http://192.168.1.1/info/robots.txt
-6 7 5 http://192.168.1.1/robots.txt
-6 7 0 http://192.168.1.1/files
-6 7 0 http://192.168.1.1/one/two/three/four.bat
-1 8 0 http://192.168.1.1/img.jpg
-1 8 0 http://192.168.1.1/info/robots.txt
-1 8 0 http://192.168.1.1/robots.txt
-1 8 0 http://192.168.1.1/files
-1 8 0 http://192.168.1.1/one/two/three/four.bat
-2 9 0 http://192.168.1.1/img.jpg
-2 9 0 http://192.168.1.1/info/robots.txt
-2 9 0 http://192.168.1.1/robots.txt
-2 9 1 http://192.168.1.1/files
-2 9 0 http://192.168.1.1/one/two/three/four.bat
-5 10 0 http://192.168.1.1/img.jpg
-5 10 0 http://192.168.1.1/info/robots.txt
-5 10 1 http://192.168.1.1/robots.txt
-5 10 1 http://192.168.1.1/files
-5 10 1 http://192.168.1.1/one/two/three/four.bat
+1 0 http://site2.net/path/to/images
+1 0 http://site2.net/test.jpg
+1 0 http://site2.net/robots.txt
+1 0 http://site2.net/help.txt
+2 0 http://site2.net/path/to/images
+2 0 http://site2.net/test.jpg
+2 0 http://site2.net/robots.txt
+2 0 http://site2.net/help.txt
+3 0 http://site2.net/path/to/images
+3 0 http://site2.net/test.jpg
+3 0 http://site2.net/robots.txt
+3 0 http://site2.net/help.txt
+4 14 http://site2.net/path/to/images
+4 2 http://site2.net/test.jpg
+4 4 http://site2.net/robots.txt
+4 2 http://site2.net/help.txt
+5 0 http://site2.net/path/to/images
+5 0 http://site2.net/test.jpg
+5 0 http://site2.net/robots.txt
+5 0 http://site2.net/help.txt
+6 0 http://site2.net/path/to/images
+6 0 http://site2.net/test.jpg
+6 0 http://site2.net/robots.txt
+6 0 http://site2.net/help.txt
+7 1 http://site2.net/path/to/images
+7 0 http://site2.net/test.jpg
+7 0 http://site2.net/robots.txt
+7 0 http://site2.net/help.txt
+8 0 http://site2.net/path/to/images
+8 0 http://site2.net/test.jpg
+8 0 http://site2.net/robots.txt
+8 0 http://site2.net/help.txt
+9 1 http://site2.net/path/to/images
+9 0 http://site2.net/test.jpg
+9 0 http://site2.net/robots.txt
+9 0 http://site2.net/help.txt
+10 4 http://site2.net/path/to/images
+10 0 http://site2.net/test.jpg
+10 1 http://site2.net/robots.txt
+10 0 http://site2.net/help.txt
+1 0 http://site1.com/test.jpg
+1 0 http://site1.com/readme.txt
+1 0 http://site1.com/path/to/file
+2 0 http://site1.com/test.jpg
+2 1 http://site1.com/readme.txt
+2 0 http://site1.com/path/to/file
+3 0 http://site1.com/test.jpg
+3 0 http://site1.com/readme.txt
+3 0 http://site1.com/path/to/file
+4 1 http://site1.com/test.jpg
+4 2 http://site1.com/readme.txt
+4 0 http://site1.com/path/to/file
+5 0 http://site1.com/test.jpg
+5 1 http://site1.com/readme.txt
+5 0 http://site1.com/path/to/file
+6 0 http://site1.com/test.jpg
+6 0 http://site1.com/readme.txt
+6 0 http://site1.com/path/to/file
+7 0 http://site1.com/test.jpg
+7 0 http://site1.com/readme.txt
+7 0 http://site1.com/path/to/file
+8 0 http://site1.com/test.jpg
+8 0 http://site1.com/readme.txt
+8 0 http://site1.com/path/to/file
+9 0 http://site1.com/test.jpg
+9 0 http://site1.com/readme.txt
+9 1 http://site1.com/path/to/file
+10 0 http://site1.com/test.jpg
+10 0 http://site1.com/readme.txt
+10 0 http://site1.com/path/to/file
+1 0 http://192.168.1.1/img.jpg
+1 0 http://192.168.1.1/info/robots.txt
+1 0 http://192.168.1.1/robots.txt
+1 0 http://192.168.1.1/files
+1 0 http://192.168.1.1/one/two/three/four.bat
+2 7 http://192.168.1.1/img.jpg
+2 1 http://192.168.1.1/info/robots.txt
+2 1 http://192.168.1.1/robots.txt
+2 0 http://192.168.1.1/files
+2 6 http://192.168.1.1/one/two/three/four.bat
+3 1 http://192.168.1.1/img.jpg
+3 0 http://192.168.1.1/info/robots.txt
+3 0 http://192.168.1.1/robots.txt
+3 0 http://192.168.1.1/files
+3 0 http://192.168.1.1/one/two/three/four.bat
+4 0 http://192.168.1.1/img.jpg
+4 0 http://192.168.1.1/info/robots.txt
+4 0 http://192.168.1.1/robots.txt
+4 0 http://192.168.1.1/files
+4 0 http://192.168.1.1/one/two/three/four.bat
+5 0 http://192.168.1.1/img.jpg
+5 0 http://192.168.1.1/info/robots.txt
+5 0 http://192.168.1.1/robots.txt
+5 0 http://192.168.1.1/files
+5 0 http://192.168.1.1/one/two/three/four.bat
+6 0 http://192.168.1.1/img.jpg
+6 0 http://192.168.1.1/info/robots.txt
+6 0 http://192.168.1.1/robots.txt
+6 0 http://192.168.1.1/files
+6 0 http://192.168.1.1/one/two/three/four.bat
+7 0 http://192.168.1.1/img.jpg
+7 0 http://192.168.1.1/info/robots.txt
+7 0 http://192.168.1.1/robots.txt
+7 0 http://192.168.1.1/files
+7 0 http://192.168.1.1/one/two/three/four.bat
+8 0 http://192.168.1.1/img.jpg
+8 0 http://192.168.1.1/info/robots.txt
+8 0 http://192.168.1.1/robots.txt
+8 0 http://192.168.1.1/files
+8 0 http://192.168.1.1/one/two/three/four.bat
+9 0 http://192.168.1.1/img.jpg
+9 0 http://192.168.1.1/info/robots.txt
+9 0 http://192.168.1.1/robots.txt
+9 0 http://192.168.1.1/files
+9 0 http://192.168.1.1/one/two/three/four.bat
+10 0 http://192.168.1.1/img.jpg
+10 0 http://192.168.1.1/info/robots.txt
+10 1 http://192.168.1.1/robots.txt
+10 0 http://192.168.1.1/files
+10 0 http://192.168.1.1/one/two/three/four.bat
