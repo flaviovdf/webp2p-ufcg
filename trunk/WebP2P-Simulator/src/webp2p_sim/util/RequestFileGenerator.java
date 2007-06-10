@@ -61,6 +61,7 @@ public class RequestFileGenerator {
 	}
 	
 	private String selectFileByPopularity(long tick, long result, WebServer server) {
+		// essa dist tem que ser zipf
 		RandomVariable randomVar = new RandomVariable(this.dist);
 		
 		long total = 0;
@@ -113,9 +114,7 @@ public class RequestFileGenerator {
 		public long getParetoValue() {
 			return paretoValue;
 		}
-		
 	}
-	
 	
 	public static void main(String[] args) {
 		File topologyFile = new File("topology.xml");
