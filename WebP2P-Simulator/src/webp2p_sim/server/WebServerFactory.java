@@ -19,14 +19,14 @@ import webp2p_sim.util.InfinitTimeToLive;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
 
-import edu.uah.math.distributions.ExponentialDistribution;
+import edu.uah.math.distributions.Distribution;
 
 public class WebServerFactory {
 	
 	private DiscoveryService discoveryService;
-	private final ExponentialDistribution distribution;
+	private final Distribution distribution;
 
-	public WebServerFactory(ExponentialDistribution distribution, DiscoveryService discoveryService) {
+	public WebServerFactory(Distribution distribution, DiscoveryService discoveryService) {
 		this.distribution = distribution;
 		this.discoveryService = discoveryService;
 	}
