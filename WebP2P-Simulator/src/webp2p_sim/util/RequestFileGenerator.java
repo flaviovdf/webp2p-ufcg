@@ -61,7 +61,7 @@ public class RequestFileGenerator {
 	}
 	
 	private String selectFileByPopularity(long tick, long result, WebServer server) {
-		// essa dist tem que ser zipf
+		// essa dist tem que ser zipf 
 		RandomVariable randomVar = new RandomVariable(this.dist);
 		
 		long total = 0;
