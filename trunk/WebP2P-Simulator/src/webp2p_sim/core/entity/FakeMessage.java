@@ -1,6 +1,6 @@
 package webp2p_sim.core.entity;
 
-public class FakeMessage implements Message {
+public class FakeMessage implements ApplicationMessage {
 
 	private int numberOfTicks;
 	private int numberOfProcess;
@@ -40,5 +40,10 @@ public class FakeMessage implements Message {
 	public void verify() {
 		if (this.ticks != this.numberOfTicks) throw new RuntimeException("The number of calls to 'tickOcurred()' was " + this.ticks + ". Expected: " + this.numberOfTicks + ".");
 		if (this.process != this.numberOfProcess) throw new RuntimeException("The number of calls to 'process()' was " + this.process + ". Expected: " + this.numberOfProcess + ".");
+	}
+
+	public long size() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -1,9 +1,9 @@
 package webp2p_sim.ds;
 
-import webp2p_sim.core.entity.AbstractMessage;
+import webp2p_sim.core.entity.AbstractApplicationMessage;
 import webp2p_sim.server.WebServer;
 
-public class PutFileRequest extends AbstractMessage {
+public class PutFileRequest extends AbstractApplicationMessage {
 
 	private String url;
 	private WebServer server;

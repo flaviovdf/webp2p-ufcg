@@ -23,7 +23,6 @@ public class Host {
 		final int PRIME = 31;
 		int result = 1;
 		result = PRIME * result + ((address == null) ? 0 : address.hashCode());
-		result = PRIME * result + ((bandwidth == null) ? 0 : bandwidth.hashCode());
 		return result;
 	}
 
@@ -41,12 +40,9 @@ public class Host {
 				return false;
 		} else if (!address.equals(other.address))
 			return false;
-		if (bandwidth == null) {
-			if (other.bandwidth != null)
-				return false;
-		} else if (!bandwidth.equals(other.bandwidth))
-			return false;
 		return true;
 	}
+
+	
 	
 }

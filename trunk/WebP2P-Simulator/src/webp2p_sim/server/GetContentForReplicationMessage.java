@@ -1,8 +1,8 @@
 package webp2p_sim.server;
 
-import webp2p_sim.core.entity.AbstractMessage;
+import webp2p_sim.core.entity.AbstractApplicationMessage;
 
-public class GetContentForReplicationMessage extends AbstractMessage {
+public class GetContentForReplicationMessage extends AbstractApplicationMessage {
 
 	private final String url;
 	private final WebServer server;
