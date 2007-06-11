@@ -8,25 +8,25 @@ import edu.uah.math.distributions.RandomVariable;
 
 public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 
-	private Queue<Message> queue;
+	private Queue<ApplicationMessage> queue;
 
 	private RandomVariable rv;
 
-	private Message currentMessage;
+	private ApplicationMessage currentMessage;
 
 	private String name;
 
 	public SimpleQueuedEntity(String name, Distribution distribution) {
 		this.name = name;
 		this.rv = new RandomVariable(distribution);
-		this.queue = new LinkedList<Message>();
+		this.queue = new LinkedList<ApplicationMessage>();
 		this.currentMessage = null;
 	}
 
-	public void sendMessage(Message message) {
-		message.setProcessTime(rv.simulate());
-		message.setEntity(this);
-		queue.offer(message);
+	public void sendMessage(ApplicationMessage applicationMessage) {
+		applicationMessage.setProcessTime(rv.simulate());
+		applicationMessage.setEntity(this);
+		queue.offer(applicationMessage);
 	}
 
 	public void tickOcurred() {

@@ -2,10 +2,10 @@ package webp2p_sim.proxy;
 
 import java.util.Set;
 
-import webp2p_sim.core.entity.AbstractMessage;
+import webp2p_sim.core.entity.AbstractApplicationMessage;
 import webp2p_sim.server.WebServer;
 
-public class GetResponse extends AbstractMessage {
+public class GetResponse extends AbstractApplicationMessage {
 
 	private final Set<WebServer> servers;
 	private final long requestID;

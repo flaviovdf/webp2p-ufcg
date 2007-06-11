@@ -1,5 +1,7 @@
 package webp2p_sim.core.network;
 
+import webp2p_sim.core.entity.ApplicationMessage;
+
 
 
 public class NetworkMessage {

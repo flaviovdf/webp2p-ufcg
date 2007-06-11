@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 
 import org.easymock.classextension.EasyMock;
 
+import webp2p_sim.core.entity.ApplicationMessage;
+
 public class ConnectionTest extends TestCase {
 
 	public void testGets() {

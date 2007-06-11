@@ -1,11 +1,11 @@
 package webp2p_sim.core.entity;
 
-public abstract class AbstractMessage implements Message {
+public abstract class AbstractApplicationMessage implements ApplicationMessage {
 
 	private long processTime;
 	protected NetworkEntity entity;
 
-	public AbstractMessage() {
+	public AbstractApplicationMessage() {
 		this.processTime = 0;
 	}
 	
@@ -23,5 +23,10 @@ public abstract class AbstractMessage implements Message {
 	
 	public final void setEntity(NetworkEntity entity) {
 		this.entity = entity;
+	}
+	
+	//FIXME
+	public long size() {
+		return 0;
 	}
 }

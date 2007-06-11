@@ -1,8 +1,8 @@
 package webp2p_sim.server;
 
-import webp2p_sim.core.entity.AbstractMessage;
+import webp2p_sim.core.entity.AbstractApplicationMessage;
 
-public class HereIsReplicaOfContent extends AbstractMessage {
+public class HereIsReplicaOfContent extends AbstractApplicationMessage {
 
 	private final String url;
 	private final int replicationTTL;

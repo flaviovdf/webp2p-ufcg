@@ -1,9 +1,9 @@
 package webp2p_sim.proxy;
 
-import webp2p_sim.core.entity.AbstractMessage;
-import webp2p_sim.core.entity.Message;
+import webp2p_sim.core.entity.AbstractApplicationMessage;
+import webp2p_sim.core.entity.ApplicationMessage;
 
-public class HereIsContentMessage extends AbstractMessage implements Message {
+public class HereIsContentMessage extends AbstractApplicationMessage implements ApplicationMessage {
 
 	private final long request;
 	private final int result;

@@ -1,9 +1,9 @@
 package webp2p_sim.ds;
 
-import webp2p_sim.core.entity.AbstractMessage;
+import webp2p_sim.core.entity.AbstractApplicationMessage;
 import webp2p_sim.proxy.Proxy;
 
-public class GetServersForURLRequest extends AbstractMessage {
+public class GetServersForURLRequest extends AbstractApplicationMessage {
 
 	private final long requestID;
 	private final String url;
