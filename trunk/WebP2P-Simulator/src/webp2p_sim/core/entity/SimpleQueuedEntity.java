@@ -6,7 +6,7 @@ import java.util.Queue;
 import edu.uah.math.distributions.Distribution;
 import edu.uah.math.distributions.RandomVariable;
 
-public class SimpleQueuedEntity implements QueuedEntity, TimedEntity {
+public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 
 	private Queue<Message> queue;
 

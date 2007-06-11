@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.core.entity.QueuedEntity;
+import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.proxy.GetResponse;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.util.SmartTestCase;
@@ -36,7 +36,7 @@ public class DiscoveryServiceTest extends SmartTestCase {
 		
 		ds.putRequest("url3",webServerMock3);
 		
-		QueuedEntity queued = EasyMock.createStrictMock(QueuedEntity.class);
+		NetworkEntity queued = EasyMock.createStrictMock(NetworkEntity.class);
 
 		Set<WebServer> responseServer1 = new HashSet<WebServer>();
 		responseServer1.add(webServerMock1);

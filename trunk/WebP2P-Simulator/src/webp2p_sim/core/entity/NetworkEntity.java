@@ -1,6 +1,6 @@
 package webp2p_sim.core.entity;
 
-public interface QueuedEntity {
+public interface NetworkEntity {
 
 	public void sendMessage(Message message);
 	
