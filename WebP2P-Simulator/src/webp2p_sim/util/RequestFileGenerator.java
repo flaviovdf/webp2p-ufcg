@@ -78,7 +78,6 @@ public class RequestFileGenerator {
 		StringBuffer resultValue = new StringBuffer();
 		long times = 0;
 		for (Pair pair: values) {
-			//TODO com os arredondamentos, nem todos as requisições são distribuídas para os arquivos.
 			times = Math.round(pair.getParetoValue()*result/total);
 			for (int k = 0; k<times; k++) {
 				resultValue.append(tick+" "+pair.getFileName()+"\n");

@@ -1,3 +1,17 @@
-Gerar as entradas seguindo distribuiÁ„o exponencial.
-Fazer testes com v·rias distribuiÁıes para ver como se comporta
-Plotar resultados
+TODO LIST - Para Sexta Feira Dia 15/06/2007
+
+Barata
+	Colocar no topology.xml as distribui√ß√µes que definem o tempo de atendimento de requisi√ß√µes dos servidores
+	Colocar tamanho de arquivos no topology, seguindo pareto (na verdade, coloque generico)
+	Colocar o host do topology como sendo IP
+
+Joao
+	Implementar Browser
+	Desacoplar a heuristica (strategy)
+	Criar entidade que envia requisi√ß√µes para os WebsServer. Pode ser o Browser que processa respostas com instantaneamente
+
+Peruca
+	Finalizar camada de rede
+	Fazer duas maneiras rodar as simula√ß√µes no mesmo cen√°rio.
+		1. Usando WebP2P
+		2. Sem usar WebP2P
