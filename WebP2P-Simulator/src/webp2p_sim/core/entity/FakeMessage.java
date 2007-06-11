@@ -30,7 +30,7 @@ public class FakeMessage implements Message {
 		return this.ticks >= this.numberOfTicks;
 	}
 
-	public void setEntity(QueuedEntity entity) {
+	public void setEntity(NetworkEntity entity) {
 	}
 
 	public void tickOcurred() {

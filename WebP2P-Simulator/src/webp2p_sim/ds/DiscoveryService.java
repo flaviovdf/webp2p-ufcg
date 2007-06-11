@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import webp2p_sim.core.entity.QueuedEntity;
+import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.proxy.GetResponse;
 import webp2p_sim.server.WebServer;
@@ -24,7 +24,7 @@ public class DiscoveryService extends SimpleQueuedEntity {
 		this.url2servers = new HashMap<String, Set<WebServer>>();
 	}
 	
-	void getRequest(long requestID, String url, QueuedEntity callback) {
+	void getRequest(long requestID, String url, NetworkEntity callback) {
 		LOG.debug( "Request " + requestID + " asking for file " + url );
 		
 		Set<WebServer> servers = url2servers.get(url);

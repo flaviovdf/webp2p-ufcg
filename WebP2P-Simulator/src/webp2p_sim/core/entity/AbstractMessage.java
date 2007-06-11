@@ -3,7 +3,7 @@ package webp2p_sim.core.entity;
 public abstract class AbstractMessage implements Message {
 
 	private long processTime;
-	protected QueuedEntity entity;
+	protected NetworkEntity entity;
 
 	public AbstractMessage() {
 		this.processTime = 0;
@@ -21,7 +21,7 @@ public abstract class AbstractMessage implements Message {
 		this.processTime = Math.round(processTime);
 	}
 	
-	public final void setEntity(QueuedEntity entity) {
+	public final void setEntity(NetworkEntity entity) {
 		this.entity = entity;
 	}
 }
