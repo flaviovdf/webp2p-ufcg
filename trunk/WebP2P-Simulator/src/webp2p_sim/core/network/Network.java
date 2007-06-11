@@ -74,6 +74,7 @@ public class Network implements TimedEntity {
 			}
 		}
 		else {
+			//FIXME
 			Connection connection = new Connection(receiver, sender);
 			
 			if (!connections.contains(connection)) {
@@ -109,12 +110,12 @@ public class Network implements TimedEntity {
 				//flush data for one tick.
 				List<NetworkMessage> messagesDone = con.flushData(endToEndDelay, 1);
 				
+				for (NetworkMessage nm : messagesDone) {
+					receiver.sendMessage(nm.getApplicationMessage());
+				}
+				
 				if (con.noMoreMessages()) {
 					it.remove();
-					
-					for (NetworkMessage nm : messagesDone) {
-						receiver.sendMessage(nm.getApplicationMessage());
-					}
 				}
 			}
 		}
