@@ -33,7 +33,7 @@ public class Simulator {
 		req.loadFile(inputFile);
 		
 		// TODO Verificar a ordem em que os objetos sao invocados!
-		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[0]));
+		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
 		Clock.getInstance().addEntities(browser, req, ds, proxy);
 	}
 	

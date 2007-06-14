@@ -16,7 +16,7 @@ public class SimpleDistanceDelay implements EndToEndDelay {
 	private final double TIME_FACTOR;
 	
 	public SimpleDistanceDelay() {
-		this(0.1);
+		this(0.5);
 	}
 	
 	public SimpleDistanceDelay(double time_factor) {
