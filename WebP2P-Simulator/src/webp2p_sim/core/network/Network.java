@@ -1,11 +1,10 @@
 package webp2p_sim.core.network;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -18,7 +17,7 @@ public class Network implements TimedEntity {
 	private static Logger LOG = Logger.getLogger(Network.class);
 	
 	private final Map<Address, NetworkEntity> entities;
-	private final Set<Connection> connections;
+	private final Map<SenderToReceiver, Connection> connections;
 	private final EndToEndDelay endToEndDelay;
 
 	private static Network instance = null;
@@ -26,7 +25,7 @@ public class Network implements TimedEntity {
 	private Network() {
 		this.endToEndDelay = new SimpleDistanceDelay();
 		this.entities = new HashMap<Address, NetworkEntity>();
-		this.connections = new HashSet<Connection>();
+		this.connections = new HashMap<SenderToReceiver, Connection>();
 		
 		LOG.info("Underlying Network Created");
 	}
@@ -61,6 +60,7 @@ public class Network implements TimedEntity {
 		entities.remove(address);
 	}
 	
+	//FIXME Since entities wil ignore errors, no notification is sent in case one occurs
 	public void sendMessage(Host sender, Host receiver, ApplicationMessage message) {
 		NetworkEntity sendere = entities.get(sender.getAddress());
 		NetworkEntity receivere = entities.get(receiver.getAddress());
@@ -74,12 +74,12 @@ public class Network implements TimedEntity {
 			}
 		}
 		else {
-			//FIXME
-			Connection connection = new Connection(receiver, sender);
+			Connection connection = getConnection(sender, receiver);
 			
-			if (!connections.contains(connection)) {
+			if (connection == null) {
 				LOG.info("Connection < " + connection + " > stablished");
-				connections.add(connection);
+				connection = new Connection(sender, receiver);
+				connections.put(new SenderToReceiver(sender, receiver), connection);
 			}
 			
 			LOG.info("Transmitting message < " + message + " > through connection < " + connection + " >");
@@ -87,10 +87,11 @@ public class Network implements TimedEntity {
 		}
 	}
 	
+	//FIXME Since entities wil ignore errors, no notification is sent in case one occurs
 	public void tickOcurred() {
-		Iterator<Connection> it = connections.iterator();
+		Iterator<Entry<SenderToReceiver, Connection>> it = connections.entrySet().iterator();
 		while(it.hasNext()) {
-			Connection con = it.next();
+			Connection con = it.next().getValue();
 			
 			NetworkEntity sender = entities.get(con.getSenderAddress());
 			NetworkEntity receiver = entities.get(con.getReceiverAddress());
@@ -124,5 +125,51 @@ public class Network implements TimedEntity {
 	public static void reset() {
 		LOG.info("Underlying Network is going down");
 		Network.instance = null;
+	}
+
+	protected Connection getConnection(Host sender, Host receiver) {
+		return connections.get(new SenderToReceiver(sender, receiver));
+	}
+	
+	private class SenderToReceiver {
+
+		private final Host sender;
+		private final Host receiver;
+
+		public SenderToReceiver(Host sender, Host receiver) {
+			this.sender = sender;
+			this.receiver = receiver;
+		}
+
+		@Override
+		public int hashCode() {
+			final int PRIME = 31;
+			int result = 1;
+			result = PRIME * result + ((receiver == null) ? 0 : receiver.hashCode());
+			result = PRIME * result + ((sender == null) ? 0 : sender.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			final SenderToReceiver other = (SenderToReceiver) obj;
+			if (receiver == null) {
+				if (other.receiver != null)
+					return false;
+			} else if (!receiver.equals(other.receiver))
+				return false;
+			if (sender == null) {
+				if (other.sender != null)
+					return false;
+			} else if (!sender.equals(other.sender))
+				return false;
+			return true;
+		}
 	}
 }

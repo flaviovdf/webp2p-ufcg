@@ -101,6 +101,10 @@ public class Connection {
 		return messages.isEmpty();
 	}
 	
+	public int getAmountMessagesBeingTransfered() {
+		return messages.size();
+	}
+	
 	@Override
 	public String toString() {
 		return "Client: " + sender.toString() + " - Server:" + receiver.toString();
@@ -136,4 +140,5 @@ public class Connection {
 			return false;
 		return true;
 	}
+
 }
