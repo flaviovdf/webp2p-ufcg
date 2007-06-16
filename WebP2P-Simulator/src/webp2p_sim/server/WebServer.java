@@ -33,6 +33,7 @@ public class WebServer extends SimpleQueuedEntity {
 
 	private Map<String, TimeToLive> files;
 	private Map<String, ReplicationInfo> replicationMap;
+	private ReplicationStrategy strategyOfReplication;
 	
 	public WebServer(String name, Distribution distribution, DiscoveryService discoveryService) {
 		super(name, distribution);
@@ -41,6 +42,7 @@ public class WebServer extends SimpleQueuedEntity {
 		this.adj = new LinkedList<WebServer>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();
 		this.files = new HashMap<String, TimeToLive>();
+		this.strategyOfReplication = new DefaultReplicationStrategy();
 	}
 
 	void loadFile(String url, int size, TimeToLive ttl) {
@@ -50,9 +52,13 @@ public class WebServer extends SimpleQueuedEntity {
 		
 		if (olderTTL == null || olderTTL.remaining() < ttl.remaining()) {
 			this.files.put(url, ttl);
-			this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL));
+			this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL,url));
 			this.discoveryService.sendMessage(new PutFileRequest(url, this));
 		}
+	}
+	
+	public void setStrategyOfReplication(ReplicationStrategy strategyOfReplication) {
+		this.strategyOfReplication = strategyOfReplication;
 	}
 	
 	public Set<String> getFiles() {
@@ -104,14 +110,7 @@ public class WebServer extends SimpleQueuedEntity {
 			ReplicationInfo info = this.replicationMap.get(url);
 			info.urlRequested();
 			if (info.mustReplicate()) {
-				for (WebServer server : this.adj) {
-					if (!info.hasReplica(server)) {
-						LOG.debug( "Replication for " + url + " requested to " + server );
-						info.replicationRequested(server);
-						server.sendMessage(new CreateReplicaOfUrlMessage(url, this));
-						break;
-					}
-				}
+				this.strategyOfReplication.performReplication(this, info);
 			}
 		} else {
 			result = -1;
