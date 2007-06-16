@@ -15,15 +15,20 @@ class ReplicationInfo implements TimedEntity {
 	private int numGets;
 	private int ticks;
 	private Map<WebServer, ReplicationStatus> replicaTTLMap;
+	private String url;
 	
-	public ReplicationInfo(int threshold, int thresholdTTL) {
+	public ReplicationInfo(int threshold, int thresholdTTL, String url) {
 		this.threshold = threshold;
 		this.thresholdTTL = thresholdTTL;
 		this.numGets = 0;
 		this.ticks = 0;
 		this.replicaTTLMap = new HashMap<WebServer, ReplicationStatus>();
+		this.url = url;
 	}
 	
+	public String getUrl() {
+		return this.url;
+	}
 	
 	public void replicationRequested(WebServer server) {
 		this.numGets = 0;
