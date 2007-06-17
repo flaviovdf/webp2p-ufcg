@@ -44,7 +44,7 @@ public class Clock {
 	}
 	
 	public void countTick() {
-		this.ticks++;
+		this.ticks += getTickSize();
 		
 		for (TimedEntity timedEntity : entities) {
 			timedEntity.tickOcurred();
@@ -53,5 +53,9 @@ public class Clock {
 
 	public long getTicks() {
 		return ticks;
+	}
+
+	public long getTickSize() {
+		return 1;
 	}
 }

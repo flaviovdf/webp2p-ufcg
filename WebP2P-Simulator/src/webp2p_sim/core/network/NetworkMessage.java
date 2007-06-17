@@ -9,7 +9,7 @@ public class NetworkMessage {
 	private static final long DEFAULT_SIZE = 0;
 	private final ApplicationMessage applicationMessage;
 	private final long dataSize;
-	private long dataTransfered;
+	private double dataTransfered;
 
 	public NetworkMessage(ApplicationMessage applicationMessage) {
 		this.applicationMessage = applicationMessage;
@@ -25,11 +25,11 @@ public class NetworkMessage {
 		return dataSize;
 	}
 
-	public void dataTransfered(long amount) {
-		dataTransfered += amount;
+	public void dataTransfered(double dataToFlushPerMessage) {
+		dataTransfered += dataToFlushPerMessage;
 	}
 	
-	public long dataLeft() {
+	public double dataLeft() {
 		return Math.max(0, dataSize - dataTransfered);
 	}
 
