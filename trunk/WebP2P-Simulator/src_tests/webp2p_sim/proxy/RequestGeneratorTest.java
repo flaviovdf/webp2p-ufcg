@@ -21,13 +21,13 @@ public class RequestGeneratorTest extends SmartTestCase {
 		
 		RequestGenerator requestGenerator = new RequestGenerator(interestedMock);
 		requestGenerator.loadFile(new File("tests" + File.separator + "requests" + File.separator + "input.txt"));
-		
 		// time 1
 		interestedMock.generateRequest("http://site1.com/path/to/file");
-		
 		EasyMock.replay(interestedMock);
+		
 		requestGenerator.tickOcurred();
 		EasyMock.verify(interestedMock);
+		
 		
 		// time 2
 		EasyMock.reset(interestedMock);
@@ -41,7 +41,6 @@ public class RequestGeneratorTest extends SmartTestCase {
 		
 		// time 5
 		EasyMock.reset(interestedMock);
-		
 		interestedMock.generateRequest("http://site2.net/help.txt");
 		
 		EasyMock.replay(interestedMock);

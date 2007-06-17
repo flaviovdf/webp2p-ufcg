@@ -7,6 +7,7 @@ import org.easymock.classextension.EasyMock;
 
 import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.proxy.GetResponse;
+import webp2p_sim.proxy.Request;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.util.SmartTestCase;
 
@@ -53,9 +54,9 @@ public class DiscoveryServiceTest extends SmartTestCase {
 		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer3,requestID2)));
 		
 		EasyMock.replay(queued);
-		ds.getRequest(requestID1, "url1", queued);
-		ds.getRequest(requestID2, "url2", queued);
-		ds.getRequest(requestID2, "url3", queued);
+		ds.getRequest(new Request(requestID1, "url1", queued));
+		ds.getRequest(new Request(requestID2, "url2", queued));
+		ds.getRequest(new Request(requestID2, "url3", queued));
 
 		EasyMock.verify(queued);
 	}

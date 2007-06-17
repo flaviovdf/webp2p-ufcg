@@ -56,12 +56,9 @@ public class RequestGenerator implements TimedEntity {
 		
 		if (this.requests.containsKey(this.ticks)) {
 			List<String> req = this.requests.get(this.ticks);
-			
 			for (String url : req) {
 				this.interested.generateRequest(url);
 			}
 		}
-		
 	}
-
 }

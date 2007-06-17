@@ -1,32 +1,23 @@
 package webp2p_sim.ds;
 
 import webp2p_sim.core.entity.AbstractApplicationMessage;
-import webp2p_sim.proxy.Proxy;
+import webp2p_sim.proxy.Request;
 
 public class GetServersForURLRequest extends AbstractApplicationMessage {
 
-	private final long requestID;
-	private final String url;
-	private final Proxy callback;
+	private Request request;
 
-	public GetServersForURLRequest(long requestID, String url, Proxy callback) {
-		this.requestID = requestID;
-		this.url = url;
-		this.callback = callback;
+	public GetServersForURLRequest(Request request) {
+		this.request = request;
 	}
 
 	public void process() {
-		((DiscoveryService) entity).getRequest(requestID, url, callback);
+		((DiscoveryService) entity).getRequest(request);
 	}
 
 	@Override
 	public int hashCode() {
-		final int PRIME = 31;
-		int result = 1;
-		result = PRIME * result + ((callback == null) ? 0 : callback.hashCode());
-		result = PRIME * result + (int) (requestID ^ (requestID >>> 32));
-		result = PRIME * result + ((url == null) ? 0 : url.hashCode());
-		return result;
+		return this.request.hashCode();
 	}
 
 	@Override
@@ -38,22 +29,11 @@ public class GetServersForURLRequest extends AbstractApplicationMessage {
 		if (getClass() != obj.getClass())
 			return false;
 		final GetServersForURLRequest other = (GetServersForURLRequest) obj;
-		if (callback == null) {
-			if (other.callback != null)
+		if (request == null) {
+			if (other.request != null)
 				return false;
-		} else if (!callback.equals(other.callback))
-			return false;
-		if (requestID != other.requestID)
-			return false;
-		if (url == null) {
-			if (other.url != null)
-				return false;
-		} else if (!url.equals(other.url))
+		} else if (!request.equals(other.request))
 			return false;
 		return true;
 	}
-	
-	
-
-
 }
