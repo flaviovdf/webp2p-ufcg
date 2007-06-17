@@ -1,9 +1,9 @@
 package webp2p_sim.browser;
 
-import edu.uah.math.distributions.Distribution;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.proxy.GeneratorInterested;
 import webp2p_sim.proxy.Proxy;
+import edu.uah.math.distributions.Distribution;
 
 public class Browser extends SimpleQueuedEntity implements GeneratorInterested {
 
@@ -15,7 +15,6 @@ public class Browser extends SimpleQueuedEntity implements GeneratorInterested {
 	}
 
 	public void generateRequest(String url) {
-		this.proxy.sendMessage(null); // TODO
+		this.proxy.sendRequest(url); // TODO
 	}
-
 }

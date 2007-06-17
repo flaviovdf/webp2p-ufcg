@@ -15,7 +15,7 @@ import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.ds.PutFileRequest;
 import webp2p_sim.proxy.HereIsContentMessage;
-import webp2p_sim.proxy.Proxy;
+import webp2p_sim.proxy.Request;
 import webp2p_sim.util.TimeToLive;
 import edu.uah.math.distributions.Distribution;
 
@@ -100,14 +100,14 @@ public class WebServer extends SimpleQueuedEntity {
 
 	//called by proxies
 	
-	void getContent(long request, String url, Proxy callback) {
-		LOG.debug( "Content for " + url + " requested by " + callback + " request number " + request );
+	void getContent(Request request) {
+		LOG.debug( "Content for " + request.getUrl() + " requested by " + request.getCallBack() + " request number " + request.getId() );
 		
 		int result;
-		if (this.files.containsKey(url)) {
+		if (this.files.containsKey(request.getUrl())) {
 			result = 0;
 			
-			ReplicationInfo info = this.replicationMap.get(url);
+			ReplicationInfo info = this.replicationMap.get(request.getUrl());
 			info.urlRequested();
 			if (info.mustReplicate()) {
 				this.strategyOfReplication.performReplication(this, info);
@@ -116,8 +116,8 @@ public class WebServer extends SimpleQueuedEntity {
 			result = -1;
 		}
 		
-		LOG.debug( "Sending content to " + callback + " request number " + request);
-		callback.sendMessage(new HereIsContentMessage(request, result));
+		LOG.debug( "Sending content to " + request.getCallBack() + " request number " + request.getId());
+		request.getCallBack().sendMessage(new HereIsContentMessage(request.getId(), result));
 	}
 	
 	//called by other servers

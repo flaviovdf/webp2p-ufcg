@@ -33,7 +33,7 @@ public class Proxy extends SimpleQueuedEntity {
 		long generatedRequestID = this.requestIDGenerator.getNextID();
 		LOG.debug( "Asking for file " + url + ". Request: " + generatedRequestID );
 		requests.put(generatedRequestID, url);
-		discoveryService.sendMessage(new GetServersForURLRequest(generatedRequestID, url, this));
+		discoveryService.sendMessage(new GetServersForURLRequest(new Request(generatedRequestID, url, this)));
 	}
 
 	void hereAreServers(long request, Set<WebServer> servers) {

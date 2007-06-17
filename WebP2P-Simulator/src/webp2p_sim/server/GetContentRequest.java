@@ -2,6 +2,7 @@ package webp2p_sim.server;
 
 import webp2p_sim.core.entity.AbstractApplicationMessage;
 import webp2p_sim.proxy.Proxy;
+import webp2p_sim.proxy.Request;
 
 public class GetContentRequest extends AbstractApplicationMessage {
 
@@ -16,7 +17,7 @@ public class GetContentRequest extends AbstractApplicationMessage {
 	}
 
 	public void process() {
-		((WebServer) entity).getContent(this.request, this.url, this.callback);
+		((WebServer) entity).getContent(new Request(this.request, this.url, this.callback));
 	}
 
 	@Override
