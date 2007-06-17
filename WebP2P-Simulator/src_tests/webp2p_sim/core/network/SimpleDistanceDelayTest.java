@@ -23,14 +23,14 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		NetworkMessage message1 = EasyMock.createNiceMock(NetworkMessage.class);
 		NetworkMessage message2 = EasyMock.createNiceMock(NetworkMessage.class);
 		
-		EasyMock.expect(message1.dataLeft()).andReturn(new Long(300)).anyTimes();
-		EasyMock.expect(message2.dataLeft()).andReturn(new Long(200)).anyTimes();
+		EasyMock.expect(message1.dataLeft()).andReturn(300d).anyTimes();
+		EasyMock.expect(message2.dataLeft()).andReturn(200d).anyTimes();
 		
 		EasyMock.replay(message1);
 		EasyMock.replay(message2);
 		
-		connection.transmitMessage(message1);
-		connection.transmitMessage(message2);
+		connection.transmitMessage(delay, message1);
+		connection.transmitMessage(delay, message2);
 		
 		long xor = senderHost.getAddress().getNumericHost() ^ receiverHost.getAddress().getNumericHost();
 		assertEquals((500f / maxUp) + (factor * Long.bitCount(xor)), delay.getDelayBetweenConnection(connection));
@@ -53,14 +53,14 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		NetworkMessage message1 = EasyMock.createNiceMock(NetworkMessage.class);
 		NetworkMessage message2 = EasyMock.createNiceMock(NetworkMessage.class);
 		
-		EasyMock.expect(message1.dataLeft()).andReturn(new Long(300)).anyTimes();
-		EasyMock.expect(message2.dataLeft()).andReturn(new Long(200)).anyTimes();
+		EasyMock.expect(message1.dataLeft()).andReturn((300d)).anyTimes();
+		EasyMock.expect(message2.dataLeft()).andReturn((200d)).anyTimes();
 		
 		EasyMock.replay(message1);
 		EasyMock.replay(message2);
 		
-		connection.transmitMessage(message1);
-		connection.transmitMessage(message2);
+		connection.transmitMessage(delay, message1);
+		connection.transmitMessage(delay, message2);
 		
 		assertEquals(0d, delay.getDelayBetweenConnection(connection));
 	}
@@ -82,14 +82,14 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		NetworkMessage message1 = EasyMock.createNiceMock(NetworkMessage.class);
 		NetworkMessage message2 = EasyMock.createNiceMock(NetworkMessage.class);
 		
-		EasyMock.expect(message1.dataLeft()).andReturn(new Long(300)).anyTimes();
-		EasyMock.expect(message2.dataLeft()).andReturn(new Long(200)).anyTimes();
+		EasyMock.expect(message1.dataLeft()).andReturn((300d)).anyTimes();
+		EasyMock.expect(message2.dataLeft()).andReturn((200d)).anyTimes();
 		
 		EasyMock.replay(message1);
 		EasyMock.replay(message2);
 		
-		connection.transmitMessage(message1);
-		connection.transmitMessage(message2);
+		connection.transmitMessage(delay, message1);
+		connection.transmitMessage(delay, message2);
 		
 		assertEquals((500f / maxUp) + (factor * 8), delay.getDelayBetweenConnection(connection));
 	}
@@ -111,16 +111,16 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		NetworkMessage message1 = EasyMock.createNiceMock(NetworkMessage.class);
 		NetworkMessage message2 = EasyMock.createNiceMock(NetworkMessage.class);
 		
-		EasyMock.expect(message1.dataLeft()).andReturn(new Long(300)).anyTimes();
-		EasyMock.expect(message2.dataLeft()).andReturn(new Long(200)).anyTimes();
+		EasyMock.expect(message1.dataLeft()).andReturn((300d)).anyTimes();
+		EasyMock.expect(message2.dataLeft()).andReturn((200d)).anyTimes();
 		
 		EasyMock.replay(message1);
 		EasyMock.replay(message2);
 		
-		connection.transmitMessage(message1);
-		connection.transmitMessage(message2);
+		connection.transmitMessage(delay, message1);
+		connection.transmitMessage(delay, message2);
 		
 		long xor = senderHost.getAddress().getNumericHost() ^ receiverHost.getAddress().getNumericHost();
-		assertEquals((500f / maxDown) + (factor * Long.bitCount(xor)), delay.getDelayBetweenConnection(connection));
+		assertEquals((500d / maxDown) + (factor * Long.bitCount(xor)), delay.getDelayBetweenConnection(connection));
 	}
 }
