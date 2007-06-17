@@ -9,11 +9,13 @@ public class Connection {
 	private final Host sender;
 	private final Host receiver;
 	private final List<NetworkMessage> messages;
+	private double dataPerTick;
 	
 	public Connection(Host sender, Host receiver) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.messages = new ArrayList<NetworkMessage>();
+		this.dataPerTick = 0;
 	}
 	
 	public Address getSenderAddress() {
@@ -24,10 +26,15 @@ public class Connection {
 		return receiver.getAddress();
 	}
 	
-	public void transmitMessage(NetworkMessage message) {
+	public void transmitMessage(EndToEndDelay endToEnd, NetworkMessage message) {
 		messages.add(message);
 		sender.getBandwidth().allocateUpBand(this);
 		receiver.getBandwidth().allocateDownBand(this);
+		
+		//calculating amount of data being sent through this connection
+		double delay = endToEnd.getDelayBetweenConnection(this);
+		double totalData = getAmountDataBeingTransfered();
+		this.dataPerTick = (totalData) / delay;
 	}
 	
 	public float getAllocatedSenderUploadBandwidth() {
@@ -38,8 +45,8 @@ public class Connection {
 		return receiver.getBandwidth().getAllocatedDownBand(this);
 	}
 	
-	public long getAmountDataBeingTransfered() {
-		long counter = 0;
+	public double getAmountDataBeingTransfered() {
+		double counter = 0;
 		for (NetworkMessage message : messages) {
 			counter += message.dataLeft();
 		}
@@ -47,17 +54,11 @@ public class Connection {
 		return counter;
 	}
 
-	public List<NetworkMessage> flushData(EndToEndDelay endToEndDelay, long timeInterval) {
+	public List<NetworkMessage> flushData() {
 		List<NetworkMessage> returnValue = new ArrayList<NetworkMessage>();
 		
-		//delay is for the whole data, we must find how much data this interval
-		double delayBetween = endToEndDelay.getDelayBetweenConnection(this);
-		
-		long totalData = getAmountDataBeingTransfered();
-		double dataOnInterval = (totalData * timeInterval) / delayBetween; 
-		
 		//now we decrease this data per message equally
-		long dataToFlushPerMessage = Math.round(dataOnInterval / messages.size());
+		double dataToFlushPerMessage = dataPerTick / messages.size();
 		
 		//this variable is used to maintain extra data not used by messages
 		long extraDataToFlush;
@@ -66,7 +67,7 @@ public class Connection {
 			Iterator<NetworkMessage> it = messages.iterator();
 			while (it.hasNext()) {
 				NetworkMessage message = it.next();
-				long dataLeft = message.dataLeft();
+				double dataLeft = message.dataLeft();
 				
 				if (dataLeft >= dataToFlushPerMessage) {
 					message.dataTransfered(dataToFlushPerMessage);
@@ -84,7 +85,7 @@ public class Connection {
 			
 			//not leaving loop
 			if (extraDataToFlush > 0) {
-				dataToFlushPerMessage = Math.round(extraDataToFlush / messages.size());
+				dataToFlushPerMessage = extraDataToFlush / messages.size();
 			}
 			
 		} while(extraDataToFlush > 0 && !messages.isEmpty());

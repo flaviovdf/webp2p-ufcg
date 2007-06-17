@@ -31,10 +31,10 @@ public class SimpleDistanceDelay implements EndToEndDelay {
 			return 0;
 		}
 		
-		long size = connection.getAmountDataBeingTransfered();
+		double size = connection.getAmountDataBeingTransfered();
 		
-		float senderUp = (float) size / connection.getAllocatedSenderUploadBandwidth();
-		float receiverDown = (float) size / connection.getAllocatedReceiverDownloadBandwidth();
+		double senderUp = size / connection.getAllocatedSenderUploadBandwidth();
+		double receiverDown = size / connection.getAllocatedReceiverDownloadBandwidth();
 		
 		return Math.max(senderUp, receiverDown) + TIME_FACTOR * distanceBeetweenHosts(senderAddress, receiveAddress);
 	}

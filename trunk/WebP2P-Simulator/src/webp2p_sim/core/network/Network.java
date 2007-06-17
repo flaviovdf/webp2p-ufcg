@@ -83,11 +83,11 @@ public class Network implements TimedEntity {
 			}
 			
 			LOG.info("Transmitting message < " + message + " > through connection < " + connection + " >");
-			connection.transmitMessage(new NetworkMessage(message));
+			connection.transmitMessage(endToEndDelay, new NetworkMessage(message));
 		}
 	}
 	
-	//FIXME Since entities wil ignore errors, no notification is sent in case one occurs
+	//FIXME Since entities will ignore errors, no notification is sent in case one occurs
 	public void tickOcurred() {
 		Iterator<Entry<SenderToReceiver, Connection>> it = connections.entrySet().iterator();
 		while(it.hasNext()) {
@@ -109,7 +109,7 @@ public class Network implements TimedEntity {
 			}
 			else {
 				//flush data for one tick.
-				List<NetworkMessage> messagesDone = con.flushData(endToEndDelay, 1);
+				List<NetworkMessage> messagesDone = con.flushData();
 				
 				for (NetworkMessage nm : messagesDone) {
 					receiver.sendMessage(nm.getApplicationMessage());
@@ -129,6 +129,10 @@ public class Network implements TimedEntity {
 
 	protected Connection getConnection(Host sender, Host receiver) {
 		return connections.get(new SenderToReceiver(sender, receiver));
+	}
+	
+	protected EndToEndDelay getDelay() {
+		return endToEndDelay;
 	}
 	
 	private class SenderToReceiver {
