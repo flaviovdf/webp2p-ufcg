@@ -8,7 +8,7 @@ Barata
 Joao
 	Implementar Browser
 	Desacoplar a heuristica (strategy)
-	Criar entidade que envia requisições para os WebsServer. Pode ser o Browser que processa respostas com instantaneamente
+	Criar entidade que envia requisições para os WebsServer. Pode ser o Browser que processa respostas instantaneamente
 
 Peruca
 	Finalizar camada de rede
