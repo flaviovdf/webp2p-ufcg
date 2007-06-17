@@ -1,12 +1,11 @@
 package webp2p_sim.core.network;
 
-import junit.framework.TestCase;
-
 import org.easymock.classextension.EasyMock;
 
 import webp2p_sim.core.entity.ApplicationMessage;
+import webp2p_sim.util.SmartTestCase;
 
-public class ConnectionTest extends TestCase {
+public class ConnectionTest extends SmartTestCase {
 
 	public void testGets() {
 		int maxDown = 256;
@@ -39,6 +38,10 @@ public class ConnectionTest extends TestCase {
 		int maxDown = 256;
 		int maxUp = 64;
 		
+		EndToEndDelay endToEndDelay = EasyMock.createNiceMock(EndToEndDelay.class);
+		EasyMock.expect(endToEndDelay.getDelayBetweenConnection((Connection) EasyMock.anyObject())).andReturn(10d).anyTimes();
+		EasyMock.replay(endToEndDelay);
+		
 		AsymetricBandwidth band1 = new AsymetricBandwidth(maxUp, maxDown);
 		AsymetricBandwidth band2 = new AsymetricBandwidth(maxUp, maxDown);
 		
@@ -50,16 +53,16 @@ public class ConnectionTest extends TestCase {
 		NetworkMessage message1 = EasyMock.createNiceMock(NetworkMessage.class);
 		NetworkMessage message2 = EasyMock.createNiceMock(NetworkMessage.class);
 		
-		EasyMock.expect(message1.dataLeft()).andReturn(new Long(300)).anyTimes();
-		EasyMock.expect(message2.dataLeft()).andReturn(new Long(200)).anyTimes();
+		EasyMock.expect(message1.dataLeft()).andReturn(300d).anyTimes();
+		EasyMock.expect(message2.dataLeft()).andReturn(200d).anyTimes();
 		
 		EasyMock.replay(message1);
 		EasyMock.replay(message2);
 		
-		connection.transmitMessage(message1);
-		connection.transmitMessage(message2);
+		connection.transmitMessage(endToEndDelay, message1);
+		connection.transmitMessage(endToEndDelay, message2);
 		
-		assertEquals(500, connection.getAmountDataBeingTransfered());
+		assertEquals(500d, connection.getAmountDataBeingTransfered());
 		
 		assertEquals((float)maxDown, connection.getAllocatedReceiverDownloadBandwidth());
 		assertEquals((float)maxUp, connection.getAllocatedSenderUploadBandwidth());
@@ -70,6 +73,10 @@ public class ConnectionTest extends TestCase {
 	public void testFlushMessage() {
 		int maxDown = 256;
 		int maxUp = 64;
+		
+		EndToEndDelay endToEndDelay = EasyMock.createNiceMock(EndToEndDelay.class);
+		EasyMock.expect(endToEndDelay.getDelayBetweenConnection((Connection) EasyMock.anyObject())).andReturn(10d).anyTimes();
+		EasyMock.replay(endToEndDelay);
 		
 		AsymetricBandwidth band1 = new AsymetricBandwidth(maxUp, maxDown);
 		AsymetricBandwidth band2 = new AsymetricBandwidth(maxUp, maxDown);
@@ -88,43 +95,38 @@ public class ConnectionTest extends TestCase {
 		EasyMock.replay(appMsg1);
 		EasyMock.replay(appMsg2);
 		
+		EndToEndDelay delay = EasyMock.createMock(EndToEndDelay.class);
+		EasyMock.expect(delay.getDelayBetweenConnection(connection)).andReturn(new Double(2)).andReturn(new Double(3));
+		EasyMock.replay(delay);
+		
 		NetworkMessage message1 = new NetworkMessage(appMsg1);
 		NetworkMessage message2 = new NetworkMessage(appMsg2);
-		connection.transmitMessage(message1);
-		connection.transmitMessage(message2);
-		assertEquals(300, message1.dataLeft());
-		assertEquals(200, message2.dataLeft());
-		assertEquals(500, connection.getAmountDataBeingTransfered());
+		connection.transmitMessage(delay, message1);
+		connection.transmitMessage(delay, message2);
+		assertEquals(300d, message1.dataLeft());
+		assertEquals(200d, message2.dataLeft());
+		assertEquals(500d, connection.getAmountDataBeingTransfered());
 		
 		assertEquals((float)maxDown, connection.getAllocatedReceiverDownloadBandwidth());
 		assertEquals((float)maxUp, connection.getAllocatedSenderUploadBandwidth());
 		
 		assertFalse(connection.noMoreMessages());
 		
-		EndToEndDelay delay = EasyMock.createMock(EndToEndDelay.class);
-		EasyMock.expect(delay.getDelayBetweenConnection(connection)).andReturn(new Double(2)).andReturn(new Double(2)).andReturn(new Double(2)).andReturn(new Double(1));
 		
-		EasyMock.replay(delay);
-		
-		connection.flushData(delay, 1);
-		assertEquals(175, message1.dataLeft());
-		assertEquals(75, message2.dataLeft());
+		connection.flushData();
+		assertEquals(217, message1.dataLeft(), 1);
+		assertEquals(116, message2.dataLeft(), 1);
 		assertFalse(connection.noMoreMessages());
 		
-		connection.flushData(delay, 1);
-		assertEquals(112, message1.dataLeft());
-		assertEquals(12, message2.dataLeft());
+		connection.flushData();
+		assertEquals(133, message1.dataLeft(), 1);
+		assertEquals(33, message2.dataLeft(), 1);
 		assertFalse(connection.noMoreMessages());
 		
-		connection.flushData(delay, 1);
-		assertEquals(62, message1.dataLeft());
-		assertEquals(0, message2.dataLeft());
+		connection.flushData();
+		assertEquals(1d, message1.dataLeft());
+		assertEquals(0d, message2.dataLeft());
 		assertFalse(connection.noMoreMessages());
-		
-		connection.flushData(delay, 1);
-		assertEquals(0, message1.dataLeft());
-		assertEquals(0, message2.dataLeft());
-		assertTrue(connection.noMoreMessages());
 		
 		EasyMock.verify(delay);
 	}
