@@ -1,19 +1,18 @@
 package webp2p_sim.server;
 
-import webp2p_sim.proxy.GeneratorInterested;
+import java.util.List;
 
-// generate straffic on webservers
-public class FakeRequestGenerator implements GeneratorInterested {
+// generate traffic on webservers
+public class FakeRequestGenerator {
 
-	private WebServer server;
+	private List<WebServer> servers;
 
-	public FakeRequestGenerator(WebServer server) {
-		this.server = server;
+	public FakeRequestGenerator(List<WebServer> servers) {
+		this.servers = servers;
 	}
 	
-	public void generateRequest(String url) {
+	public void generateRequests() {
 		// TODO Auto-generated method stub
-		// gerar os requests diretamento nos webservers
+		// gerar os requests diretamente nos webservers
 	}
-
 }
