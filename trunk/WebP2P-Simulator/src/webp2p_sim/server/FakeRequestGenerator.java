@@ -13,7 +13,7 @@ public class FakeRequestGenerator implements GeneratorInterested {
 	
 	public void generateRequest(String url) {
 		// TODO Auto-generated method stub
-		
+		// gerar os requests diretamento nos webservers
 	}
 
 }
