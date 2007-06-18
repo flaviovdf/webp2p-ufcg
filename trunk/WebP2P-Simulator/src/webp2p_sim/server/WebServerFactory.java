@@ -5,8 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -93,18 +91,15 @@ public class WebServerFactory {
 
 	private Distribution loadServerDistribution(Element distributionElement) {
 		String distributionName = distributionElement.getElementsByTagName("name").item(0).getTextContent();
-		List<Double> parameters = this.getParameters(distributionElement);
+		Object[] parameters = this.getParameters(distributionElement);
 		try {
 			Class distributionClass = Class.forName(distributionName);
-			Constructor constructor = distributionClass.getConstructor(this.getTypes(parameters.size()));
+			Constructor constructor = distributionClass.getConstructor(this.getTypes(parameters.length));
 			return (Distribution) constructor.newInstance(parameters);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -119,18 +114,21 @@ public class WebServerFactory {
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch ( NoSuchMethodException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private List<Double> getParameters(Element distributionElement) {
-		List<Double> parameters = new LinkedList<Double>();
-		
+	private Double[] getParameters(Element distributionElement) {
 		NodeList paramNodes = distributionElement.getElementsByTagName("param");
+		
+		Double[] parameters = new Double[paramNodes.getLength()];
 		
 		for (int i = 0; i < paramNodes.getLength(); i++) {
 			Node n = paramNodes.item(i);
-			parameters.add(new Double(n.getTextContent()));
+			parameters[i] = new Double(n.getTextContent());
 		}
 		
 		return parameters;
@@ -139,7 +137,7 @@ public class WebServerFactory {
 	private Class[] getTypes(int numberOfParameters) {
 		Class[] types = new Class[numberOfParameters];
 		for (int i = 0; i < types.length; i++) {
-			types[i] = Double.class;
+			types[i] = double.class;
 		}
 		return types;
 	}
