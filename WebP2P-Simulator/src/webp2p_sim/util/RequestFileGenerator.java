@@ -28,9 +28,9 @@ public class RequestFileGenerator {
 	private Set<WebServer> webServers;
 	
 	public RequestFileGenerator(Distribution dist, int numberOfTicks, File topologyFile) {
-		this.dist = dist;
+		this.setDistribution(dist);
 		this.numberOfTicks = numberOfTicks;
-		this.serverFactory = new WebServerFactory(dist,new DiscoveryService("ds",dist));
+		this.serverFactory = new WebServerFactory(new DiscoveryService("ds", dist));
 		this.webServers = this.serverFactory.createServers(topologyFile);
 	}
 	

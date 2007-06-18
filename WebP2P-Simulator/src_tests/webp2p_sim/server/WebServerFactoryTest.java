@@ -8,7 +8,6 @@ import java.util.Set;
 
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.util.SmartTestCase;
-import edu.uah.math.distributions.ExponentialDistribution;
 import edu.uah.math.distributions.NormalDistribution;
 
 public class WebServerFactoryTest extends SmartTestCase {
@@ -22,7 +21,7 @@ public class WebServerFactoryTest extends SmartTestCase {
 	}
 	
 	public void testCreateServers() {
-		WebServerFactory factory = new WebServerFactory(new ExponentialDistribution(2), new DiscoveryService("DS", new NormalDistribution(0, 0)));
+		WebServerFactory factory = new WebServerFactory(new DiscoveryService("DS", new NormalDistribution(0, 0)));
 		List<WebServer> servers = new LinkedList<WebServer>(factory.createServers(new File("topology.xml")));
 		
 		assertEquals(3, servers.size());
