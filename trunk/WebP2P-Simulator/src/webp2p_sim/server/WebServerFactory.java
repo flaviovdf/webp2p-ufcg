@@ -1,8 +1,12 @@
 package webp2p_sim.server;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,10 +28,8 @@ import edu.uah.math.distributions.Distribution;
 public class WebServerFactory {
 	
 	private DiscoveryService discoveryService;
-	private final Distribution distribution;
 
-	public WebServerFactory(Distribution distribution, DiscoveryService discoveryService) {
-		this.distribution = distribution;
+	public WebServerFactory(DiscoveryService discoveryService) {
 		this.discoveryService = discoveryService;
 	}
 
@@ -47,6 +49,7 @@ public class WebServerFactory {
 					
 					Element serverElement = (Element) serverNode;
 					String url = serverElement.getElementsByTagName("url").item(0).getTextContent();
+					Distribution distribution = this.loadServerDistribution((Element) serverElement.getElementsByTagName("distribution").item(0));
 					WebServer server = new WebServer(url, distribution, this.discoveryService);
 					
 					NodeList filesList = XPathAPI.selectNodeList(serverElement, "file");
@@ -88,4 +91,56 @@ public class WebServerFactory {
 		return new HashSet<WebServer>(servers.values());
 	}
 
+	private Distribution loadServerDistribution(Element distributionElement) {
+		String distributionName = distributionElement.getElementsByTagName("name").item(0).getTextContent();
+		List<Double> parameters = this.getParameters(distributionElement);
+		try {
+			Class distributionClass = Class.forName(distributionName);
+			Constructor constructor = distributionClass.getConstructor(this.getTypes(parameters.size()));
+			return (Distribution) constructor.newInstance(parameters);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private List<Double> getParameters(Element distributionElement) {
+		List<Double> parameters = new LinkedList<Double>();
+		
+		NodeList paramNodes = distributionElement.getElementsByTagName("param");
+		
+		for (int i = 0; i < paramNodes.getLength(); i++) {
+			Node n = paramNodes.item(i);
+			parameters.add(new Double(n.getTextContent()));
+		}
+		
+		return parameters;
+	}
+
+	private Class[] getTypes(int numberOfParameters) {
+		Class[] types = new Class[numberOfParameters];
+		for (int i = 0; i < types.length; i++) {
+			types[i] = Double.class;
+		}
+		return types;
+	}
 }

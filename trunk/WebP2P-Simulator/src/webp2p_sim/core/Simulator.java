@@ -25,7 +25,7 @@ public class Simulator {
 		this.maxTicks = maxTicks;
 		
 		DiscoveryService ds = new DiscoveryService("Discovery Service", new ExponentialDistribution(2));
-		WebServerFactory webServerFactory = new WebServerFactory(new ExponentialDistribution(2), ds);
+		WebServerFactory webServerFactory = new WebServerFactory(ds);
 		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
 		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
 		Browser browser = new Browser("Browser", null, proxy); // TODO
