@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.server.WebServerFactory;
-
 import edu.uah.math.distributions.Distribution;
 import edu.uah.math.distributions.ParetoDistribution;
 import edu.uah.math.distributions.RandomVariable;
@@ -24,14 +28,12 @@ public class RequestFileGenerator {
 
 	private Distribution dist;
 	private int numberOfTicks;
-	private WebServerFactory serverFactory;
 	private Set<WebServer> webServers;
 	
-	public RequestFileGenerator(Distribution dist, int numberOfTicks, File topologyFile) {
+	public RequestFileGenerator(Distribution dist, int numberOfTicks, Set<WebServer> webServers) {
 		this.setDistribution(dist);
 		this.numberOfTicks = numberOfTicks;
-		this.serverFactory = new WebServerFactory(new DiscoveryService("ds", dist));
-		this.webServers = this.serverFactory.createServers(topologyFile);
+		this.webServers = webServers;
 	}
 	
 	
@@ -39,28 +41,42 @@ public class RequestFileGenerator {
 		this.dist = dist;
 	}
 	
-	
-	public boolean generateRequestFile(String pathOut) {
-		StringBuffer contents = new StringBuffer();
+	public Map<Long,List<UrlToWebServer>> generateRequests() {
+		Map<Long,List<UrlToWebServer>> returnValue = new HashMap<Long,List<UrlToWebServer>>();
 		
 		RandomVariable randomVar = new RandomVariable(this.dist);
 		
 		for (WebServer server : this.webServers) {
-			for (int i = 1 ; i <= numberOfTicks ; i++) {
+			for (long tick = 1 ; tick <= numberOfTicks ; tick++) {
 				long result = Math.round(randomVar.simulate());
-				contents.append(selectFileByPopularity(i,result,server));
+				List<UrlToWebServer> list = selectFileByPopularity(result,server);
+				returnValue.put(tick, list);
+			}
+		}
+		
+		return returnValue;
+	}
+	
+	public boolean generateRequestFile(String pathOut) {
+		Map<Long, List<UrlToWebServer>> map = generateRequests();
+		
+		StringBuffer st = new StringBuffer();
+		for (Entry<Long, List<UrlToWebServer>> entry : map.entrySet()) {
+			for (UrlToWebServer urlTo : entry.getValue()) {
+				st.append(entry.getKey()+" "+urlTo.getUrl());
 			}
 		}
 		try {
-			this.writeResult(new File(pathOut), contents.toString());
+			this.writeResult(new File(pathOut), st.toString());
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
-		}		
-		return true;
+		}	
+		
 	}
 	
-	private String selectFileByPopularity(long tick, long result, WebServer server) {
+	private List<UrlToWebServer> selectFileByPopularity(long result, WebServer server) {
 		// essa dist tem que ser zipf 
 		RandomVariable randomVar = new RandomVariable(this.dist);
 		
@@ -75,15 +91,19 @@ public class RequestFileGenerator {
 			values[i++] = new Pair(simulated,url);
 		}
 		
-		StringBuffer resultValue = new StringBuffer();
+		List<UrlToWebServer> resultValue = new ArrayList<UrlToWebServer>();
 		long times = 0;
 		for (Pair pair: values) {
+		
 			times = Math.round(pair.getParetoValue()*result/total);
 			for (int k = 0; k<times; k++) {
-				resultValue.append(tick+" "+pair.getFileName()+"\n");
+				
+				resultValue.add(new UrlToWebServer(server,pair.getFileName()));
 			}
 		}
-		return resultValue.toString();
+		
+		return resultValue;
+//		.put(tick, resultValue);
 	}
 
 
@@ -118,9 +138,12 @@ public class RequestFileGenerator {
 	}
 	
 	public static void main(String[] args) {
+		WebServerFactory factory = new WebServerFactory(new DiscoveryService("ds", new ParetoDistribution()));
 		File topologyFile = new File("topology.xml");
 		
-		RequestFileGenerator generator = new RequestFileGenerator(new ParetoDistribution(),10, topologyFile);
+		Set<WebServer> servers = factory.createServers(topologyFile);
+				
+		RequestFileGenerator generator = new RequestFileGenerator(new ParetoDistribution(),10, servers);
 		generator.generateRequestFile("tests"+File.separator+"requests"+File.separator+"paretoInput.txt");
 	}
 }

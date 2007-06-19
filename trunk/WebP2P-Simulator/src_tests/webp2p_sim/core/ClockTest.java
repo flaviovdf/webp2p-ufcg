@@ -21,13 +21,13 @@ public class ClockTest extends SmartTestCase {
 	}
 	
 	public void testCountTick1() {
-		assertEquals(0, this.clock.getTicks());
+		assertEquals(0, this.clock.getCurrentTick());
 		
 		this.clock.countTick();
-		assertEquals(1, this.clock.getTicks());
+		assertEquals(1, this.clock.getCurrentTick());
 		
 		this.clock.countTick();
-		assertEquals(2, this.clock.getTicks());
+		assertEquals(2, this.clock.getCurrentTick());
 		
 		TimedEntity entityMock1 = EasyMock.createStrictMock(TimedEntity.class);
 		

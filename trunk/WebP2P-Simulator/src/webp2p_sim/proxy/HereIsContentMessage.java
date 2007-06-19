@@ -14,7 +14,7 @@ public class HereIsContentMessage extends AbstractApplicationMessage implements 
 	}
 
 	public void process() {
-		((Proxy) entity).hereIsContent(request, result);
+		((RequestCallBack) entity).hereIsContent(request, result);
 	}
 
 }
