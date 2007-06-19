@@ -14,7 +14,7 @@ import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RandomLongGenerator;
 import edu.uah.math.distributions.Distribution;
 
-public class Proxy extends SimpleQueuedEntity {
+public class Proxy extends SimpleQueuedEntity implements RequestCallBack, GeneratorInterested {
 
 	private static Logger LOG = Logger.getLogger( Proxy.class );
 	
@@ -29,7 +29,7 @@ public class Proxy extends SimpleQueuedEntity {
 		this.requestIDGenerator = requestIDGenerator;
 	}
 	
-	public void sendRequest(String url) {
+	public void generateRequest(String url) {
 		long generatedRequestID = this.requestIDGenerator.getNextID();
 		LOG.debug( "Asking for file " + url + ". Request: " + generatedRequestID );
 		requests.put(generatedRequestID, url);
@@ -50,7 +50,7 @@ public class Proxy extends SimpleQueuedEntity {
 		}
 	}
 
-	void hereIsContent(long request, int result) {
+	public void hereIsContent(long request, int result) {
 		LOG.debug( "Request " + request + " completed with result " + result );
 	}
 	

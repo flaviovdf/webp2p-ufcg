@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import webp2p_sim.browser.Browser;
 import webp2p_sim.core.entity.TimedEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.proxy.Proxy;
@@ -28,17 +27,17 @@ public class Simulator {
 		WebServerFactory webServerFactory = new WebServerFactory(ds);
 		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
 		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
-		Browser browser = new Browser("Browser", null, proxy); // TODO
-		RequestGenerator req = new RequestGenerator(browser);
+//		Browser browser = new Browser("Browser", null, proxy); // TODO
+		RequestGenerator req = new RequestGenerator(proxy);
 		req.loadFile(inputFile);
 		
 		// TODO Verificar a ordem em que os objetos sao invocados!
 		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
-		Clock.getInstance().addEntities(browser, req, ds, proxy);
+		Clock.getInstance().addEntities(req, ds, proxy);
 	}
 	
 	public void simulate() {
-		while (Clock.getInstance().getTicks() != maxTicks) {
+		while (Clock.getInstance().getCurrentTick() != maxTicks) {
 			Clock.getInstance().countTick();
 		}
 	}

@@ -1,16 +1,16 @@
 package webp2p_sim.server;
 
 import webp2p_sim.core.entity.AbstractApplicationMessage;
-import webp2p_sim.proxy.Proxy;
 import webp2p_sim.proxy.Request;
+import webp2p_sim.proxy.RequestCallBack;
 
 public class GetContentRequest extends AbstractApplicationMessage {
 
 	private long request;
 	private String url;
-	private Proxy callback;
+	private RequestCallBack callback;
 
-	public GetContentRequest(long request, String url, Proxy callback) {
+	public GetContentRequest(long request, String url, RequestCallBack callback) {
 		this.request = request;
 		this.url = url;
 		this.callback = callback;

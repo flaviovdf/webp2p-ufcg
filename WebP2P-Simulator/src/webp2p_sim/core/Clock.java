@@ -51,7 +51,7 @@ public class Clock {
 		}
 	}
 
-	public long getTicks() {
+	public long getCurrentTick() {
 		return ticks;
 	}
 

@@ -81,7 +81,7 @@ public class ProxyTest extends SmartTestCase {
 		
 		dsMock.sendMessage(EasyMock.eq(new GetServersForURLRequest(new Request(id,URL,proxy))));
 		EasyMock.replay(dsMock);
-		proxy.sendRequest(URL);
+		proxy.generateRequest(URL);
 		EasyMock.verify(dsMock);
 		
 		assertEquals(proxy.getRequestsMap().get(id), URL);
