@@ -1,5 +1,6 @@
 package webp2p_sim.log;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Layout;
@@ -18,12 +19,14 @@ public class WebP2PLayout extends Layout {
 
 	@Override
 	public String format(LoggingEvent event) {
+		String date = DateFormat.getInstance().format(new Date(event.timeStamp));
+		
 		StringBuffer st = new StringBuffer();
-		st.append(event.getLevel().toString());
-		st.append(" [REALTIME: " + new Date((event.timeStamp)).toString()+"]");
-		st.append(" [SYSTEMTIME: " + Clock.getInstance().getCurrentTick()+"]");
+		st.append("[REALTIME: " + date  +" - ");
+		st.append("SYSTEMTIME: " + Clock.getInstance().getCurrentTick()+"] ");
+		st.append("{" + event.getLevel().toString() + "} * ");
 		LocationInfo info = event.getLocationInformation();
-		st.append(" "+info.getClassName()+"."+info.getMethodName());
+		st.append(info.getClassName() + "." + info.getMethodName());
 		st.append(" ==> "+event.getMessage()+"\n");
 		return st.toString();
 	}
