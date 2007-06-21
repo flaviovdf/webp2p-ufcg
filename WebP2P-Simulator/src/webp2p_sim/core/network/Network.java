@@ -53,14 +53,14 @@ public class Network implements TimedEntity {
 		Address address = host.getAddress();
 		if (!entities.containsKey(address)) {
 			LOG.info("Unable to unbind < " + address + " >, not bound");
-			throw new NetworkException("Name already in use " + address);
+			throw new NetworkException("Name already in use <" + address + ">");
 		}
 		
 		LOG.info("Sucessfully unbound < " + address + " >");
 		entities.remove(address);
 	}
 	
-	//FIXME Since entities wil ignore errors, no notification is sent in case one occurs
+	//FIXME Since entities will ignore errors, no notification is sent in case one occurs
 	public void sendMessage(Host sender, Host receiver, ApplicationMessage message) {
 		NetworkEntity sendere = entities.get(sender.getAddress());
 		NetworkEntity receivere = entities.get(receiver.getAddress());
