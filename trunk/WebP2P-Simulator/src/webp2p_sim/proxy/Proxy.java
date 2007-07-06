@@ -31,8 +31,8 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 	
 	void hereAreServers(long request, Set<WebServer> servers) {
 		RequestData requestData = requests.get(request);
-		LOG.debug( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );
 		if (requestData != null) {
+			LOG.debug( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );
 			if (servers != null && !servers.isEmpty()) {
 				WebServer server = servers.iterator().next();
 				if (server != null) {

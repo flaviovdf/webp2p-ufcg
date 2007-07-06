@@ -27,10 +27,10 @@ import edu.uah.math.distributions.RandomVariable;
 public class RequestFileGenerator {
 
 	private Distribution dist;
-	private int numberOfTicks;
+	private long numberOfTicks;
 	private Set<WebServer> webServers;
 	
-	public RequestFileGenerator(Distribution dist, int numberOfTicks, Set<WebServer> webServers) {
+	public RequestFileGenerator(Distribution dist, long numberOfTicks, Set<WebServer> webServers) {
 		this.setDistribution(dist);
 		this.numberOfTicks = numberOfTicks;
 		this.webServers = webServers;
