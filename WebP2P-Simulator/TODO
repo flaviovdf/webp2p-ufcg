@@ -1,17 +1,17 @@
 TODO LIST - Para Sexta Feira Dia 15/06/2007
 
 Barata
-	Colocar no topology.xml as distribuições que definem o tempo de atendimento de requisições dos servidores DONE
-	Colocar tamanho de arquivos no topology, seguindo pareto (na verdade, coloque generico)
-	Colocar o host do topology como sendo IP
+	[done] Colocar no topology.xml as distribuições que definem o tempo de atendimento de requisições dos servidores
+	[done] Colocar tamanho de arquivos no topology, seguindo pareto (na verdade, coloque generico)
+	[done] Colocar o host do topology como sendo IP
 
 Joao
 	Implementar Browser
-	Desacoplar a heuristica (strategy) DONE
-	Criar entidade que envia requisições para os WebsServer. Pode ser o Browser que processa respostas instantaneamente DONE
+	[done] Desacoplar a heuristica (strategy)
+	[done] Criar entidade que envia requisições para os WebsServer. Pode ser o Browser que processa respostas instantaneamente
 
 Peruca
-	Finalizar camada de rede DONE
+	[done] Finalizar camada de rede
 	Fazer duas maneiras rodar as simulações no mesmo cenário.
 		1. Usando WebP2P
 		2. Sem usar WebP2P
