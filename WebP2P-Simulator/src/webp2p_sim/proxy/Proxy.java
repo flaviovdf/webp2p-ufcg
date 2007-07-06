@@ -22,23 +22,21 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 	
 	private final DiscoveryService discoveryService;
 	private Map<Long, RequestData> requests; 
-	private RandomLongGenerator requestIDGenerator;
 		
 	public Proxy(String name, Distribution distribution, DiscoveryService discoveryService, RandomLongGenerator requestIDGenerator) {
 		super(name, distribution);
 		this.requests = new HashMap<Long, RequestData>();
 		this.discoveryService = discoveryService;
-		this.requestIDGenerator = requestIDGenerator;
 	}
 	
 	void hereAreServers(long request, Set<WebServer> servers) {
 		RequestData requestData = requests.get(request);
-		LOG.debug( "Server list " + servers + " received for url "+requestData+" with request " + request );
+		LOG.debug( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );
 		if (requestData != null) {
 			if (servers != null && !servers.isEmpty()) {
 				WebServer server = servers.iterator().next();
 				if (server != null) {
-					LOG.debug( "Asking file " + requestData + " to server " + server + ". Request: " + request );
+					LOG.debug( "Asking file " + requestData.getUrl() + " to server " + server + ". Request: " + request );
 					server.sendMessage(new GetContentRequest(request, requestData.getUrl(), this));
 				}
 			}
