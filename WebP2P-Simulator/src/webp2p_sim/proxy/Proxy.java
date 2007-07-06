@@ -9,12 +9,13 @@ import org.apache.log4j.Logger;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.ds.GetServersForURLRequest;
+import webp2p_sim.server.ContentIF;
 import webp2p_sim.server.GetContentRequest;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RandomLongGenerator;
 import edu.uah.math.distributions.Distribution;
 
-public class Proxy extends SimpleQueuedEntity implements RequestCallBack, GeneratorInterested {
+public class Proxy extends SimpleQueuedEntity implements RequestCallBack, ContentIF {
 
 	private static Logger LOG = Logger.getLogger( Proxy.class );
 	
@@ -29,13 +30,6 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Genera
 		this.requestIDGenerator = requestIDGenerator;
 	}
 	
-	public void generateRequest(String url) {
-		long generatedRequestID = this.requestIDGenerator.getNextID();
-		LOG.debug( "Asking for file " + url + ". Request: " + generatedRequestID );
-		requests.put(generatedRequestID, url);
-		discoveryService.sendMessage(new GetServersForURLRequest(new Request(generatedRequestID, url, this)));
-	}
-
 	void hereAreServers(long request, Set<WebServer> servers) {
 		String url = requests.get(request);
 		LOG.debug( "Server list " + servers + " received for url "+url+" with request " + request );
@@ -57,6 +51,12 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Genera
 	//just for test
 	Map<Long, String> getRequestsMap() {
 		return this.requests;
+	}
+
+	public void getContent(Request request) {
+		LOG.debug( "Asking for file " + request.getUrl() + ". Request: " + request.getId() );
+		requests.put(request.getId(), request.getUrl());
+		discoveryService.sendMessage(new GetServersForURLRequest(new Request(request.getId(), request.getUrl(), this)));
 	}
 	
 }

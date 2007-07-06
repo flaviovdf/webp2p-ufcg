@@ -100,7 +100,7 @@ public class WebServer extends SimpleQueuedEntity {
 
 	//called by proxies
 	
-	void getContent(Request request) {
+	public void getContent(Request request) {
 		LOG.debug( "Content for " + request.getUrl() + " requested by " + request.getCallBack() + " request number " + request.getId() );
 		
 		int result;

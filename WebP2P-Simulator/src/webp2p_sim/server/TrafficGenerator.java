@@ -11,6 +11,7 @@ import webp2p_sim.util.RandomLongGenerator;
 import webp2p_sim.util.UrlToWebServer;
 
 // generate traffic on webservers
+//TODO startar no main
 public class TrafficGenerator implements TimedEntity {
 
 	

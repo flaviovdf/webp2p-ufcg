@@ -30,11 +30,11 @@ public class ProxyTest extends SmartTestCase {
 	}
 	
 	public void testMakeRequest() throws Exception {
-		makeRequest();
+		getContent();
 	}
 	
 	public void testHereAreServers() {
-		long reqid = makeRequest();
+		long reqid = getContent();
 		
 		WebServer serverMock1 = EasyMock.createMock(WebServer.class);
 		WebServer serverMock2 = EasyMock.createMock(WebServer.class);
@@ -52,7 +52,7 @@ public class ProxyTest extends SmartTestCase {
 
 	//proxy used to throw excpetion when an empty set was given 
 	public void testHereAreServersNoServersForUrl() {
-		long reqid = makeRequest();
+		long reqid = getContent();
 		
 		Set<WebServer> servers = new HashSet<WebServer>();
 		proxy.hereAreServers(reqid, servers);
@@ -70,18 +70,12 @@ public class ProxyTest extends SmartTestCase {
 		proxy.hereAreServers(12345, servers);
 	}
 	
-	public void testHereIsContent() {
-		long reqid = makeRequest();
-		
-		
-	}
-	
-	private long makeRequest() {
+	private long getContent() {
 		long id = generator.peekNextID();
-		
+		Browser browserMock = EasyMock.createNiceMock(Browser.class);
 		dsMock.sendMessage(EasyMock.eq(new GetServersForURLRequest(new Request(id,URL,proxy))));
 		EasyMock.replay(dsMock);
-		proxy.generateRequest(URL);
+		proxy.getContent(new Request(id,URL,browserMock));
 		EasyMock.verify(dsMock);
 		
 		assertEquals(proxy.getRequestsMap().get(id), URL);
