@@ -16,4 +16,10 @@ public class GetContentForReplicationMessage extends AbstractApplicationMessage 
 		((WebServer) entity).getContentForReplication(url, server);
 	}
 
+	public boolean equals(Object o) {
+		if (!(o instanceof GetContentForReplicationMessage)) return false;
+		
+		GetContentForReplicationMessage other = (GetContentForReplicationMessage) o;
+		return this.url.equals( other.url ) && this.server.equals( other.server );
+	}
 }

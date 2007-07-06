@@ -25,7 +25,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	
 	private static final int DEFAULT_THRESHOLD = 20;
 	private static final int DEFAULT_THRESHOLD_TTL = 50;
-	private static final int DEFAULT_REPLICATION_TTL = 100;
+	static final int DEFAULT_REPLICATION_TTL = 100;
 	
 	private String name;
 	private DiscoveryService discoveryService;
@@ -87,7 +87,6 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 				LOG.debug( "Removing page " + url + " from server " + this.name );
 				
 				urls.remove();
-				files.remove(url);
 				replicationMap.remove(url);
 			}
 		}
@@ -129,7 +128,9 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 
 	void getContentForReplication(String url, WebServer server) {
 		ReplicationInfo info = this.replicationMap.get(url);
-		if (info != null) {
+		if (info == null) {
+			LOG.debug( "Trying to replicate an inexistent url " + url + " to " + server);
+		} else {
 			LOG.debug( "Sending replica for url " + url + " to " + server + " ttl " + DEFAULT_REPLICATION_TTL);
 			info.replicationDone(server, DEFAULT_REPLICATION_TTL);
 			server.sendMessage(new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, this.files.get( url ).getSize()));

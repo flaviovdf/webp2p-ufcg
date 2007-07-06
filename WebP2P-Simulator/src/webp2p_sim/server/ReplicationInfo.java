@@ -63,7 +63,6 @@ class ReplicationInfo implements TimedEntity {
 			ReplicationStatus status = replicaTTLMap.get(server);
 			if (status.isDone() && status.getTTL().decrease() == 0) {
 				servers.remove();
-				replicaTTLMap.remove(server);
 			}
 		}
 	}
