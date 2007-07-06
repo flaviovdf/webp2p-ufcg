@@ -57,8 +57,9 @@ public class WebServerFactory {
 							
 							Element fileElement = (Element) fileNode;
 							String path = fileElement.getElementsByTagName("path").item(0).getTextContent();
+							int size = Integer.parseInt(fileElement.getElementsByTagName("size").item(0).getTextContent());
 							
-							server.loadFile(url + path, 1, new InfinitTimeToLive());
+							server.loadFile(url + path, size, new InfinitTimeToLive());
 						}
 					}
 					
