@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.easymock.classextension.EasyMock;
 
+import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.ds.GetServersForURLRequest;
 import webp2p_sim.server.GetContentRequest;
@@ -78,10 +79,20 @@ public class ProxyTest extends SmartTestCase {
 		proxy.getContent(new Request(id,URL,browserMock));
 		EasyMock.verify(dsMock);
 		
-		assertEquals(proxy.getRequestsMap().get(id), URL);
+		assertEquals(proxy.getRequestsMap().get(id).getUrl(),URL);
 		
 		EasyMock.reset(dsMock);
-		
 		return id;
+	}
+	
+	public void testHereIsContent() {
+		long reqId = getContent();
+		
+		NetworkEntity browserMock = this.proxy.getRequestsMap().get(reqId).getBrowser();
+		EasyMock.reset(browserMock);
+		((Browser) browserMock).sendMessage(new HereIsContentMessage(reqId,1));
+		EasyMock.replay(browserMock);
+		proxy.hereIsContent(reqId, 1);
+		EasyMock.verify(browserMock);
 	}
 }
