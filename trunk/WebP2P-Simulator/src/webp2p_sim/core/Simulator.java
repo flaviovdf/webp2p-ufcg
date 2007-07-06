@@ -8,12 +8,14 @@ import org.apache.log4j.PropertyConfigurator;
 
 import webp2p_sim.core.entity.TimedEntity;
 import webp2p_sim.ds.DiscoveryService;
+import webp2p_sim.proxy.Browser;
 import webp2p_sim.proxy.Proxy;
 import webp2p_sim.proxy.RequestGenerator;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.server.WebServerFactory;
 import webp2p_sim.util.RandomLongGenerator;
 import edu.uah.math.distributions.ExponentialDistribution;
+import edu.uah.math.distributions.ParetoDistribution;
 
 
 public class Simulator {
@@ -27,8 +29,8 @@ public class Simulator {
 		WebServerFactory webServerFactory = new WebServerFactory(ds);
 		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
 		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
-//		Browser browser = new Browser("Browser", null, proxy); // TODO
-		RequestGenerator req = new RequestGenerator(proxy);
+		Browser browser = new Browser("Browser", new ParetoDistribution(), proxy);
+		RequestGenerator req = new RequestGenerator(browser);
 		req.loadFile(inputFile);
 		
 		// TODO Verificar a ordem em que os objetos sao invocados!

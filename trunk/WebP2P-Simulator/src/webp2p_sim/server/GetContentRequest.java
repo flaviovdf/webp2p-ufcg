@@ -17,7 +17,17 @@ public class GetContentRequest extends AbstractApplicationMessage {
 	}
 
 	public void process() {
-		((WebServer) entity).getContent(new Request(this.request, this.url, this.callback));
+		((ContentIF) entity).getContent(new Request(this.request, this.url, this.callback));
+	}
+
+	@Override
+	public int hashCode() {
+		final int PRIME = 31;
+		int result = 1;
+		result = PRIME * result + ((callback == null) ? 0 : callback.hashCode());
+		result = PRIME * result + (int) (request ^ (request >>> 32));
+		result = PRIME * result + ((url == null) ? 0 : url.hashCode());
+		return result;
 	}
 
 	@Override
@@ -43,5 +53,7 @@ public class GetContentRequest extends AbstractApplicationMessage {
 			return false;
 		return true;
 	}
+
+	
 
 }
