@@ -19,7 +19,7 @@ import webp2p_sim.proxy.Request;
 import webp2p_sim.util.TimeToLive;
 import edu.uah.math.distributions.Distribution;
 
-public class WebServer extends SimpleQueuedEntity {
+public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	
 	private static final Logger LOG = Logger.getLogger( WebServer.class );
 	

@@ -29,8 +29,14 @@ public class DiscoveryService extends SimpleQueuedEntity {
 		LOG.debug( "Request " + requestID + " asking for file " + url );
 		
 		Set<WebServer> servers = url2servers.get(url);
-		LOG.debug( "Sending WebServer list " + servers + " to request " + requestID );
-		callback.sendMessage(new GetResponse(new HashSet<WebServer>(servers), requestID));
+		HashSet<WebServer> response = new HashSet<WebServer>();
+		
+		if (servers != null) {
+			response.addAll(servers);
+		}
+		LOG.debug( "Sending WebServer list " + response + " to request " + requestID );
+		callback.sendMessage(new GetResponse(response, requestID));
+		
 	}
 	
 	void putRequest(String url, WebServer webServer) {
