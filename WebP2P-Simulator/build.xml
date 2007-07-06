@@ -35,7 +35,7 @@ Ant build file for WebP2P-Simulator
 
 	<!-- TEST -->
 	<target name="test" depends="build">
-		<junit>
+		<junit errorproperty="${test.error}" failureproperty="${test.failure}">
 			<formatter type="brief" usefile="false" />
 
 			<classpath>
@@ -46,6 +46,9 @@ Ant build file for WebP2P-Simulator
 				<fileset dir="${classes.dir}" includes="**/*Test.class" />
 			</batchtest>
 		</junit>
+		
+		<fail if="${test.failure}" message="[FAILURE] Task failed." />
+		<fail if="${test.error}" message="[ERROR] Task failed." />
 	</target>
 	<!-- END TEST -->
 
