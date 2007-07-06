@@ -39,7 +39,11 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 					LOG.debug( "Asking file " + requestData.getUrl() + " to server " + server + ". Request: " + request );
 					server.sendMessage(new GetContentRequest(request, requestData.getUrl(), this));
 				}
+			} else {
+				requestData.entity.sendMessage(new HereIsContentMessage(request, -1)); // empty result
 			}
+		} else {
+			LOG.debug( "Request " + request + " not found on the proxy map" );
 		}
 	}
 
