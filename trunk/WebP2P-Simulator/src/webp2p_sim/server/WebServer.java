@@ -31,7 +31,7 @@ public class WebServer extends SimpleQueuedEntity {
 	private DiscoveryService discoveryService;
 	private List<WebServer> adj;
 
-	private Map<String, TimeToLive> files;
+	private Map<String, FileInfo> files;
 	private Map<String, ReplicationInfo> replicationMap;
 	private ReplicationStrategy strategyOfReplication;
 	
@@ -41,17 +41,17 @@ public class WebServer extends SimpleQueuedEntity {
 		this.discoveryService = discoveryService;
 		this.adj = new LinkedList<WebServer>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();
-		this.files = new HashMap<String, TimeToLive>();
+		this.files = new HashMap<String, FileInfo>();
 		this.strategyOfReplication = new DefaultReplicationStrategy();
 	}
 
 	void loadFile(String url, int size, TimeToLive ttl) {
 		LOG.debug( "Loading file " + url + " in server " + this.name );
 		
-		TimeToLive olderTTL = this.files.get(url);
+		FileInfo fileInfo = this.files.get(url);
 		
-		if (olderTTL == null || olderTTL.remaining() < ttl.remaining()) {
-			this.files.put(url, ttl);
+		if (fileInfo == null || fileInfo.getTTL().remaining() < ttl.remaining()) {
+			this.files.put(url, new FileInfo(ttl, size));
 			this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL,url));
 			this.discoveryService.sendMessage(new PutFileRequest(url, this));
 		}
@@ -82,8 +82,8 @@ public class WebServer extends SimpleQueuedEntity {
 		Iterator<String> urls = files.keySet().iterator();
 		while (urls.hasNext()) {
 			String url = urls.next();
-			TimeToLive ttl = files.get(url);
-			if (ttl.decrease() == 0) {
+			FileInfo fileInfo = files.get(url);
+			if (fileInfo.getTTL().decrease() == 0) {
 				LOG.debug( "Removing page " + url + " from server " + this.name );
 				
 				urls.remove();
@@ -132,8 +132,7 @@ public class WebServer extends SimpleQueuedEntity {
 		if (info != null) {
 			LOG.debug( "Sending replica for url " + url + " to " + server + " ttl " + DEFAULT_REPLICATION_TTL);
 			info.replicationDone(server, DEFAULT_REPLICATION_TTL);
-			//FIXME size = 1?!
-			server.sendMessage(new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, 1));
+			server.sendMessage(new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, this.files.get( url ).getSize()));
 		}
 	}
 
@@ -141,4 +140,23 @@ public class WebServer extends SimpleQueuedEntity {
 		LOG.debug( "Replica for url " + url + " recevied  ttl " + DEFAULT_REPLICATION_TTL);
 		loadFile(url, size, new TimeToLive(replicationTTL));
 	}
+	
+	private class FileInfo {
+		private TimeToLive ttl;
+		private int size;
+
+		public FileInfo(TimeToLive ttl, int size) {
+			this.ttl = ttl;
+			this.size = size;
+		}
+		
+		public int getSize() {
+			return size;
+		}
+		
+		public TimeToLive getTTL() {
+			return ttl;
+		}
+	}
+
 }
