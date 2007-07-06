@@ -18,4 +18,11 @@ public class HereIsReplicaOfContent extends AbstractApplicationMessage {
 		((WebServer) entity).hereIsReplicaOfUrl(url, replicationTTL, size);
 	}
 
+	public boolean equals(Object o) {
+		if (!(o instanceof HereIsReplicaOfContent)) return false;
+		
+		HereIsReplicaOfContent other = (HereIsReplicaOfContent) o;
+		return this.url.equals( other.url ) && this.replicationTTL == other.replicationTTL && this.size == other.size;
+	}
+
 }

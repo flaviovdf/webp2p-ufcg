@@ -16,4 +16,12 @@ public class PutFileRequest extends AbstractApplicationMessage {
 	public void process() {
 		((DiscoveryService) entity).putRequest(this.url, this.server);
 	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof PutFileRequest)) return false;
+		
+		PutFileRequest other = (PutFileRequest) o;
+		return this.url.equals( other.url ) && this.server.equals( other.server );
+	}
+
 }
