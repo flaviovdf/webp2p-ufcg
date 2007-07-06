@@ -1,7 +1,7 @@
 <topology>
 
 	<server>
-		<url>http://site1.com</url>
+		<url>http://192.168.0.1</url>
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
 			<param>1</param><!-- rate -->
@@ -12,7 +12,7 @@
 		</file>
 		<file>
 			<path>/path/to/file</path>
-			<size>1</size>
+			<size>2</size>
 		</file>
 		<file>
 			<path>/readme.txt</path>
@@ -21,7 +21,7 @@
 	</server>
 
 	<server>
-		<url>http://192.168.1.1</url>
+		<url>http://192.168.0.2</url>
 		<distribution>
 			<name>edu.uah.math.distributions.NormalDistribution</name>
 			<param>0</param><!-- location -->
@@ -29,7 +29,7 @@
 		</distribution>
 		<file>
 			<path>/img.jpg</path>
-			<size>1</size>
+			<size>3</size>
 		</file>
 		<file>
 			<path>/files</path>
@@ -37,7 +37,7 @@
 		</file>
 		<file>
 			<path>/robots.txt</path>
-			<size>1</size>
+			<size>3</size>
 		</file>
 		<file>
 			<path>/info/robots.txt</path>
@@ -50,22 +50,22 @@
 	</server>
 
 	<server>
-		<url>http://site2.net</url>
+		<url>http://192.168.1.1</url>
 		<distribution>
 			<name>edu.uah.math.distributions.PoissonDistribution</name>
 			<param>1</param><!-- rate -->
 		</distribution>
 		<file>
 			<path>/test.jpg</path>
-			<size>1</size>
+			<size>8</size>
 		</file>
 		<file>
 			<path>/path/to/images</path>
-			<size>1</size>
+			<size>11</size>
 		</file>
 		<file>
 			<path>/help.txt</path>
-			<size>1</size>
+			<size>2</size>
 		</file>
 		<file>
 			<path>/robots.txt</path>
@@ -74,13 +74,13 @@
 	</server>
 	
 	<link>
-		<server1>http://site1.com</server1>
-		<server2>http://192.168.1.1</server2>
+		<server1>http://192.168.0.1</server1>
+		<server2>http://192.168.0.2</server2>
 	</link>
 	
 	<link>
-		<server1>http://192.168.1.1</server1>
-		<server2>http://site2.net</server2>
+		<server1>http://192.168.0.2</server1>
+		<server2>http://192.168.1.1</server2>
 	</link>
 
 </topology>
