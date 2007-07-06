@@ -50,7 +50,7 @@
 	</server>
 
 	<server>
-		<url>http://192.168.1.1</url>
+		<url>http://10.10.1.1</url>
 		<distribution>
 			<name>edu.uah.math.distributions.PoissonDistribution</name>
 			<param>1</param><!-- rate -->
@@ -80,7 +80,7 @@
 	
 	<link>
 		<server1>http://192.168.0.2</server1>
-		<server2>http://192.168.1.1</server2>
+		<server2>http://10.10.1.1</server2>
 	</link>
 
 </topology>

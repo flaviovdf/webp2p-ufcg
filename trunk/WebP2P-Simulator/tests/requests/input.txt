@@ -1,6 +1,6 @@
-1 http://site1.com/path/to/file
-2 http://192.168.1.1/robots.txt
-2 http://192.168.1.1/one/two/three/four.bat
-5 http://site2.net/help.txt
-6 http://site2.net/test.jpg
-10 http://site2.net/robots.txt
+1 http://192.168.0.1/path/to/file
+2 http://192.168.0.2/robots.txt
+2 http://192.168.0.2/one/two/three/four.bat
+5 http://10.10.1.1/help.txt
+6 http://10.10.1.1/test.jpg
+10 http://10.10.1.1/robots.txt

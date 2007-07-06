@@ -18,11 +18,10 @@ public class RequestGeneratorTest extends SmartTestCase {
 
 	public void test() {
 		GeneratorInterested interestedMock = EasyMock.createStrictMock(GeneratorInterested.class);
-		
 		RequestGenerator requestGenerator = new RequestGenerator(interestedMock);
 		requestGenerator.loadFile(new File("tests" + File.separator + "requests" + File.separator + "input.txt"));
 		// time 1
-		interestedMock.generateRequest("http://site1.com/path/to/file");
+		interestedMock.generateRequest("http://192.168.0.1/path/to/file");
 		EasyMock.replay(interestedMock);
 		
 		requestGenerator.tickOcurred();
@@ -32,8 +31,8 @@ public class RequestGeneratorTest extends SmartTestCase {
 		// time 2
 		EasyMock.reset(interestedMock);
 		
-		interestedMock.generateRequest("http://192.168.1.1/robots.txt");
-		interestedMock.generateRequest("http://192.168.1.1/one/two/three/four.bat");
+		interestedMock.generateRequest("http://192.168.0.2/robots.txt");
+		interestedMock.generateRequest("http://192.168.0.2/one/two/three/four.bat");
 		
 		EasyMock.replay(interestedMock);
 		requestGenerator.tickOcurred();
@@ -41,7 +40,7 @@ public class RequestGeneratorTest extends SmartTestCase {
 		
 		// time 5
 		EasyMock.reset(interestedMock);
-		interestedMock.generateRequest("http://site2.net/help.txt");
+		interestedMock.generateRequest("http://10.10.1.1/help.txt");
 		
 		EasyMock.replay(interestedMock);
 		requestGenerator.tickOcurred();
@@ -52,7 +51,7 @@ public class RequestGeneratorTest extends SmartTestCase {
 		// time 6
 		EasyMock.reset(interestedMock);
 		
-		interestedMock.generateRequest("http://site2.net/test.jpg");
+		interestedMock.generateRequest("http://10.10.1.1/test.jpg");
 		
 		EasyMock.replay(interestedMock);
 		requestGenerator.tickOcurred();
@@ -61,7 +60,7 @@ public class RequestGeneratorTest extends SmartTestCase {
 		// time 10
 		EasyMock.reset(interestedMock);
 		
-		interestedMock.generateRequest("http://site2.net/robots.txt");
+		interestedMock.generateRequest("http://10.10.1.1/robots.txt");
 		
 		EasyMock.replay(interestedMock);
 		requestGenerator.tickOcurred();
