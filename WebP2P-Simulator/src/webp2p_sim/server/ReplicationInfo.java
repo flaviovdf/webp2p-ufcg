@@ -49,6 +49,10 @@ class ReplicationInfo implements TimedEntity {
 	public boolean mustReplicate() {
 		return numGets >= threshold;
 	}
+	
+	public int getRequestsInThisWindow() {
+		return this.numGets;
+	}
 
 	public void tickOcurred() {
 		ticks++;
