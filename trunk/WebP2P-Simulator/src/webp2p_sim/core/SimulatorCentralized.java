@@ -12,7 +12,6 @@ import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RequestFileGenerator;
 import edu.uah.math.distributions.ContinuousUniformDistribution;
 import edu.uah.math.distributions.ExponentialDistribution;
-import edu.uah.math.distributions.ParetoDistribution;
 
 public class SimulatorCentralized extends Simulator {
 
@@ -20,13 +19,13 @@ public class SimulatorCentralized extends Simulator {
 		super(maxTicks);
 		
 		DiscoveryService ds = new DiscoveryService("FAKE Discovery Service", new ContinuousUniformDistribution(0, 0));
-		WebServer server = new WebServer("192.168.254.1", new ExponentialDistribution(2), ds);
-		Browser browser = new Browser("Browser", new ParetoDistribution(), server);
+		WebServer server = new WebServer("192.168.254.1", new ExponentialDistribution(1f/50), ds);
+		Browser browser = new Browser("Browser", new ContinuousUniformDistribution(0, 0), server);
 		RequestGenerator req = new RequestGenerator(browser);
 		
 		Set<WebServer> servers = new HashSet<WebServer>();
 		servers.add(server);
-		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(new ParetoDistribution(), getNumberOfTicks(), servers ).generateRequests());
+		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(new ExponentialDistribution(1), getNumberOfTicks(), servers ).generateRequests());
 		req.loadFile(inputFile);
 		
 		Clock.getInstance().addEntities(req, server, browser, trafficGenerator);
