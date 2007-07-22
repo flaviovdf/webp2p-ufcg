@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Looks for the root dir
+
+findrootdir() {
+
+	PRG="$0"
+
+	while [ -h "$PRG" ]; do
+		ls=`ls -ld "$PRG"`
+		link=`expr "$ls" : '.*-> \(.*\)$'`
+		if expr "$link" : '.*/.*' > /dev/null; then
+			PRG="$link"
+		else
+			PRG=`dirname "$PRG"`/"$link"
+		fi
+	done
+
+	PRGDIR=`dirname "$PRG"`
+	ROOT_DIR=`cd "$PRGDIR/.." ; pwd`
+}
+
+# Sets the classpath
+
+setclasspath() {
+	CLASSPATH=.
+
+	for i in *.jar; do
+		CLASSPATH=$CLASSPATH:$ROOT_DIR/$i
+	done
+
+	cd "$ROOT_DIR/lib"
+
+	for i in *.jar; do
+		CLASSPATH=$CLASSPATH:$ROOT_DIR/lib/$i
+	done
+
+	cd - > /dev/null
+}
+
+# Main
+
+findrootdir && setclasspath
+
+java -cp "$CLASSPATH" webp2p.discoveryservice.ui.Main $1
