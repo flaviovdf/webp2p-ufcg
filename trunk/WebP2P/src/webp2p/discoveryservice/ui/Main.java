@@ -19,8 +19,8 @@ public class Main {
 		webServer.start();
 	}
 
-	public boolean isEven(int n) {
-		return n % 2 == 0;
+	public int isEven(int a, int b) {
+		return a / b;
 	}
 
 }
