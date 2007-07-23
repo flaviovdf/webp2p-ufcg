@@ -1,26 +1,23 @@
 package webp2p.discoveryservice;
 
-import java.io.IOException;
-
-import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.server.PropertyHandlerMapping;
-import org.apache.xmlrpc.server.XmlRpcStreamServer;
-import org.apache.xmlrpc.webserver.WebServer;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException, XmlRpcException {
-		PropertyHandlerMapping pMapping = new PropertyHandlerMapping();
-		pMapping.addHandler("test", Main.class);
+	public static void main(String[] args) {
+		if (args.length != 1) {
+			System.err.println("Parameters format: <port>");
+			System.exit(1);
+		}
 		
-		WebServer webServer = new WebServer(9090);
-		XmlRpcStreamServer server = webServer.getXmlRpcServer();
-		server.setHandlerMapping(pMapping);
-		webServer.start();
-	}
-
-	public int isEven(int a, int b) {
-		return a / b;
+		try {
+			int port = Integer.parseInt(args[0]);
+			
+			DiscoveryServiceSkel discoveryServiceSkel = new DiscoveryServiceSkel();
+			discoveryServiceSkel.start(port);
+			
+		} catch (NumberFormatException e) {
+			System.err.println("Invalid port number");
+		}
 	}
 
 }
