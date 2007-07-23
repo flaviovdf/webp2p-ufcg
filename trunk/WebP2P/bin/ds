@@ -42,4 +42,4 @@ setclasspath() {
 
 findrootdir && setclasspath
 
-java -cp "$CLASSPATH" webp2p.discoveryservice.ui.Main $1
+java -cp "$CLASSPATH" webp2p.discoveryservice.Main $1
