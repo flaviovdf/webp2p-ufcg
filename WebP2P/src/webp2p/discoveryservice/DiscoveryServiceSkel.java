@@ -4,15 +4,17 @@ import java.io.IOException;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
+import org.apache.xmlrpc.server.RequestProcessorFactoryFactory;
 import org.apache.xmlrpc.server.XmlRpcStreamServer;
 import org.apache.xmlrpc.webserver.WebServer;
 
 public class DiscoveryServiceSkel {
-
+	
 	public void start(int port) {
 		PropertyHandlerMapping pMapping = new PropertyHandlerMapping();
 		try {
-			pMapping.addHandler("$default", DiscoveryService.class);
+			pMapping.setRequestProcessorFactoryFactory(new RequestProcessorFactoryFactory.StatelessProcessorFactoryFactory());
+			pMapping.addHandler("ds", DiscoveryService.class);
 		} catch (XmlRpcException e) {
 			throw new RuntimeException("Could not add handler for class " + this.getClass(), e);
 		}
