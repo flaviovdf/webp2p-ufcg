@@ -1,4 +1,4 @@
-package webp2p.discoveryservice.ui;
+package webp2p.discoveryservice;
 
 import java.io.IOException;
 
