@@ -29,7 +29,7 @@ public class DiscoveryService {
 			this.table.put(file, new HashSet<String>());
 			firstEntryForFile = true;
 		}
-		
+
 		Set<String> webservers = this.table.get(file);
 		webservers.add(wsAddr);
 		

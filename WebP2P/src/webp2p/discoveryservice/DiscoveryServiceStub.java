@@ -2,7 +2,7 @@ package webp2p.discoveryservice;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+import java.util.Arrays;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -28,10 +28,9 @@ public class DiscoveryServiceStub {
 		System.out.println(this.client.execute("ds.put", new Object[] { wsAddr, file }));
 	}
 	
-	public List<String> get(String file) throws XmlRpcException {
-		Object result = this.client.execute("ds.get", new Object[] { file });
-		System.out.println(result);
-		return null;
+	public String[] get(String file) throws XmlRpcException {
+		Object[] result = (Object[]) this.client.execute("ds.get", new Object[] { file });
+		return Arrays.asList(result).toArray(new String[0]);
 	}
 
 }
