@@ -7,10 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The <code>DiscoveryService</code> is a catalog which holds information about where the files are.
+ */
 public class DiscoveryService {
 
 	private Map<String, Set<String>> table;
 
+	/**
+	 * Creates a new <code>DiscoveryService</code> instance.
+	 */
 	public DiscoveryService() {
 		this.table = new HashMap<String, Set<String>>();
 	}

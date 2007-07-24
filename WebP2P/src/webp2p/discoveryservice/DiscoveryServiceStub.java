@@ -15,9 +15,9 @@ public class DiscoveryServiceStub {
 	public DiscoveryServiceStub(String dsAddr, int port) {
 		XmlRpcClientConfigImpl pConfig = new XmlRpcClientConfigImpl();
 		try {
-			pConfig.setServerURL(new URL(dsAddr + ":" + port));
+			pConfig.setServerURL(new URL("http://" + dsAddr + ":" + port));
 		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Invalid address " + dsAddr + ":" + port, e);
+			throw new IllegalArgumentException("Invalid URL 'http://" + dsAddr + ":" + port + "'", e);
 		}
 		
 		this.client = new XmlRpcClient();
@@ -25,12 +25,16 @@ public class DiscoveryServiceStub {
 	}
 
 	public void put(String wsAddr, String file) throws XmlRpcException {
-		System.out.println(this.client.execute("ds.put", new Object[] { wsAddr, file }));
+		this.client.execute("ds.put", new Object[] { wsAddr, file });
 	}
 	
 	public String[] get(String file) throws XmlRpcException {
 		Object[] result = (Object[]) this.client.execute("ds.get", new Object[] { file });
 		return Arrays.asList(result).toArray(new String[0]);
+	}
+	
+	public void delete(String wsAddr, String file) throws XmlRpcException {
+		this.client.execute("ds.delete", new Object[] { wsAddr, file });
 	}
 
 }
