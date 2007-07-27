@@ -1,8 +1,6 @@
 package webp2p.proxy;
 
 import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.XmlRpcRequest;
-import org.apache.xmlrpc.client.AsyncCallback;
 
 import webp2p.discoveryservice.DiscoveryServiceStub;
 import webp2p.webserver.WebServerStub;
@@ -27,5 +25,5 @@ public class Proxy {
 			return null;
 		}
 	}
-	
+
 }
