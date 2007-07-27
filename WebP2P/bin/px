@@ -42,4 +42,4 @@ setclasspath() {
 
 findrootdir && setclasspath
 
-java -cp "$CLASSPATH" webp2p.proxy.ui.Main $1 $2
+java -cp "$CLASSPATH" webp2p.proxy.Main $1 $2 $3
