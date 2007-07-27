@@ -19,6 +19,7 @@ public class Proxy {
 		try {
 			String[] servers = this.discoveryService.get(url);
 			String wsAddr = this.webserverArbitrator.chooseWebServer(servers);
+			if (wsAddr == null) return null;
 			WebServerStub wsStub = new WebServerStub(wsAddr);
 			return wsStub.getContent(url);
 		} catch (XmlRpcException e) {
