@@ -1,6 +1,8 @@
 package webp2p.proxy;
 
 import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.XmlRpcRequest;
+import org.apache.xmlrpc.client.AsyncCallback;
 
 import webp2p.discoveryservice.DiscoveryServiceStub;
 import webp2p.webserver.WebServerStub;
@@ -8,33 +10,22 @@ import webp2p.webserver.WebServerStub;
 public class Proxy {
 	
 	private DiscoveryServiceStub discoveryService;
+	private WebServerArbitrator webserverArbitrator;
 
-	public Proxy(DiscoveryServiceStub discoveryService) {
+	public Proxy(DiscoveryServiceStub discoveryService, WebServerArbitrator arbitrator) {
 		this.discoveryService = discoveryService;
+		this.webserverArbitrator = arbitrator;
 	}
 	
 	public byte[] getContent(String url) {
 		try {
 			String[] servers = this.discoveryService.get(url);
-
-			for (String wsAddr : servers) {
-				WebServerStub wsStub = new WebServerStub(wsAddr);
-//				byte[] file = wsStub.getContent(url);
-				
-			}
-			
-			return null;
+			String wsAddr = this.webserverArbitrator.chooseWebServer(servers);
+			WebServerStub wsStub = new WebServerStub(wsAddr);
+			return wsStub.getContent(url);
 		} catch (XmlRpcException e) {
 			return null;
 		}
 	}
 	
-	public void hereIsContent() {
-		
-	}
-	
-	public void hereAreServers() {
-		
-	}
-
 }
