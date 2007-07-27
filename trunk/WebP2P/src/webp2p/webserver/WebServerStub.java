@@ -8,8 +8,8 @@ public class WebServerStub {
 		
 	}
 
-	public void getContent(String url) throws XmlRpcException {
-		
+	public byte[] getContent(String url) throws XmlRpcException {
+		return ("file content: " + url).getBytes();
 	}
 
 }
