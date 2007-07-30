@@ -12,12 +12,12 @@ public class DiscoveryServiceStub {
 
 	private XmlRpcClient client;
 
-	public DiscoveryServiceStub(String dsAddr, int port) {
+	public DiscoveryServiceStub(String dsAddr, int dsPort) {
 		XmlRpcClientConfigImpl pConfig = new XmlRpcClientConfigImpl();
 		try {
-			pConfig.setServerURL(new URL("http://" + dsAddr + ":" + port));
+			pConfig.setServerURL(new URL("http://" + dsAddr + ":" + dsPort));
 		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Invalid URL 'http://" + dsAddr + ":" + port + "'", e);
+			throw new IllegalArgumentException("Invalid URL 'http://" + dsAddr + ":" + dsPort + "'", e);
 		}
 		
 		this.client = new XmlRpcClient();

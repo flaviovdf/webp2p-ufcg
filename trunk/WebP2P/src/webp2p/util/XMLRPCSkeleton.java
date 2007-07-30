@@ -1,4 +1,4 @@
-package webp2p.discoveryservice;
+package webp2p.util;
 
 import java.io.IOException;
 
@@ -9,15 +9,23 @@ import org.apache.xmlrpc.webserver.WebServer;
 
 import webp2p.util.StatefulProcessorFactoryFactory;
 
-public class DiscoveryServiceSkel {
+public class XMLRPCSkeleton {
+	
+	private String name;
+	private Class clazz;
+
+	public XMLRPCSkeleton(String name, Class clazz) {
+		this.name = name;
+		this.clazz = clazz;
+	}
 	
 	public void start(int port) {
 		PropertyHandlerMapping pMapping = new PropertyHandlerMapping();
 		pMapping.setRequestProcessorFactoryFactory(new StatefulProcessorFactoryFactory());
 		try {
-			pMapping.addHandler("ds", DiscoveryService.class);
+			pMapping.addHandler(this.name, this.clazz);
 		} catch (XmlRpcException e) {
-			throw new RuntimeException("Could not add handler for class " + this.getClass(), e);
+			throw new RuntimeException("Could not add handler for class " + this.clazz, e);
 		}
 		
 		WebServer webServer = new WebServer(port);

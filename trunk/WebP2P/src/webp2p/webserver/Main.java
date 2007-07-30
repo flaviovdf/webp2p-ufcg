@@ -1,4 +1,4 @@
-package webp2p.discoveryservice;
+package webp2p.webserver;
 
 import webp2p.util.XMLRPCSkeleton;
 
@@ -12,10 +12,11 @@ public class Main {
 		}
 		
 		try {
+			WebServerP2P.init();
 			int port = Integer.parseInt(args[0]);
-			XMLRPCSkeleton discoveryServiceSkel = new XMLRPCSkeleton("ds", DiscoveryService.class);
-			System.out.println("Starting DiscoveryService...");
-			discoveryServiceSkel.start(port);
+			XMLRPCSkeleton webserverp2pSkel = new XMLRPCSkeleton("ws", WebServerP2P.class);
+			System.out.println("Starting WebServerP2P...");
+			webserverp2pSkel.start(port);
 			System.out.println("Successfully started!");
 		} catch (NumberFormatException e) {
 			System.err.println("Invalid port number");
