@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<project name="WebP2P" basedir="." default="build">
+<project name="WebP2P" basedir="." default="jar">
 
 	<property name="jar" value="webp2p.jar" />
+	<property name="war" value="webp2p-proxy.war" />
 	<property name="src" value="src" />
 	<property name="classes" value="classes" />
 	<property name="lib" value="lib" />
@@ -15,9 +16,11 @@
 
 	<!-- CLEAN -->
 	<target name="clean">
+		<delete dir="tmp" />
 		<delete dir="${classes}" />
 		<mkdir dir="${classes}" />
 		<delete file="${jar}" />
+		<delete file="${war}" />
 	</target>
 
 	<!-- COMPILE -->
@@ -27,11 +30,35 @@
 		</javac>
 	</target>
 
-	<!-- BUILD -->
-	<target name="build" depends="compile">
+	<!-- JAR -->
+	<target name="jar" depends="compile">
 		<jar destfile="${jar}">
-			<fileset dir="${classes}"/>
+			<fileset dir="${classes}" />
 		</jar>
+	</target>
+
+	<!-- WAR -->
+	<target name="war" depends="jar">
+		<mkdir dir="tmp/WEB-INF"/>
+		
+		<copy todir="tmp/WEB-INF">
+			<fileset file="${lib}">
+ 				<include name="${lib}/*.jar" />
+				<exclude name="${lib}/servlet-api.jar" />
+			</fileset>
+			<fileset file="${classes}">
+				<include name="${classes}/**/*Servlet.class"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="tmp/WEB-INF/${lib}" file="${jar}" />
+		<copy todir="tmp/WEB-INF/${classes}" file="proxy.properties" />
+		
+		<war destfile="${war}" webxml="web.xml">
+			<fileset dir="tmp" />
+		</war>
+		
+		<delete dir="tmp" />
 	</target>
 
 </project>
