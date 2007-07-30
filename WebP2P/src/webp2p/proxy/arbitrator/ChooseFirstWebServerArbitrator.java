@@ -1,7 +1,7 @@
-package webp2p.proxy;
+package webp2p.proxy.arbitrator;
 
 /**
- * A simple <code>WebServerArbitrator</code> which returns the first <code>WebServer</code>
+ * A simple <code>WebServerArbitrator</code> which returns the first <code>WebServerP2P</code>
  * from a list of web servers.
  */
 public class ChooseFirstWebServerArbitrator implements WebServerArbitrator {

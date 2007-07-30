@@ -12,6 +12,9 @@ import java.util.Set;
  */
 public class DiscoveryService {
 
+	/**
+	 * The list of web servers by a given file.
+	 */
 	private Map<String, Set<String>> table;
 
 	/**
@@ -29,6 +32,7 @@ public class DiscoveryService {
 	 * @return <code>true</code> if it is a first entry for the specified file, <code>false</code> otherwise.
 	 */
 	public boolean put(String wsAddr, String file) {
+System.out.println("DiscoveryService.put() " + wsAddr + " -> "+file);
 		boolean firstEntryForFile = false;
 
 		if (! this.table.containsKey(file)) {
