@@ -12,10 +12,10 @@ public class Main {
 		}
 		
 		try {
-			WebServerP2P.init();
 			int port = Integer.parseInt(args[0]);
-			XMLRPCSkeleton webserverp2pSkel = new XMLRPCSkeleton("ws", WebServerP2P.class);
 			System.out.println("Starting WebServerP2P...");
+			WebServerP2P.init();
+			XMLRPCSkeleton webserverp2pSkel = new XMLRPCSkeleton("ws", WebServerP2P.class);
 			webserverp2pSkel.start(port);
 			System.out.println("Successfully started!");
 		} catch (NumberFormatException e) {
