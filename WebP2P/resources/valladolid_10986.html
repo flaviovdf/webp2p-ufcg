@@ -1,0 +1,87 @@
+<html><head><title>Sending email</title></head><body>
+<basefont face="ARIAL">
+<p>
+</p><center>
+<font size="6"><b>Problem E</b></font><br>
+<font size="5"><b>Sending email</b></font><br>
+<font size="4">Time Limit: 3 seconds</font>
+</center>
+<p></p>
+
+<p align="right">
+<table border="0"><tbody><tr><td><small>
+<i>"A new internet watchdog is creating a stir in<br>
+Springfield. Mr. X, if that is his real name, has<br>
+come up with a sensational scoop."</i>
+</small></td></tr></tbody></table>
+<tt>Kent Brockman</tt>
+</p>
+
+<p class="paragraph">
+There are <b>n</b> SMTP servers connected by network cables.
+Each of the <b>m</b> cables connects two computers and has a
+certain latency measured in milliseconds required to send an
+email message. What is the shortest time required to send a
+message from server <b>S</b> to server <b>T</b> along a 
+sequence of cables? Assume that there is no delay incurred
+at any of the servers.
+</p>
+
+<p class="paragraph">
+<font size="5"><b>Input</b></font><br>
+The first line of input gives the number of cases, <b>N</b>.
+<b>N</b> test cases follow. Each one starts with a line containing
+<b>n</b> (2&lt;=<b>n</b>&lt;20000), <b>m</b> (0&lt;=<b>m</b>&lt;50000),
+<b>S</b> (0&lt;=<b>S</b>&lt;<b>n</b>) and <b>T</b> 
+(0&lt;=<b>T</b>&lt;<b>n</b>). <b>S</b>!=<b>T</b>. The next <b>m</b> lines will each 
+contain 3 integers: 2 different servers (in the range [0, <b>n</b>-1]) 
+that are connected by a bidirectional cable and
+the latency, <b>w</b>, along this cable (0&lt;=<b>w</b>&lt;=10000).
+</p>
+
+<p class="paragraph">
+<font size="5"><b>Output</b></font><br>
+For each test case, output the line "Case #<b>x</b>:" followed by the
+number of milliseconds required to send a message from <b>S</b> to
+<b>T</b>. Print "unreachable" if there is no route from <b>S</b> to
+<b>T</b>.
+</p>
+
+<table border="1" bordercolor="black" cellpadding="5" cellspacing="0" width="100%">
+<tbody><tr valign="top">
+<td>
+<font size="5"><b>Sample Input</b></font>
+</td>
+<td>
+<font size="5"><b>Sample Output</b></font>
+</td>
+</tr>
+<tr bgcolor="#d0d0d0" valign="top">
+<td>
+<pre>3
+2 1 0 1
+0 1 100
+3 3 2 0
+0 1 100
+0 2 200
+1 2 50
+2 0 0 1
+</pre>
+</td>
+<td>
+<pre>Case #1: 100
+Case #2: 150
+Case #3: unreachable
+</pre>
+</td>
+</tr>
+</tbody></table>
+
+<p>
+</p><hr>
+<b>Problemsetter: Igor Naverniouk</b>
+<p></p>
+
+
+
+</body></html>
