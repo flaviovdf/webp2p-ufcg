@@ -12,6 +12,9 @@ import webp2p.webserver.config.WebServerP2PConfig;
 
 public class WebServerP2P {
 	
+	public WebServerP2P() {
+	}
+	
 	static void init() {
 		DiscoveryServiceStub discoveryService;
 		
@@ -31,9 +34,6 @@ System.out.println("WebServerP2P.WebServerP2P() -- 2");
 		}
 	}
 
-	public WebServerP2P() {
-	}
-	
 	public byte[] getContent(String url) {
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream(256);
@@ -61,4 +61,7 @@ System.out.println(connection.getHeaderFields());
 		return ("file content: " + url).getBytes();
 	}
 
+	public boolean createReplica(String url) {
+		return false;
+	}
 }
