@@ -20,14 +20,16 @@ public class Main {
 		Simulator simulator;
 		if (args[0].equals("distributed")) {
 			try {
-				simulator = new SimulatorDistributed(new File(args[1]), new File(args[2]), Integer.parseInt(args[3]));
+//				FIXME AQUI JOÃO;
+//				simulator = new SimulatorDistributed(new File(args[1]), new File(args[2]), Integer.parseInt(args[3]));
 			} catch (Throwable e) {
 				usage(e);
 				return;
 			}
 		} else if (args[0].equals("centralized")) {
 			try {
-				simulator = new SimulatorCentralized(new File(args[1]), Integer.parseInt(args[2]));
+//				FIXME AQUI JOÃO;
+//				simulator = new SimulatorCentralized(new File(args[1]), Integer.parseInt(args[2]));
 			} catch (Throwable e) {
 				usage(e);
 				return;
@@ -42,7 +44,8 @@ public class Main {
 		System.out.println(startMessage);
 		
 		try {
-			simulator.simulate();
+//			FIXME AQUI JOÃO;
+//			simulator.simulate();
 			String endMessage = "Simulation finished";
 			System.out.println(endMessage);
 			LOG.info(endMessage);

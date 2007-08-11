@@ -19,19 +19,20 @@ import edu.uah.math.distributions.ParetoDistribution;
 
 public class SimulatorDistributed extends Simulator {
 	
-	public SimulatorDistributed(File inputFile, File topologyFile, int maxTicks) {
-		super(maxTicks);
+	public SimulatorDistributed(DistributedParams params) {
+		super(params);
 		
-		DiscoveryService ds = new DiscoveryService("Discovery Service", new ExponentialDistribution(2));
-		WebServerFactory webServerFactory = new WebServerFactory(ds);
-		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
-		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
-		Browser browser = new Browser("Browser", new ParetoDistribution(), proxy);
-		RequestGenerator req = new RequestGenerator(browser);
-		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(new ParetoDistribution(), getNumberOfTicks(), servers).generateRequests());
-		req.loadFile(inputFile);
-		
-		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
-		Clock.getInstance().addEntities(req, ds, proxy, browser, trafficGenerator);
+//		FIXME AQUI JOÃO;
+//		DiscoveryService ds = new DiscoveryService("Discovery Service", new ExponentialDistribution(2));
+//		WebServerFactory webServerFactory = new WebServerFactory(ds);
+//		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
+//		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
+//		Browser browser = new Browser("Browser", new ParetoDistribution(), proxy);
+//		RequestGenerator req = new RequestGenerator(browser);
+//		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(new ParetoDistribution(), getNumberOfTicks(), servers).generateRequests());
+//		req.loadFile(inputFile);
+//		
+//		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
+//		Clock.getInstance().addEntities(req, ds, proxy, browser, trafficGenerator);
 	}
 }

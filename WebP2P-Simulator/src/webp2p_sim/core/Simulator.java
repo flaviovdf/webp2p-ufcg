@@ -5,8 +5,8 @@ public abstract class Simulator {
 
 	private final long maxTicks;
 
-	public Simulator(long maxTicks) {
-		this.maxTicks = maxTicks;
+	public Simulator(Params params) {
+		this.maxTicks = params.getSimTime();
 	}
 	
 	public final long getNumberOfTicks() {
