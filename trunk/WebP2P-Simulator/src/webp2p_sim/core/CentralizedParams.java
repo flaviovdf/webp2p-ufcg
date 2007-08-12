@@ -22,31 +22,33 @@ public class CentralizedParams extends Params {
 		int seed = config.getInt("sim.seed");
 		
 		String browserInputFile = config.getString("browser.inputfile");
+		String browserIP = config.getString("browser.ip");
 		String[] distDefinitionArray = config.getStringArray("browser.process.distribution");
 		Distribution browserDist = extractObject(distDefinitionArray);
 		
+		String webServerIP = config.getString("server.ip");
 		distDefinitionArray = config.getStringArray("server.process.distribution");
 		Distribution webServerDist = extractObject(distDefinitionArray);
 		
 		distDefinitionArray = config.getStringArray("server.traffic.distribution");
 		Distribution webServerTrafficDist = extractObject(distDefinitionArray);
 		
-		buildMe(simTime, seed, browserInputFile, browserDist, webServerDist, webServerTrafficDist);
+		buildMe(simTime, seed, browserInputFile, browserIP, browserDist, webServerDist, webServerIP, webServerTrafficDist);
 	}
 	
-	public CentralizedParams(long simTime, int seed, String browserInputFile, Distribution browserDist, Distribution webServerDist, Distribution webServerTrafficDist) {
-		buildMe(simTime, seed, browserInputFile, browserDist, webServerDist, webServerTrafficDist);
+	public CentralizedParams(long simTime, int seed, String browserInputFile, String browserIP, Distribution browserDist, Distribution webServerDist, String webServerIP, Distribution webServerTrafficDist) {
+		buildMe(simTime, seed, browserInputFile,  browserIP, browserDist, webServerDist, webServerIP, webServerTrafficDist);
 	}
 	
-	private void buildMe(long simTime, int seed, String browserInputFile, Distribution browserDist, Distribution webServerDist, Distribution webServerTrafficDist) {
+	private void buildMe(long simTime, int seed, String browserInputFile,  String browserIP, Distribution browserDist, Distribution webServerDist, String webServerIP, Distribution webServerTrafficDist) {
 		this.browserInputFile = browserInputFile;
 		this.simTime = simTime;
 		this.seed = seed;
 		this.webServerTrafficDist = webServerTrafficDist;
 		
-		this.ds = new DiscoveryService("FAKE Discovery Service", new ContinuousUniformDistribution(0, 0));
-		this.webServer = new WebServer("192.168.254.1", new ExponentialDistribution(1f/50), ds);
-		this.browser = new Browser("Browser", browserDist, webServer);
+		this.ds = new DiscoveryService("127.0.0.1", new ContinuousUniformDistribution(0, 0));
+		this.webServer = new WebServer(webServerIP, new ExponentialDistribution(1f/50), ds);
+		this.browser = new Browser(browserIP, browserDist, webServer);
 	}
 
 	public String getBrowserInputFile() {
@@ -69,3 +71,4 @@ public class CentralizedParams extends Params {
 		return webServerTrafficDist;
 	}
 }
+

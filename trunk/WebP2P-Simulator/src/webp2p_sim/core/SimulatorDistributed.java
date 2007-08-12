@@ -10,11 +10,9 @@ import webp2p_sim.proxy.Proxy;
 import webp2p_sim.proxy.RequestGenerator;
 import webp2p_sim.server.TrafficGenerator;
 import webp2p_sim.server.WebServer;
-import webp2p_sim.server.WebServerFactory;
 import webp2p_sim.util.RandomLongGenerator;
 import webp2p_sim.util.RequestFileGenerator;
 import edu.uah.math.distributions.ExponentialDistribution;
-import edu.uah.math.distributions.ParetoDistribution;
 
 
 public class SimulatorDistributed extends Simulator {
@@ -22,17 +20,16 @@ public class SimulatorDistributed extends Simulator {
 	public SimulatorDistributed(DistributedParams params) {
 		super(params);
 		
-//		FIXME AQUI JOÃO;
-//		DiscoveryService ds = new DiscoveryService("Discovery Service", new ExponentialDistribution(2));
-//		WebServerFactory webServerFactory = new WebServerFactory(ds);
-//		Set<WebServer> servers = webServerFactory.createServers(topologyFile);
-//		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
-//		Browser browser = new Browser("Browser", new ParetoDistribution(), proxy);
-//		RequestGenerator req = new RequestGenerator(browser);
-//		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(new ParetoDistribution(), getNumberOfTicks(), servers).generateRequests());
-//		req.loadFile(inputFile);
-//		
-//		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
-//		Clock.getInstance().addEntities(req, ds, proxy, browser, trafficGenerator);
+		DiscoveryService ds = params.getDs();
+		Set<WebServer> servers = params.getWebServers();
+		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
+		Browser browser = params.getBrowser();
+		
+		RequestGenerator req = new RequestGenerator(browser);
+		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(params.getTrafficDistribution(), getNumberOfTicks(), servers).generateRequests());
+		req.loadFile(new File(params.getBrowserInputFile()));
+		
+		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
+		Clock.getInstance().addEntities(req, ds, proxy, browser, trafficGenerator);
 	}
 }

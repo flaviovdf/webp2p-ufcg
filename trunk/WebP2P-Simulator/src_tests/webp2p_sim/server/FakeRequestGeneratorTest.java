@@ -1,13 +1,6 @@
 package webp2p_sim.server;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import junit.framework.TestCase;
-
-import org.easymock.classextension.EasyMock;
-
-import webp2p_sim.proxy.Proxy;
 
 
 public class FakeRequestGeneratorTest extends TestCase {
