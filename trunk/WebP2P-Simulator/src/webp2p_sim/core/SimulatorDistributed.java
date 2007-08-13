@@ -10,9 +10,7 @@ import webp2p_sim.proxy.Proxy;
 import webp2p_sim.proxy.RequestGenerator;
 import webp2p_sim.server.TrafficGenerator;
 import webp2p_sim.server.WebServer;
-import webp2p_sim.util.RandomLongGenerator;
 import webp2p_sim.util.RequestFileGenerator;
-import edu.uah.math.distributions.ExponentialDistribution;
 
 
 public class SimulatorDistributed extends Simulator {
@@ -22,7 +20,7 @@ public class SimulatorDistributed extends Simulator {
 		
 		DiscoveryService ds = params.getDs();
 		Set<WebServer> servers = params.getWebServers();
-		Proxy proxy = new Proxy("Proxy", new ExponentialDistribution(2), ds, new RandomLongGenerator());
+		Proxy proxy = params.getProxy();
 		Browser browser = params.getBrowser();
 		
 		RequestGenerator req = new RequestGenerator(browser);
