@@ -1,6 +1,9 @@
 package webp2p_sim.core;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+
+import org.apache.commons.configuration.Configuration;
 
 public class Params {
 
@@ -8,7 +11,27 @@ public class Params {
 	protected int seed;
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T extractObject(String[] definitionArray) {
+	protected <T> T extractObject(Configuration config, String name) {
+		ArrayList<String> defitinion = new ArrayList<String>();
+		String className = config.getString(name);
+		defitinion.add(className);
+		
+		for (int i = 1; i <= Integer.MAX_VALUE; i++) {
+		 	String value = config.getString(name + ".param" + i);
+		 	
+		 	if (value == null) {
+		 		break;
+		 	}
+		 	
+			defitinion.add(value);
+		}
+		
+		String[] definitionArray = defitinion.toArray(new String[0]);
+		
+		if (definitionArray.length == 0) {
+			throw new RuntimeException("Cannot create object from empty array");
+		}
+		
 		try {
 			Class[] paramTypes = new Class[definitionArray.length - 1];
 			Object[] paramsValues = new Object[definitionArray.length - 1];
@@ -25,7 +48,6 @@ public class Params {
 			Constructor<T> constructor = clazz.getConstructor(paramTypes);
 			return constructor.newInstance(paramsValues);
 		} catch (Exception exception) {
-			exception.printStackTrace();
 			throw new RuntimeException(exception);
 		}
 	}

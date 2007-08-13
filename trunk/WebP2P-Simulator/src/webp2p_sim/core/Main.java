@@ -46,6 +46,9 @@ public class Main {
 			System.out.println(startMessage);
 		
 			simulator.simulate();
+			
+			System.out.println(simulator.printResults());
+			
 			String endMessage = "Simulation finished";
 			System.out.println(endMessage);
 			LOG.info(endMessage);

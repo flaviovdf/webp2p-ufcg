@@ -23,8 +23,11 @@ public class SimulatorCentralized extends Simulator {
 		servers.add(server);
 		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(centralizedParams.getTrafficDistribution(), getNumberOfTicks(), servers ).generateRequests());
 		req.loadFile(new File(centralizedParams.getBrowserInputFile()));
+	
+		browser.setMetricCalculator(collector);
 		
 		Clock.getInstance().addEntities(req, server, browser, trafficGenerator);
 	}
+
 
 }

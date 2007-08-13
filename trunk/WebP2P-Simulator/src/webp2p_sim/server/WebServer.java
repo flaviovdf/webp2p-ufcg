@@ -45,7 +45,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		this.strategyOfReplication = new DefaultReplicationStrategy();
 	}
 
-	void loadFile(String url, int size, TimeToLive ttl) {
+	public void loadFile(String url, int size, TimeToLive ttl) {
 		LOG.debug( "Loading file " + url + " in server " + this.name );
 		
 		FileInfo fileInfo = this.files.get(url);
