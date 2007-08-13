@@ -28,19 +28,15 @@ public class DistributedParams extends Params {
 
 		String browserIP = config.getString("browser.ip");
 		String browserInputFile = config.getString("browser.inputfile");
-		String[] distDefinitionArray = config.getStringArray("browser.process.distribution");
-		Distribution browserDist = extractObject(distDefinitionArray);
+		Distribution browserDist = extractObject(config, "browser.process.distribution");
 		
 		String proxyIP = config.getString("proxy.ip");
-		distDefinitionArray = config.getStringArray("proxy.process.distribution");
-		Distribution proxyDist = extractObject(distDefinitionArray);
+		Distribution proxyDist = extractObject(config, "proxy.process.distribution");
 		
-		distDefinitionArray = config.getStringArray("server.traffic.distribution");
-		Distribution trafficDist = extractObject(distDefinitionArray);
+		Distribution trafficDist = extractObject(config, "server.traffic.distribution");
 		
 		String dsIP = config.getString("browser.ip");
-		distDefinitionArray = config.getStringArray("ds.process.distribution");
-		Distribution dsDist = extractObject(distDefinitionArray);
+		Distribution dsDist = extractObject(config, "ds.process.distribution");
 		
 		File topologyXML = new File(config.getString("server.topologyfile"));
 		

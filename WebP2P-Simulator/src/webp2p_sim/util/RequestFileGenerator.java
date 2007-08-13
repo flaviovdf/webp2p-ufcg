@@ -80,13 +80,12 @@ public class RequestFileGenerator {
 		// essa dist tem que ser zipf 
 		RandomVariable randomVar = new RandomVariable(this.dist);
 		
-		long total = 0;
+		double total = 0;
 		Pair[] values = new Pair[server.getFiles().size()];
-		long simulated;
 		
 		int i = 0;
 		for (String url : server.getFiles()) {
-			simulated = Math.round(randomVar.simulate());
+			double simulated = randomVar.simulate();
 			total += simulated;
 			values[i++] = new Pair(simulated,url);
 		}
@@ -103,7 +102,6 @@ public class RequestFileGenerator {
 		}
 		
 		return resultValue;
-//		.put(tick, resultValue);
 	}
 
 
@@ -120,10 +118,10 @@ public class RequestFileGenerator {
 	
 	
 	private class Pair {
-		private long paretoValue;
+		private double paretoValue;
 		private String fileName;
 		
-		public Pair(long times, String fileName) {
+		public Pair(double times, String fileName) {
 			this.paretoValue = times;
 			this.fileName = fileName;
 		}
@@ -132,7 +130,7 @@ public class RequestFileGenerator {
 			return fileName;
 		}
 
-		public long getParetoValue() {
+		public double getParetoValue() {
 			return paretoValue;
 		}
 	}
