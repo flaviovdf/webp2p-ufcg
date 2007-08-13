@@ -7,19 +7,20 @@ import org.apache.commons.configuration.Configuration;
 
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.proxy.Browser;
-import webp2p_sim.server.ContentIF;
+import webp2p_sim.proxy.Proxy;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.server.WebServerFactory;
+import webp2p_sim.util.RandomLongGenerator;
 import edu.uah.math.distributions.Distribution;
 
 public class DistributedParams extends Params {
 
 	private DiscoveryService ds;
-	private WebServer webServer;
 	private Browser browser;
 	private String browserInputFile;
 	private Set<WebServer> webServers;
 	private Distribution trafficDist;
+	private Proxy proxy;
 
 	public DistributedParams(Configuration config) {
 		long simTime = config.getLong("sim.runtime");
@@ -30,6 +31,10 @@ public class DistributedParams extends Params {
 		String[] distDefinitionArray = config.getStringArray("browser.process.distribution");
 		Distribution browserDist = extractObject(distDefinitionArray);
 		
+		String proxyIP = config.getString("proxy.ip");
+		distDefinitionArray = config.getStringArray("proxy.process.distribution");
+		Distribution proxyDist = extractObject(distDefinitionArray);
+		
 		distDefinitionArray = config.getStringArray("server.traffic.distribution");
 		Distribution trafficDist = extractObject(distDefinitionArray);
 		
@@ -39,27 +44,23 @@ public class DistributedParams extends Params {
 		
 		File topologyXML = new File(config.getString("server.topologyfile"));
 		
-		buildMe(simTime, seed, browserInputFile, browserDist, browserIP, trafficDist, dsDist, dsIP, topologyXML);
+		buildMe(simTime, seed, browserInputFile, browserDist, browserIP, proxyIP, proxyDist, trafficDist, dsDist, dsIP, topologyXML);
 	}
 	
-	public DistributedParams(long simTime, int seed, String browserInputFile, Distribution browserDist, String browserIP, Distribution trafficDist, Distribution dsDist, String dsIP, File topologyXML) {
-		buildMe(simTime, seed, browserInputFile, browserDist, browserIP, trafficDist, dsDist, dsIP, topologyXML);
+	public DistributedParams(long simTime, int seed, String browserInputFile, Distribution browserDist, String browserIP, String proxyIP, Distribution proxyDist, Distribution trafficDist, Distribution dsDist, String dsIP, File topologyXML) {
+		buildMe(simTime, seed, browserInputFile, browserDist, browserIP, proxyIP, proxyDist, trafficDist, dsDist, dsIP, topologyXML);
 	}
 	
-	private void buildMe(long simTime, int seed, String browserInputFile, Distribution browserDist, String browserIP, Distribution trafficDist, Distribution dsDist, String dsIP, File topologyXML) {
+	private void buildMe(long simTime, int seed, String browserInputFile, Distribution browserDist, String browserIP, String proxyIP, Distribution proxyDist, Distribution trafficDist, Distribution dsDist, String dsIP, File topologyXML) {
 		this.browserInputFile = browserInputFile;
 		this.simTime = simTime;
 		this.seed = seed;
 		this.trafficDist = trafficDist;
 		
 		this.ds = new DiscoveryService(dsIP, dsDist);
+		this.proxy = new Proxy(proxyIP, proxyDist, ds, new RandomLongGenerator());
 		this.webServers = new WebServerFactory(ds).createServers(topologyXML);
-		this.browser = new Browser(browserIP, browserDist, chooseWebServer());
-	}
-
-	//FIXME implementar
-	private ContentIF chooseWebServer() {
-		return this.webServers.iterator().next();
+		this.browser = new Browser(browserIP, browserDist, proxy);
 	}
 
 	public String getBrowserInputFile() {
@@ -80,5 +81,9 @@ public class DistributedParams extends Params {
 
 	public Distribution getTrafficDistribution() {
 		return trafficDist;
+	}
+
+	public Proxy getProxy() {
+		return proxy;
 	}
 }
