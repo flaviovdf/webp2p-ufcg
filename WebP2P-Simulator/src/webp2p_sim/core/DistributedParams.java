@@ -7,6 +7,7 @@ import org.apache.commons.configuration.Configuration;
 
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.proxy.Browser;
+import webp2p_sim.server.ContentIF;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.server.WebServerFactory;
 import edu.uah.math.distributions.Distribution;
@@ -53,7 +54,12 @@ public class DistributedParams extends Params {
 		
 		this.ds = new DiscoveryService(dsIP, dsDist);
 		this.webServers = new WebServerFactory(ds).createServers(topologyXML);
-		this.browser = new Browser(browserIP, browserDist, webServer);
+		this.browser = new Browser(browserIP, browserDist, chooseWebServer());
+	}
+
+	//FIXME implementar
+	private ContentIF chooseWebServer() {
+		return this.webServers.iterator().next();
 	}
 
 	public String getBrowserInputFile() {
