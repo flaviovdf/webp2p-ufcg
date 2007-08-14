@@ -7,10 +7,11 @@ import java.util.Properties;
 
 public class WebServerP2PConfig {
 	
-	public static final String PROP_DISCOVERYSERVICE_ADRRESS = "ds.addr";
+	public static final String PROP_DISCOVERYSERVICE_ADDRESS = "ds.addr";
 	public static final String PROP_DISCOVERYSERVICE_PORT = "ds.port";
-	public static final String PROP_WEBSERVERP2P_LIST = "ws.list";
-	public static final String PROP_WEBSERVERP2P_SHAREDFILES = "ws.sharedfiles";
+	
+	public static final String PROP_WEBSERVERP2P_EXTERNAL_ADDRESS = "ws.external.addr";
+	public static final String PROP_WEBSERVERP2P_EXTERNAL_PORT = "ws.external.port";
 	
 	private static final String PROPERTIES_FILENAME = "webserverp2p.properties";
 	
@@ -37,11 +38,19 @@ public class WebServerP2PConfig {
 	}
 	
 	public String getDiscoveryServiceAddress() {
-		return this.props.getProperty(PROP_DISCOVERYSERVICE_ADRRESS);
+		return this.props.getProperty(PROP_DISCOVERYSERVICE_ADDRESS);
 	}
 	
 	public int getDiscoveryServicePort() {
 		return Integer.parseInt(this.props.getProperty(PROP_DISCOVERYSERVICE_PORT));
+	}
+	
+	public String getWebServerP2PAddress() {
+		return this.props.getProperty(PROP_WEBSERVERP2P_EXTERNAL_ADDRESS);
+	}
+	
+	public int getWebServerP2PPort() {
+		return Integer.parseInt(this.props.getProperty(PROP_WEBSERVERP2P_EXTERNAL_PORT));
 	}
 
 }
