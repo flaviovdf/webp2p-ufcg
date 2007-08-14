@@ -24,8 +24,7 @@ public class WebServerStub {
 	}
 
 	public byte[] getContent(String url) throws XmlRpcException {
-		byte[] result = (byte[]) this.client.execute("ws.getContent", new Object[] { url });
-		return result;
+		return (byte[]) this.client.execute("ws.getContent", new Object[] { url });
 	}
 
 }
