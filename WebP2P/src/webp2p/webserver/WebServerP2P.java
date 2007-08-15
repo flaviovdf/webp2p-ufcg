@@ -22,11 +22,9 @@ public class WebServerP2P {
 	}
 	
 	static void init() {
-		DiscoveryServiceStub discoveryService;
-		
 		String dsAddr = WebServerP2PConfig.getInstance().getDiscoveryServiceAddress();
 		int dsPort = WebServerP2PConfig.getInstance().getDiscoveryServicePort();
-		discoveryService = new DiscoveryServiceStub(dsAddr, dsPort);
+		DiscoveryServiceStub discoveryService = new DiscoveryServiceStub(dsAddr, dsPort);
 		
 		String wsAddr = WebServerP2PConfig.getInstance().getWebServerP2PAddress();
 		int wsPort = WebServerP2PConfig.getInstance().getWebServerP2PPort();
