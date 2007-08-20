@@ -22,8 +22,8 @@ public class WebP2PLayout extends Layout {
 		String date = DateFormat.getInstance().format(new Date(event.timeStamp));
 		
 		StringBuffer st = new StringBuffer();
-		st.append("[REALTIME: " + date  +" - ");
-		st.append("SYSTEMTIME: " + Clock.getInstance().getCurrentTick()+"] ");
+		st.append("[ REALTIME: " + date  +" - ");
+		st.append("SYSTEMTIME: " + Clock.getInstance().getCurrentTick()+" ] ");
 		st.append("{" + event.getLevel().toString() + "} * ");
 		LocationInfo info = event.getLocationInformation();
 		st.append(info.getClassName() + "." + info.getMethodName());

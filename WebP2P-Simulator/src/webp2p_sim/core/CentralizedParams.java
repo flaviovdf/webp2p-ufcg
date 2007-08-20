@@ -43,7 +43,6 @@ public class CentralizedParams extends Params {
 		this.simTime = simTime;
 		this.seed = seed;
 		this.webServerTrafficDist = webServerTrafficDist;
-		
 		this.ds = new DiscoveryService("127.0.0.1", new ContinuousUniformDistribution(0, 0));
 		this.webServer = new WebServer(webServerIP, webServerDist, ds);
 		this.webServer.loadFile(webServerFile, 1, new InfinitTimeToLive());

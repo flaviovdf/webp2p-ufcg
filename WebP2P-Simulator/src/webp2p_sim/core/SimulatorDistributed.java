@@ -11,7 +11,6 @@ import webp2p_sim.proxy.RequestGenerator;
 import webp2p_sim.server.TrafficGenerator;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RequestFileGenerator;
-import webp2p_sim.util.ResponseTimeMetricCollector;
 
 public class SimulatorDistributed extends Simulator {
 	
@@ -26,8 +25,6 @@ public class SimulatorDistributed extends Simulator {
 		RequestGenerator req = new RequestGenerator(browser);
 		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(params.getTrafficDistribution(), getNumberOfTicks(), servers).generateRequests());
 		req.loadFile(new File(params.getBrowserInputFile()));
-		
-		browser.setMetricCalculator(collector);
 		
 		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));
 		Clock.getInstance().addEntities(req, ds, proxy, browser, trafficGenerator);
