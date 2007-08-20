@@ -48,27 +48,37 @@ if [ "$1" == "-seq" ]; then
 	VALUES=`seq $FIRST $INC $LAST`
 fi
 
-NRUNS=100
+NRUNS=1000
 for newparam in $VALUES; do
 	
-	sum=0
+	sum_mean=0
+	sum_sd=0
 
 	for i in `seq $NRUNS`; do
 
 		rm -f simulator.log
 	
 		sed "s/$PARAM  *=  *[0-9]*\.*[0-9]*/$PARAM = $newparam/" $FILE > $NEWPROP
-		value=`sh $SELF/run.sh $TYPE $NEWPROP | grep = | awk '{print $NF}'`
+		sh $SELF/run.sh $TYPE $NEWPROP | grep = | awk '{print $NF}'
+		results=`sh $SELF/parse_log.sh simulator.log`
+		mean=`echo $results | awk '{print $1}'`
+		sd=`echo $results | awk '{print $2}'`
 
-		if [ $value != "NaN" ]; then
-			sum=`echo "scale = 5; $sum + $value" | bc`	
+		if [ $mean != "NaN" ]; then
+			sum_mean=`echo "scale = 5; $sum_mean + $mean" | bc`	
 		fi
+
+		if [ $sd != "NaN" ]; then
+			sum_sd=`echo "scale = 5; $sum_sd + $sd" | bc`
+		fi
+
 
 		rm -f $NEWPROP
 
 	done
 
-	AVG=`echo "scale = 5; $sum / $NRUNS" | bc`
-	OUT="$newparam  $AVG"
+	AVGMEAN=`echo "scale = 5; $sum_mean / $NRUNS" | bc`
+	AVGSD=`echo "scale = 5; $sum_sd / $NRUNS" | bc`
+	OUT="$newparam   $AVGMEAN   $AVGSD"
 	echo $OUT >> $DATA
 done
