@@ -1,0 +1,21 @@
+PING 150.165.98.40 (150.165.98.40) 56(84) bytes of data.
+64 bytes from 150.165.98.40: icmp_seq=1 ttl=64 time=0.104 ms
+64 bytes from 150.165.98.40: icmp_seq=2 ttl=64 time=0.107 ms
+64 bytes from 150.165.98.40: icmp_seq=3 ttl=64 time=0.110 ms
+64 bytes from 150.165.98.40: icmp_seq=4 ttl=64 time=0.108 ms
+64 bytes from 150.165.98.40: icmp_seq=5 ttl=64 time=0.111 ms
+64 bytes from 150.165.98.40: icmp_seq=6 ttl=64 time=0.118 ms
+64 bytes from 150.165.98.40: icmp_seq=7 ttl=64 time=0.127 ms
+64 bytes from 150.165.98.40: icmp_seq=8 ttl=64 time=0.113 ms
+64 bytes from 150.165.98.40: icmp_seq=9 ttl=64 time=0.115 ms
+64 bytes from 150.165.98.40: icmp_seq=10 ttl=64 time=0.126 ms
+64 bytes from 150.165.98.40: icmp_seq=11 ttl=64 time=0.110 ms
+64 bytes from 150.165.98.40: icmp_seq=12 ttl=64 time=0.130 ms
+64 bytes from 150.165.98.40: icmp_seq=13 ttl=64 time=0.107 ms
+64 bytes from 150.165.98.40: icmp_seq=14 ttl=64 time=0.117 ms
+64 bytes from 150.165.98.40: icmp_seq=15 ttl=64 time=0.108 ms
+64 bytes from 150.165.98.40: icmp_seq=16 ttl=64 time=0.118 ms
+
+--- 150.165.98.40 ping statistics ---
+16 packets transmitted, 16 received, 0% packet loss, time 15569ms
+rtt min/avg/max/mdev = 0.104/0.114/0.130/0.011 ms
