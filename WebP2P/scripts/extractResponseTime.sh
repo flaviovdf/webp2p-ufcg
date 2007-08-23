@@ -3,9 +3,11 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-soma=0
-for time in `grep time= $1 | awk -F'time=' '{print $2}' | awk -F' ' '{print $1}' | head`; do
-	soma=`echo "scale=5; $soma+$time" | bc`
-done
+#soma=0
+#for time in `grep time= $1 | awk -F'time=' '{print $2}' | awk -F' ' '{print $1}' | head -4`; do#
+#	soma=`echo "scale=5; $soma+$time" | bc`
+#done
+#
+#echo "scale=5; $soma/4" | bc
 
-echo "scale=5; $soma/10" | bc
+grep "rtt min/" $1 | awk -F'/' '{print $5}'
