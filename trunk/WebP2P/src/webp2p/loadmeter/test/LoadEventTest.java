@@ -60,10 +60,5 @@ public class LoadEventTest extends TestCase {
 		EasyMock.replay(mockListener);
 		meter.ping();
 		EasyMock.verify(mockListener);
-		
-		
-		/*List<FilesToResponseTime> files = event.getRankFilesList();
-		asserTrue(files.contains(arg0))*/
 	}
-	
 }
