@@ -38,4 +38,43 @@ public class LoadEvent {
 		assert fileToResponseTime.getResponseTime() > 0;
 		this.files.add(fileToResponseTime);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((files == null) ? 0 : files.hashCode());
+		result = prime * result + port;
+		result = prime * result + ((server == null) ? 0 : server.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final LoadEvent other = (LoadEvent) obj;
+		if (files == null) {
+			if (other.files != null)
+				return false;
+		} else if (!files.equals(other.files))
+			return false;
+		if (port != other.port)
+			return false;
+		if (server == null) {
+			if (other.server != null)
+				return false;
+		} else if (!server.equals(other.server))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return this.server + " " + this.port + " " + this.files;
+	}
 }

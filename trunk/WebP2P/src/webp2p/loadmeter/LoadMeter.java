@@ -13,6 +13,7 @@ public class LoadMeter {
 	public LoadMeter(String server, int port) {
 		this.server = server;
 		this.port = port;
+		listeners = new HashMap<LoadListener, Metric>();
 	}
 	
 	public void addListener(LoadListener listener, Metric metric) {
@@ -37,36 +38,34 @@ public class LoadMeter {
 
 	public void ping() {
 		Map<String,Integer> cache = new HashMap<String,Integer>();
-		LoadEvent loadEvent = new LoadEvent(this.server,this.port);
+		LoadEvent loadEvent = null;
 		boolean mustThrowEvent = false;
 		
 		int responseTime = -1;
 		for (Entry<LoadListener, Metric> entry : listeners.entrySet()) {
-			
+			loadEvent = new LoadEvent(this.server, this.port);
 			
 			for (String file : entry.getValue().getFiles()) {
+				
 				if (!cache.containsKey(file)) {
-					responseTime = extractTimeResponse(file);
+					responseTime = extractResponseTime(file);
 					cache.put(file, responseTime);
 					
 					if (responseTime >= entry.getValue().getTrash_hold()) {
 						loadEvent.addPopularFile(new FilesToResponseTime(file, responseTime));
+						mustThrowEvent = true;
 					}
 				}
-
-			}				
-		}
-		
-		if (mustThrowEvent) this.fireOverheadedWebServer(loadEvent);
-	}
-
-	private void fireOverheadedWebServer(LoadEvent loadEvent) {
-		for (LoadListener listener : listeners.keySet()) {
-			listener.overheadedServerDetected(loadEvent);
+			}
+			
+			if (mustThrowEvent) {
+				entry.getKey().overheadedServerDetected(loadEvent);
+				mustThrowEvent = false;
+			}
 		}
 	}
 
-	private int extractTimeResponse(String file) {
-		return -1;
+	private int extractResponseTime(String file) {
+		return 200;
 	}
 }
