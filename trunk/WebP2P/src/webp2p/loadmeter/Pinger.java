@@ -12,8 +12,7 @@ public class Pinger extends TimerTask {
 
 	@Override
 	public void run() {
-		System.out.println("huhi!");
-//		this.loadMeter.ping();
+		this.loadMeter.ping();
 	}
 
 }
