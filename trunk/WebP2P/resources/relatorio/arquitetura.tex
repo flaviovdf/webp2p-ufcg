@@ -1,0 +1,70 @@
+\section{Soluções Propostas}
+
+A solução proposta pela nossa equipe difere das demais citadas nas seções anteriores pelo fato de não abordar o problema sobre o âmbito de cache distribuído. Para fins de simplificação abordamos os participantes do sistema em duas classes: Usuários de Browser e Provedores de Conteúdo (Web Servers). A maneira que estas classes utilizam o sistema é descrita abaixo.
+
+Visando ser o menos intrusivo possível para os usuários dos browser, para estes a solução aqui proposta é baseada em um intermediador (proxy\footnote{Um proxy é um conceito da computação utilizada em diversos contextos. Este é um intermediador entre duas entidades. Supondo que a entidade A deseja se comunicar com a entidade B, em alguns casos é mais vantajoso A falar com uma outra entidade C (proxy) e este se comunicar com B. Exemplos das necessidades de um proxy são quando A não tem conexão com B ou quando A não sabe falar a linguagem de B.}). A solução não requer alteração no código fonte de nenhum browser existente ou a criação de um browser que se adequa a nossa solução. O uso do WebP2P será transparente para os usuários caracterizando-a como pouco intrusiva.
+
+Levando em consideração os provedores de conteúdo, a solução consiste em criar uma rede P2P de favores entre os Web Servers dos provedores onde um elemento dessa rede será capaz de prover o conteúdo de outro elemento caso seja necessário para fins de minimizar a carga deste outro. Para manter a solução pouco intrusiva, optamos por desenvolver uma camada de software acima dos Web Servers que usará as funcionalidades destes, como por exemplo, inserção conteúdo em tempo de execução, ao invés de modificar o código dos Web Server existentes.
+
+Entitulamos a solução proposta como WebP2P e vamos, a partir de agora, detalhar a sua arquitetura e seu funcionamento.
+
+\subsection{Arquitetura}
+
+Vamos explicar a arquitetura do WebP2P através de um exemplo simples. Esse exemplo consiste em um usuário que deseja acessar um conteúdo, através de um browser, na rede WebP2P. A ações para efetuar tal tarefa são descritas nos passos abaixo:
+
+\begin{itemize}
+	 \item O usuário configura seu browser para utilizar um proxy WebP2P. Este proxy pode estar disponível publicamente ou ser configurado pelo usuário em sua própria máquina.
+	 \item Quando o usuário tenta acessa uma URL, o browser envia um requisição HTTP ao proxy.
+	 \item Este proxy efetua a busca pelo conteúdo na Internet e na rede WebP2P usando um serviço de descoberta de conteúdo.
+	 \item Conhecendo os servidores que provêem o conteúdo, o proxy aplica uma heurística para selecionar o servidor mais adequado (menos sobrecarregado, mais próximo, com maior largura de banda etc) para atender a requisição.
+	 \item O proxy contacta o Web Server escolhido para adquirir o conteúdo.
+	 \item O Web Server escolhido envia o conteúdo requisitado para o proxy, que por sua vez, repassa para o browser.
+\end{itemize}
+
+Uma visão geral da arquitetura é mostrada na figura \ref{fig-arquitetura_cliente}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=10cm]{img/arquitetura_cliente.png}
+\caption{Arquitetura WebP2P}
+\label{fig-arquitetura_cliente}
+\end{figure}
+
+\subsubsection{Distribuição de Conteúdo}
+
+\begin{itemize}
+	\item Como dito acima, uma camada de software será utilizada para publicar conteúdo. Esta se comunica com o deamon http já existente na máquina.
+	\item Servidores Web distribuem conteúdo entre si para diminuir a carga.
+	\item Uma página escolhida pelo servidor deve ser distribuída entre outros servidores do sistema.
+	\item Um nó adjacente é escolhido de forma randômica para replicar o conteúdo com um determinado TTL. Isto é feito enviando um pedido de replicação para este nó e depois o nó se encarrega de fazer um cache do conteúdo utilizando HTTP. Ao fazer cache, o diretório de descoberta é atualizado por este nó.
+\end{itemize}
+
+A figura \ref{fig-arquitetura_server} ilustra uma rede de distribuição de conteúdo entre os servidores.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm]{img/arquitetura_servidor.png}
+\caption{Distribuição de conteúdo entre os servidores.}
+\label{fig-arquitetura_server}
+\end{figure}
+
+\subsubsection{Descoberta de Conteúdo}
+
+Inicialmente optamos, por motivos de simplicidade, fazer a descoberta do conteúdo através de um diretório central, onde os Web Servers publicam os conteúdos providos por eles. A figura \ref{fig-arquitetura_discovery} ilustra essa idéia. Se essa solução centralizada tornar-se não escalável em relação ao crescimento da rede, vamos apromorar o serviço através da inclusão de uma DHT. Soluções de DHT escaláveis e robustas já existem e estão disponíveis para uso, tais como o Bamboo \cite{bamboo}. Por este motivo, esta técnica será utilizada caso necessário.
+
+A manutenção desta DHT será feita pelos Web Servers ou utilizaremos o projeto OpenDHT~\cite{bamboo:usenix04} que disponibiliza o serviço gratuitamente através do PlanetLab.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm]{img/arquitetura_discovery.png}
+\caption{Funcionamento da publicação e descoberta de conteúdo na rede WebP2P.}
+\label{fig-arquitetura_discovery}
+\end{figure}
+
+\section{Desafios}
+
+A solução proposta ainda não aborda questões como segurança, confidencialidade, descoberta e versionamento de conteúdo etc.
+
+No âmbito de segurança deve-se prevenir que os dados sejam alterados maliciosamente por usuários e ``contaminem´´ a rede com material corrompido. Além disso, os dados providos por um determinado consumidor devem ser armazenados criptografados a fim de evitar que usuários da máquina provedora saibam qual conteúdo está sendo fornecido pela mesma.
+
+Precisa-se lidar com diferentes versões de páginas na rede. Como o conteúdo pode ser distribuído por qualquer consumidor, é necessário que os arquivos fornecidos sejam sempre os mais recentes publicados.
