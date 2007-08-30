@@ -5,7 +5,7 @@ import java.util.List;
 public class Metric {
 
 	private List<String> files;
-	private int timout;
+	private int timeout;
 	
 	/**
 	 * 
@@ -14,13 +14,13 @@ public class Metric {
 	 */
 	public Metric(List<String> files, int timeout) {
 		this.files = files;
-		this.timout = timeout;
+		this.timeout = timeout;
 	}
 	
 	public List<String> getFiles() {
 		return files;
 	}
-	public int getTrash_hold() {
-		return timout;
+	public int getTimeOut() {
+		return timeout;
 	}
 }

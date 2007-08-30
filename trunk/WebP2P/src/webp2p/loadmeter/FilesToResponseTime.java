@@ -2,14 +2,14 @@ package webp2p.loadmeter;
 
 /**
  * Tupla para representar os arquivos e seus respectivos tempos de respostas.
- * @author João Arthur Brunet Monteiro - jarthur@dsc.ufcg.edu.br
+ * @author Joï¿½o Arthur Brunet Monteiro - jarthur@dsc.ufcg.edu.br
  */
 public class FilesToResponseTime {
 		
 		private String file;
-		private int responseTime;
+		private long responseTime;
 		
-		public FilesToResponseTime(String file, int responseTime) {
+		public FilesToResponseTime(String file, long responseTime) {
 			this.file = file;
 			this.responseTime = responseTime;
 		}
@@ -18,16 +18,17 @@ public class FilesToResponseTime {
 			return file;
 		}
 		
-		public int getResponseTime() {
+		public long getResponseTime() {
 			return responseTime;
 		}
 
+				
 		@Override
 		public int hashCode() {
-			final int prime = 31;
+			final int PRIME = 31;
 			int result = 1;
-			result = prime * result + ((file == null) ? 0 : file.hashCode());
-			result = prime * result + responseTime;
+			result = PRIME * result + ((file == null) ? 0 : file.hashCode());
+			result = PRIME * result + (int) (responseTime ^ (responseTime >>> 32));
 			return result;
 		}
 
@@ -49,11 +50,9 @@ public class FilesToResponseTime {
 				return false;
 			return true;
 		}
-		
+
 		@Override
 		public String toString() {
 			return this.file + " " + this.responseTime;
 		}
-		
-	
 }
