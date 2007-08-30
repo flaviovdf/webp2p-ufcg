@@ -1,11 +1,15 @@
 package webp2p.loadmeter.test;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
 
 public class ExecutionTimer {
-	private long start;
-	private long end;
+	private double start;
+	private double end;
 
 	public ExecutionTimer() {
 		reset();
@@ -21,7 +25,7 @@ public class ExecutionTimer {
 		end = System.currentTimeMillis();
 	}
 
-	public long duration(){
+	public double duration(){
 		return (end-start);
 	}
 
@@ -47,11 +51,33 @@ public class ExecutionTimer {
 	public static void main(String s[]) {
 		// simple example
 		ExecutionTimer t = new ExecutionTimer();
-		
 		t.start();
-		t.ping("www.google.com.br",10000);
+		t.download("http://www.dsc.ufcg.edu.br/~jarthur/upload/Apresentacao.ppt");
 		t.end();
 		
-		System.out.println("\n" + t.duration() + " ms");
+		//miliseconds
+		double x = t.duration()/1000;
+		System.out.println(10/x);
+	}
+
+	public void download(String file) {
+		URLConnection conn = null;
+		InputStream  in = null;
+		try {
+			URL url = new URL(file);
+			conn = url.openConnection();
+			in = conn.getInputStream();
+			byte[] buffer = new byte[1024*10];
+			in.read(buffer);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException ioe) {
+			}
+		}
 	}
 }

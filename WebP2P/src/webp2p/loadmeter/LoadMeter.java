@@ -1,5 +1,13 @@
 package webp2p.loadmeter;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,11 +45,11 @@ public class LoadMeter {
 	}
 
 	public void ping() {
-		Map<String,Integer> cache = new HashMap<String,Integer>();
+		Map<String,Long> cache = new HashMap<String,Long>();
 		LoadEvent loadEvent = null;
 		boolean mustThrowEvent = false;
 		
-		int responseTime = -1;
+		long responseTime = -1;
 		for (Entry<LoadListener, Metric> entry : listeners.entrySet()) {
 			loadEvent = new LoadEvent(this.server, this.port);
 			
@@ -51,21 +59,50 @@ public class LoadMeter {
 					responseTime = extractResponseTime(file);
 					cache.put(file, responseTime);
 					
-					if (responseTime >= entry.getValue().getTrash_hold()) {
+					if (responseTime >= entry.getValue().getTimeOut()) {
 						loadEvent.addPopularFile(new FilesToResponseTime(file, responseTime));
 						mustThrowEvent = true;
 					}
 				}
 			}
-			
 			if (mustThrowEvent) {
 				entry.getKey().overheadedServerDetected(loadEvent);
 				mustThrowEvent = false;
 			}
 		}
 	}
-
-	private int extractResponseTime(String file) {
-		return 200;
+	
+	/**
+	 * 
+	 * @param file
+	 * @return the response time in milliseconds.
+	 */
+	private long extractResponseTime(String file) {
+		long startTime = System.currentTimeMillis();
+		this.download(this.server + File.separator +file, 1024);
+		long endTime = System.currentTimeMillis();
+		return 1024/(endTime - startTime)*1000;
+	}
+	
+	private void download(String file, int numOfBytesToDownload) {
+		URLConnection conn = null;
+		InputStream  in = null;
+		try {
+			URL url = new URL(file);
+			conn = url.openConnection();
+			in = conn.getInputStream();
+			byte[] buffer = new byte[numOfBytesToDownload];
+			in.read(buffer);
+//			while ((in.read(buffer)) != -1) {}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException ioe) {
+			}
+		}
 	}
 }
