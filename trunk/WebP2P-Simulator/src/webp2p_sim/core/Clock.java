@@ -31,6 +31,15 @@ public class Clock {
 		Clock.instance = null;
 	}
 	
+	public void countToTick(long time) {
+		while (getCurrentTick() < time) {
+			this.ticks += getTickSize();
+			for (TimedEntity timedEntity : entities) {
+				timedEntity.tickOcurred();
+			}
+		}
+	}
+	
 	public void addEntities(TimedEntity... timedEntity) {
 		addEntities(Arrays.asList(timedEntity));
 	}
@@ -43,13 +52,6 @@ public class Clock {
 		entities.remove(timedEntity);
 	}
 	
-	public void countTick() {
-		this.ticks += getTickSize();
-		
-		for (TimedEntity timedEntity : entities) {
-			timedEntity.tickOcurred();
-		}
-	}
 
 	public long getCurrentTick() {
 		return ticks;
@@ -58,4 +60,5 @@ public class Clock {
 	public long getTickSize() {
 		return 1;
 	}
+
 }

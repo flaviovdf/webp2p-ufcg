@@ -23,10 +23,10 @@ public class ClockTest extends SmartTestCase {
 	public void testCountTick1() {
 		assertEquals(0, this.clock.getCurrentTick());
 		
-		this.clock.countTick();
+		this.clock.countToTick(1);
 		assertEquals(1, this.clock.getCurrentTick());
 		
-		this.clock.countTick();
+		this.clock.countToTick(2);
 		assertEquals(2, this.clock.getCurrentTick());
 		
 		TimedEntity entityMock1 = EasyMock.createStrictMock(TimedEntity.class);
@@ -35,7 +35,7 @@ public class ClockTest extends SmartTestCase {
 		
 		EasyMock.replay(entityMock1);
 		this.clock.addEntities(entityMock1);
-		this.clock.countTick();
+		this.clock.countToTick(3);
 		EasyMock.verify(entityMock1);
 	}
 	
@@ -49,7 +49,7 @@ public class ClockTest extends SmartTestCase {
 		EasyMock.replay(entityMock1, entityMock2);
 		this.clock.addEntities(entityMock1);
 		this.clock.addEntities(entityMock2);
-		this.clock.countTick();
+		this.clock.countToTick(1);
 		EasyMock.verify(entityMock1, entityMock2);
 	}
 	
@@ -63,7 +63,7 @@ public class ClockTest extends SmartTestCase {
 		this.clock.addEntities(entityMock1);
 		this.clock.addEntities(entityMock2);
 		this.clock.removeEntity(entityMock1);
-		this.clock.countTick();
+		this.clock.countToTick(1);
 		EasyMock.verify(entityMock1, entityMock2);
 	}
 }

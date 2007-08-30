@@ -3,12 +3,13 @@ package webp2p_sim.core.entity;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import webp2p_sim.core.Clock;
 import edu.uah.math.distributions.Distribution;
 import edu.uah.math.distributions.RandomVariable;
 
 public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 
-	private Queue<ApplicationMessage> queue;
+	private LinkedList<ApplicationMessage> queue;
 
 	private RandomVariable rv;
 
@@ -24,21 +25,51 @@ public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 	}
 
 	public void sendMessage(ApplicationMessage applicationMessage) {
-		applicationMessage.setProcessTime(rv.simulate());
+		double simulate = rv.simulate();
+		applicationMessage.setProcessTime(simulate);
 		applicationMessage.setEntity(this);
-		queue.offer(applicationMessage);
+		queue.addLast(applicationMessage);
 	}
 
 	public void tickOcurred() {
-		if (currentMessage == null) {
-			currentMessage = queue.poll();
-		} else {
+		//Get next message from queue
+		if (currentMessage == null && !queue.isEmpty()) {
+			currentMessage = queue.removeFirst();
+		}
+
+		//Decreasing message time
+		if (currentMessage != null) {
+			double sumTime = currentMessage.getProcessTime();
 			currentMessage.tickOcurred();
+		
+			//Acquiring messages to process with time < 1
+			if (currentMessage.isDone()) {
+				LinkedList<ApplicationMessage> toProcess = new LinkedList<ApplicationMessage>();
+				toProcess.add(currentMessage);
+				
+				while (!queue.isEmpty() && sumTime <= Clock.getInstance().getTickSize()) {
+					ApplicationMessage poll = queue.removeFirst();
+					sumTime += poll.getProcessTime();
+					toProcess.add(poll);
+				}
+		
+				//Remove last message if time exceeds tick size
+				if (!toProcess.isEmpty() && sumTime > Clock.getInstance().getTickSize()) {
+					ApplicationMessage last = toProcess.removeLast();
+					
+					last.setProcessTime(sumTime - Clock.getInstance().getTickSize());
+					queue.addFirst(last);
+				}
+				
+				for(ApplicationMessage message : toProcess) {
+					message.setProcessTime(0);
+					message.process();
+				}
+				
+				currentMessage = null;
+			}
 		}
-		while (currentMessage != null && currentMessage.isDone()) {
-			currentMessage.process();
-			currentMessage = queue.poll();
-		}
+
 	}
 	
 	public String getName() {
@@ -59,5 +90,9 @@ public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 		if (!(obj instanceof SimpleQueuedEntity)) return false;
 		SimpleQueuedEntity parameter = (SimpleQueuedEntity) obj;
 		return this.name.equals(parameter.getName());
+	}
+
+	public Queue<ApplicationMessage> getMessageQueue() {
+		return queue;
 	}
 }
