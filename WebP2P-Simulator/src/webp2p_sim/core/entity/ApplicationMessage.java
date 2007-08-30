@@ -10,5 +10,7 @@ public interface ApplicationMessage extends TimedEntity {
 
 	public void setProcessTime(double processTime);
 
+	public double getProcessTime();
+	
 	public long size();
 }

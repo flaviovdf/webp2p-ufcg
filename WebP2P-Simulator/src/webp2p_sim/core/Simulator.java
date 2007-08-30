@@ -15,8 +15,6 @@ public class Simulator {
 	}
 	
 	public final void simulate() {
-		while (Clock.getInstance().getCurrentTick() <= maxTicks) {
-			Clock.getInstance().countTick();
-		}
+		Clock.getInstance().countToTick(maxTicks);
 	}
 }
