@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt,titlepage]{article}
+\documentclass[a4paper,12pt,titlepage,fullpage]{report}
 
 \usepackage{xspace}
 \usepackage{graphicx,url}
@@ -6,20 +6,30 @@
 \usepackage[latin1]{inputenc}
 
 %opening
-\title{Projeto WebP2P}
+\title{Monografia de Conclusão de Curso \\ \textit{Projeto WebP2P}}
 \author{Flavio V. D. de Figueiredo \and Flávio Roberto Santos \and João Arthur Brunet Monteiro}
+
+%margins
+%margens superior=3,0cm, inferior=2,0cm, esquerda e direita=2,5cm
+%\oddsidemargin 2.5cm
+%\evensidemargin 2.5cm
+%\topmargin 3.0cm
 
 \begin{document}
 
 \maketitle
 
-\section{Introdução}
+\tableofcontents
+
+\listoffigures
+
+\chapter{Introdução}
 
 Desde o surgimento da Internet, a disponibilização de conteúdo vem sendo utilizada em grande escala, tornando-a cada vez mais popular. Essa popularidade é diretamente responsável pela enorme procura por informações pelos usuários, o que aumenta o número de acessos aos provedores de conteúdo. A maioria das soluções existentes que disponibilizam conteúdo (páginas web) são centralizadas e acabam sendo o gargalo em momentos em que o número de acessos é elevado. Exemplos dessas soluções são o Apache (http://httpd.apache.org) e o AOLServer (http://www.aolserver.com). Soluções como estas não são facilmente configuráveis por usuários domésticos e algumas outras da mesma natureza são pagas. Em compensação, estes usuários podem usar serviços como o GooglePages (http://pages.google.com) que lhes oferecem espaço para armazenamento na web gratuitamente.
 
 Acreditamos que as soluções descritas acima não são adequadas para alguns sites em determinados momentos. Um exemplo é uma página que disponibiliza o resultado de um concurso, o número de acessos no momento da divulgação atinge um estado no qual o site não suporta todas as requisições. Isso traz problemas tanto para os usuários, que não conseguem acessar o conteúdo, como também para o administrador, que pode vir a sofrer prejuízos financeiros e/ou reputacionais.
 
-\subsection{Cronograma}
+\section{Cronograma}
 
 Nosso plano de projeto é analisar as solução existentes e propor uma alternativa distribuída para solucionar o problema descrito acima. Nossa solução é baseada na distribuição do conteúdo de um site entre diversos hóspedes em uma rede sobreposta Peer-to-Peer (P2P), assim acreditamos que será possível balancear a banda necessária para um site entre os diversos hóspedes e aumentar a disponibilidade do site. O projeto foi dividido em duas etapas:
 
@@ -43,11 +53,11 @@ Na Segunda iremos:
 \end{enumerate}
 
 
-\section{Trabalhos Relacionados}
+\chapter{Trabalhos Relacionados}
 
 Nesta seção apresentaremos trabalhos relacionados ao WebP2P. Foram estudadas tecnologias de distribuição e busca de conteúdo, além de servidores web descentralizados.
 
-\subsection{BitTorrent}
+\section{BitTorrent}
 
 O \textit{BitTorrent}\cite{bittorrent-cohen} é um protocolo criado para distribuir conteúdo em grande escala. Trata-se de uma alternativa distribuída ao modelo clássico de cliente-servidor, onde tínhamos apenas o servidor centralizado provendo o arquivo para um conjunto de usuários. Essa arquitetura centralizada acarreta em uma série de problemas de performance: além de a banda do servidor ser limitada e dividida entre os consumidores de arquivos, ele torna-se um ponto único de falhas.
 
@@ -55,7 +65,7 @@ Uma das propostas do protocolo é justamente de utilizar a banda dos consumidores
 
 Quanto mais consumidores interessados em um determinado arquivo disponível em um torrent, maior será a contribuição entre os mesmos e maiores serão as taxas de transferência\cite{bitcrowds-adar}. No entanto, o \textit{BitTorrent} tem uma peculiaridade: atrasos na conclusão de uma transferência em um torrent são aceitáveis. Diferentemente de uma distribuição de conteúdo como páginas web, onde o cliente faz uma requisição e não está disposto a esperar muito por uma resposta.
 
-\subsection{NodeWiz}
+\section{NodeWiz}
 
 \textit{NodeWiz}\cite{nodewiz-sujoy} é um Grid Information Service (GIS) escalável que permite o processamento eficiente e distribuído de buscas multi-atributo por faixas de valores. Isso é feito agregando-se diretórios de serviços individuais em um sistema P2P. Um GIS pode ser visto com um diretório onde provedores de serviço publicam anúncios e onde usuários submetem buscas. No \textit{NodeWiz}, o GIS é implementado por um conjunto de nós (peers) que armazenam anúncios dos provedores de serviço e respondem às buscas dos clientes.
 
@@ -69,7 +79,7 @@ Peers que recebem muitas requisições tornam-se sobrecarregados. O \textit{NodeWi
 
 \textit{NodeWiz} se encaixa no escopo da nossa solução de maneira a prover um mecanismo de busca eficiente do conteúdo distribuído. Os peers do \textit{NodeWiz} seriam os servidores web da overlay formada pelo WebP2P. Estes conteriam informações de qual servidor detêm o conteúdo procurado.
 
-\subsection{Bamboo}
+\section{Bamboo}
 
 Tabelas hash são estruturas de dados que mapeam chaves $k$ para valores $v$. Em sistemas distribuídos o conceito de Distributed Hash Tables (DHT) tem funcionalidade similar, mas o conjunto de valores é distribuído pela rede. Esta distribuição serve para que que o sistema se torne escalável e tolerante a falhas. Caso a tabela fosse armazenda em um único nó (ou pequeno conjunto), na presença de falhas não seria possível recuperar os valores, este pequeno conjunto seria sobrecarregado de buscas em momentos de alta demanda.
 
@@ -117,7 +127,7 @@ Basicamente o que acontece é que em redes congestionadas a entrada de nodos e a 
 
 A alternativa usada na implementação do \textit{OpenDHT} foi um esquema de manutenção da rede de forma periódica, ou seja, o tráfico gerado na rede física para manter a rede overlay consistente (tanto para entrada de novos nodos como para recuperação após saída) é proporcional apenas ao número de nodos na rede, ou seja, diferente da implementação anterior de \textit{Pastry} o perigo de derrubar uma rede já congestionada por aumento de banda consumida pelos algoritmos de manutenção de consistência é bem menor.
 
-\subsection{Coral Content Distribution Network}
+\section{Coral Content Distribution Network}
 
 A meta do projeto \textit{Coral Content Distribution Network (CoralCDN)}~\cite{coral} é bem parecida com a do WebP2P. No CoralCDN, uma rede P2P é utilizada para disponibilizar caches de conteúdo web. Com este, sites que sofrem sobrecarga podem evitar este problema, pois o acesso ao conteúdo do site pode ser feito através de um dos vários caches mantidos na rede.
 
@@ -157,7 +167,7 @@ Outro problema aparente é o fato de que com o uso da DSHT várias cópias do conte
 
 Os pares baixando um conteúdo se inserem como dono deste a cada 10 segundos para diminuir a carga dos servidores. Acreditamos que este fator pode causar uma sobrecarga na overlay.
 
-\subsection{Squirrel}
+\section{Squirrel}
 
 O projeto Squirrel\cite{squirrel} é uma solução de distribuição de caches similar ao CoralCDN, mas este foi feito para redes locais. O Squirrel difere do CoralCDN no sentido de que os clientes devem configurar manualmente um proxy inicial no seu browser. Além disso, servidores de conteúdo não fazem o uso do sistema.
 
@@ -169,7 +179,7 @@ Existe um segundo modo de funcionamento onde o nó dono da chave não retorna o co
 
 O fato de usar Pastry pode causar diversos problemas com o sitema, pois esta DHT não funciona bem em diversos cenários \cite{bamboo:usenix04}. O sistema é simples e teoricamente resolve o problema, mas não existe maneira de utilizá-lo atualmente.
 
-\subsection{YOUSERV}
+\section{YOUSERV}
 
 YOUSERV \cite{youserv} trata-se de uma ferramenta que possibilita um usuário de uma intranet publicar seu conteúdo de maneira simples e sem grandes custos. Um usuário precisa apenas instalar o software YOUSERV para publicar conteúdo, fornecendo seu login e senha da intranet. O conteúdo é publicado e pode ser acessado através da Internet usando um browser, desde de que se tenha uma senha de acesso à intranet.
 
@@ -222,7 +232,7 @@ No ano de 2002 existiam cerca de 3000 usuários do YOUSERV e 1200 peers espalhado
 
 Um dos pontos a se investigar é se o YOUSERV funciona somente para computadores com acesso a determinada intranet.
 
-\subsection{Browsers-Aware Proxy Server}
+\section{Browsers-Aware Proxy Server}
 
 \cite{browsers-aware} apresenta uma proposta para diminuir o tráfego com servidores web na Internet através do uso de um proxy que indexa arquivos residentes em caches de browsers de clientes em uma rede. O trabalho também faz uma análise para concluir se a quantidade de dados compartilhados entre os clientes é significativa o bastante para se utilizar a técnica na construção de um cache Web com alta performance e que seja escalável.
 
@@ -234,11 +244,11 @@ O artigo lido é datado de 2002 e ainda se encontrava em fase de desenvolvimento.
 
 A forma como é implementada a segurança servirá como modelo para o WebP2P, que utilizará o esquema de chaves simétricas para comunicação entre entidades. Além disso, a indexação e checagem de integridade dos dados são funcionalidades indispensáveis ao WebP2P e certamente precisam ser consideradas.
 
-\section{Tecnologias Estudadas}
+\chapter{Tecnologias Estudadas}
 
 Para ser feita a implementação da nossa solução, uma pesquisa foi feita abrangendo diversas tecnologias de comunicação entre processos. Foram analisadas tecnologias das mais primitivas como Sockets até tecnólogias mais sofisticadas que utilizam conceitos de chamada remota de procedimentos (RPC) \cite{rpc}. Abaixo descrevemos as tecnologias estudadas como também suas vantagens e desvantagens.
 
-\subsection{Sockets}
+\section{Sockets}
 
 Sockets e Datagramas são primitivas de comunicação TCP/UDP. Sockets podem ser vistos como a combinação de um endereço IP e uma porta, o sistema operacional se encarrega de associar os sockets aos processos. Os processos utilizam os sockets para se comunicarem com outros processos remotos. Sockets podem ser de dois tipos:
 \begin{enumerate}
@@ -250,13 +260,13 @@ Socket é a tecnologia de comunicação mais primitiva dentre as estudadas. Para a 
 
 Sockets são a base de comunicação remota entre processos e são utilizados nas outras tecnologias estudadas, mas o seu uso é transparente ao usuário.
 
-\subsection{XML-RPC}
+\section{XML-RPC}
 
 XML-RPC\cite{xml-rpc} é um protocolo simples de comunicação que utiliza mensagens HTTP para o envio de conteúdo em formato XML. O conteúdo XML das mensagens determina os procedimentos que devem ser chamados, assim como seus paramêtros e o valor de retorno.
 
 A maior vantagem do XML-RPC é o fato deste ser independente de linguagem, assim como os sockets, mas bibliotecas são necessárias para que as linguagens possam utilizar esta tecnologia. Boa parte das linguagens já têm bibliotecas disponíveis. A sua desvantagem é o overhead para a aplicação, pois para cada mensagem um conteúdo XML tem que ser interpretado.
 
-\subsection{RMI}
+\section{RMI}
 
 Remote Method Invocation (RMI)\cite{rmi} é uma forma de comunicação (usando RPC) entre processos Java\cite{java}. As bibliotecas padrões do Java já contém os pacotes necessários para o uso de RMI. Esta tecnologia provê ferramentas para que seja possível para o programador desenvolver uma aplicação sem se preocupar com detalhes de comunicação entre os diversos elementos remotos de um sistema, pois estes são vistos dentro de um programa como objetos Java.
 
@@ -264,19 +274,19 @@ Uma das características interessantes do RMI é o fato deste ser síncrono. Assim,
 
 O fato de ser de fácil uso é uma grande vantagem do RMI, porém somente aplicações Java podem utilizá-lo. Outros problemas já foram levantados, como o fato de que para cada chamada uma nova thread é criada podendo causar assim um grande overhead na aplicação \cite{jic-aliandro}.
 
-\subsection{JIC}
+\section{JIC}
 
 Java Internet Communication (JIC)\cite{jic-aliandro} é uma alternativa ao RMI desenvolvida no Laboratório de Sistemas Distribuídos da Universidade Federal de Campina Grande (UFCG). O fato de ter um código desenvolvido na UFCG, onde o projeto WebP2P será desenvolvido, nos fornece um maior nível de suporte.
 
 O JIC visa ser de fácil uso como o RMI mas para comunicações assíncronas. Outra vantagem é que ele possui um detector de falhas embutido e não traz o problema de explosão de threads citado na subseção anterior.
 
-\subsection{JXTA}
+\section{JXTA}
 
 O JXTA (do inglês juxtapose) é uma especificação independente de linguagem e plataforma para comunicação entre dispositivos sem considerar sua localização física e tecnologia de rede no qual se encontram instalados. É uma plataforma livre, tendo sido criada pela Sun Microsystems em 2001.
 
 A plataforma JXTA foi especificada na forma de uma arquitetura microkernel, ou seja, mesmo os serviços mais básicos estão implementados como módulos, restando para o kernel propriamente dito poucas funções, em geral, de comunicação entre os próprios módulos. Portanto, serviços básicos como a descoberta de peers ou de recursos na rede, comunicação entre dois ou mais peers, entre outros, são todos providos por módulos específicos.
 
-\subsubsection{Peer e Peer Group}
+\subsection{Peer e Peer Group}
 
 Uma rede virtual JXTA consiste de alguns tipos de peers, sendo que um peer conectado a rede pode, em teoria, assumir qualquer um destes papéis descritos a seguir:
 
@@ -295,7 +305,7 @@ Uma rede virtual JXTA consiste de alguns tipos de peers, sendo que um peer conec
 
 Peers se organizam em grupos (Peer Groups). A especificação não define o que esses grupos são ou porque eles existem. Porém, em geral, grupos são usados para definir um conjunto de serviços e recursos, prover uma região de acesso controlado, criação de escopo, monitoração de membros, entre outras aplicações deste conceito.
 
-\subsubsection{Advertisements}
+\subsection{Advertisements}
 
 Todas as entidades da plataforma JXTA, incluindo peers, groups, pipes e serviços, são representadas usando advertisements; documentos XML bem formados contendo informação à respeito dessas entidades (um metadado). Todas as entidades possuem um ID único e universal, além de informações adicionais específicas. Quando um recurso é disponibilizado na rede, na verdade, é porque seu advertisement foi criado e publicado, ou seja, enviado para os demais peers on-line.
 
@@ -305,13 +315,13 @@ Note que um advertisement só existe enquanto algum peer on-line armazenar uma có
 
 A plataforma JXTA define seis adverstisements básicos: Peer, Peergroup, Pipe (canal virtual de comunicação ponto-a-ponto), Service (abstração para serviço oferecido por um Peer ou Peergroup), Content (abstração para conteúdo publicado) e Endpoint (pontos de conexão de um pipe).
 
-\subsubsection{Pipes e Messages}
+\subsection{Pipes e Messages}
 
 Peers transmitem mensagens apenas através de pipes, canais virtuais que são, em geral, unidirecionais e não-confiáveis, anexáveis a um ponto de entrada e outro de saída (end points). Pipes possuem IDs únicos, e não são associados a nenhum dispositivo de rede real, havendo um serviço de resolução de IDs para dispositivos de rede. Também estão disponíveis pipes bi-direcionais ou confiáveis, implementados sobre os pipes convencionais.
 
 Mensagens são documentos XML bem formados, que possuem roteamento baseado no ID da fonte, carregando em seu cabeçalho (header) a informação de roteamento necessária, tal como a seqüência de peers a ser percorrida.
 
-\subsubsection{Protocolos}
+\subsection{Protocolos}
 
 São sete os serviços básicos fornecidos pela plataforma JXTA e, a princípio, providos por qualquer peer group criado.
 
