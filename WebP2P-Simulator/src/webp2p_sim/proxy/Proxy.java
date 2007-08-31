@@ -6,13 +6,13 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import webp2p_sim.common.ContentIF;
+import webp2p_sim.common.RequestCallBack;
 import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.ds.GetServersForURLRequest;
-import webp2p_sim.server.ContentIF;
 import webp2p_sim.server.GetContentRequest;
-import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RandomLongGenerator;
 import edu.uah.math.distributions.Distribution;
 
@@ -20,21 +20,24 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 
 	private static Logger LOG = Logger.getLogger( Proxy.class );
 	
-	private final DiscoveryService discoveryService;
+	private final NetworkEntity discoveryService;
 	private Map<Long, RequestData> requests; 
 		
-	public Proxy(String name, Distribution distribution, DiscoveryService discoveryService, RandomLongGenerator requestIDGenerator) {
+	public Proxy(String name, Distribution distribution, NetworkEntity discoveryService, RandomLongGenerator requestIDGenerator) {
 		super(name, distribution);
+		
+		assert discoveryService instanceof DiscoveryService;
+		
 		this.requests = new HashMap<Long, RequestData>();
 		this.discoveryService = discoveryService;
 	}
 	
-	void hereAreServers(long request, Set<WebServer> servers) {
+	void hereAreServers(long request, Set<NetworkEntity> servers) {
 		RequestData requestData = requests.get(request);
 		if (requestData != null) {
 			LOG.debug( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );
 			if (servers != null && !servers.isEmpty()) {
-				WebServer server = servers.iterator().next();
+				NetworkEntity server = servers.iterator().next();
 				if (server != null) {
 					LOG.debug( "Asking file " + requestData.getUrl() + " to server " + server + ". Request: " + request );
 					server.sendMessage(new GetContentRequest(request, requestData.getUrl(), this));

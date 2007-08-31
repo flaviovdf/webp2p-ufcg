@@ -90,6 +90,7 @@ public class WebServerFactory {
 		return new HashSet<WebServer>(servers.values());
 	}
 
+	@SuppressWarnings("unchecked")
 	private Distribution loadServerDistribution(Element distributionElement) {
 		String distributionName = distributionElement.getElementsByTagName("name").item(0).getTextContent();
 		Object[] parameters = this.getParameters(distributionElement);

@@ -1,7 +1,7 @@
 package webp2p_sim.proxy;
 
+import webp2p_sim.common.RequestCallBack;
 import webp2p_sim.core.entity.AbstractApplicationMessage;
-import webp2p_sim.core.entity.ApplicationMessage;
 
 public class HereIsContentMessage extends AbstractApplicationMessage {
 

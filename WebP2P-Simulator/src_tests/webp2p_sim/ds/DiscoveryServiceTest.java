@@ -39,17 +39,17 @@ public class DiscoveryServiceTest extends SmartTestCase {
 		
 		NetworkEntity queued = EasyMock.createStrictMock(NetworkEntity.class);
 
-		Set<WebServer> responseServer1 = new HashSet<WebServer>();
+		Set<NetworkEntity> responseServer1 = new HashSet<NetworkEntity>();
 		responseServer1.add(webServerMock1);
 		responseServer1.add(webServerMock2);
 				
 		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer1,requestID1)));
 		
-		Set<WebServer> responseServer2 = new HashSet<WebServer>();
+		Set<NetworkEntity> responseServer2 = new HashSet<NetworkEntity>();
 		responseServer2.add(webServerMock2);
 		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer2,requestID2)));
 		
-		Set<WebServer> responseServer3 = new HashSet<WebServer>();
+		Set<NetworkEntity> responseServer3 = new HashSet<NetworkEntity>();
 		responseServer3.add(webServerMock3);
 		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer3,requestID2)));
 		

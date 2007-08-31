@@ -1,7 +1,9 @@
-package webp2p_sim.proxy;
+package webp2p_sim.browser;
 
 import org.easymock.classextension.EasyMock;
 
+import webp2p_sim.browser.Browser;
+import webp2p_sim.proxy.Proxy;
 import webp2p_sim.server.GetContentRequest;
 import webp2p_sim.util.SmartTestCase;
 

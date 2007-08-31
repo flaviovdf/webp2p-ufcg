@@ -3,10 +3,10 @@ package webp2p_sim.server;
 import java.util.List;
 import java.util.Map;
 
+import webp2p_sim.common.RequestCallBack;
 import webp2p_sim.core.Clock;
 import webp2p_sim.core.entity.ApplicationMessage;
 import webp2p_sim.core.entity.TimedEntity;
-import webp2p_sim.proxy.RequestCallBack;
 import webp2p_sim.util.RandomLongGenerator;
 import webp2p_sim.util.UrlToWebServer;
 

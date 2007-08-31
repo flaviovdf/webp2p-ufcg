@@ -18,18 +18,18 @@ public class DiscoveryService extends SimpleQueuedEntity {
 	
 	private static final Logger LOG = Logger.getLogger( DiscoveryService.class );
 
-	private Map<String, Set<WebServer>> url2servers;
+	private Map<String, Set<NetworkEntity>> url2servers;
 	
 	public DiscoveryService(String name, Distribution distribution) {
 		super(name, distribution);
-		this.url2servers = new HashMap<String, Set<WebServer>>();
+		this.url2servers = new HashMap<String, Set<NetworkEntity>>();
 	}
 	
 	private void getRequest(long requestID, String url, NetworkEntity callback) {
 		LOG.debug( "Request " + requestID + " asking for file " + url );
 		
-		Set<WebServer> servers = url2servers.get(url);
-		HashSet<WebServer> response = new HashSet<WebServer>();
+		Set<NetworkEntity> servers = url2servers.get(url);
+		HashSet<NetworkEntity> response = new HashSet<NetworkEntity>();
 		
 		if (servers != null) {
 			response.addAll(servers);
@@ -39,12 +39,14 @@ public class DiscoveryService extends SimpleQueuedEntity {
 		
 	}
 	
-	void putRequest(String url, WebServer webServer) {
+	void putRequest(String url, NetworkEntity webServer) {
+		assert webServer instanceof WebServer;
+		
 		LOG.debug( "WebServer " + webServer + " published file " + url );
 		
-		Set<WebServer> servers = url2servers.get(url);
+		Set<NetworkEntity> servers = url2servers.get(url);
 		if (servers == null) {
-			servers = new HashSet<WebServer>();
+			servers = new HashSet<NetworkEntity>();
 			url2servers.put(url, servers);
 		}
 		

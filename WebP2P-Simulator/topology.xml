@@ -4,7 +4,7 @@
 		<url>http://192.168.0.1</url>
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
-			<param>1</param><!-- rate -->
+			<param>.0142857142</param><!-- rate -->
 		</distribution>
 		<file>
 			<path>/test.jpg</path>
@@ -23,9 +23,8 @@
 	<server>
 		<url>http://192.168.0.2</url>
 		<distribution>
-			<name>edu.uah.math.distributions.NormalDistribution</name>
-			<param>0</param><!-- location -->
-			<param>1</param><!-- scale -->
+			<name>edu.uah.math.distributions.ExponentialDistribution</name>
+			<param>.0142857142</param><!-- location -->
 		</distribution>
 		<file>
 			<path>/img.jpg</path>
@@ -52,8 +51,8 @@
 	<server>
 		<url>http://10.10.1.1</url>
 		<distribution>
-			<name>edu.uah.math.distributions.PoissonDistribution</name>
-			<param>1</param><!-- rate -->
+			<name>edu.uah.math.distributions.ExponentialDistribution</name>
+			<param>.0142857142</param><!-- rate -->
 		</distribution>
 		<file>
 			<path>/test.jpg</path>
@@ -73,6 +72,18 @@
 		</file>
 	</server>
 	
+	<server>
+		<url>http://127.0.0.2</url>
+		<distribution>
+			<name>edu.uah.math.distributions.ExponentialDistribution</name>
+			<param>.0142857142</param><!-- rate -->
+		</distribution>
+		<file>
+			<path>/index.html</path>
+			<size>2</size>
+		</file>
+	</server>
+	
 	<link>
 		<server1>http://192.168.0.1</server1>
 		<server2>http://192.168.0.2</server2>
@@ -82,5 +93,15 @@
 		<server1>http://192.168.0.2</server1>
 		<server2>http://10.10.1.1</server2>
 	</link>
+	
+	<link>
+		<server1>http://10.10.1.1</server1>
+		<server2>http://127.0.0.2</server2>
+	</link>
 
+	<link>
+		<server1>http://127.0.0.2</server1>
+		<server2>http://192.168.0.1</server2>
+	</link>
+	
 </topology>

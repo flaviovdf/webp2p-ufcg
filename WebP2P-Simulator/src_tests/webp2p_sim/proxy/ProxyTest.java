@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.easymock.classextension.EasyMock;
 
+import webp2p_sim.browser.Browser;
 import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.ds.GetServersForURLRequest;
@@ -40,7 +41,7 @@ public class ProxyTest extends SmartTestCase {
 		WebServer serverMock1 = EasyMock.createMock(WebServer.class);
 		WebServer serverMock2 = EasyMock.createMock(WebServer.class);
 		
-		Set<WebServer> servers = new LinkedHashSet<WebServer>();
+		Set<NetworkEntity> servers = new LinkedHashSet<NetworkEntity>();
 		servers.add(serverMock1);
 		servers.add(serverMock2);
 		
@@ -55,7 +56,7 @@ public class ProxyTest extends SmartTestCase {
 	public void testHereAreServersNoServersForUrl() {
 		long reqid = getContent();
 		
-		Set<WebServer> servers = new HashSet<WebServer>();
+		Set<NetworkEntity> servers = new HashSet<NetworkEntity>();
 		proxy.hereAreServers(reqid, servers);
 	}
 	
@@ -64,7 +65,7 @@ public class ProxyTest extends SmartTestCase {
 		WebServer serverMock1 = EasyMock.createMock(WebServer.class);
 		WebServer serverMock2 = EasyMock.createMock(WebServer.class);
 		
-		Set<WebServer> servers = new HashSet<WebServer>();
+		Set<NetworkEntity> servers = new HashSet<NetworkEntity>();
 		servers.add(serverMock1);
 		servers.add(serverMock2);
 		
