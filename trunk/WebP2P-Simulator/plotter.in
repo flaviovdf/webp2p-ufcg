@@ -1,2 +1,0 @@
-set grid
-plot 'sim_data.dat' u (1/$1):2 t "Response Time" w lp
