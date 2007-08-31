@@ -3,9 +3,9 @@ package webp2p_sim.core;
 import java.io.File;
 import java.util.Set;
 
+import webp2p_sim.browser.Browser;
 import webp2p_sim.core.entity.TimedEntity;
 import webp2p_sim.ds.DiscoveryService;
-import webp2p_sim.proxy.Browser;
 import webp2p_sim.proxy.Proxy;
 import webp2p_sim.proxy.RequestGenerator;
 import webp2p_sim.server.TrafficGenerator;

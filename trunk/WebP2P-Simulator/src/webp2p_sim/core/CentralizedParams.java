@@ -2,8 +2,8 @@ package webp2p_sim.core;
 
 import org.apache.commons.configuration.Configuration;
 
+import webp2p_sim.browser.Browser;
 import webp2p_sim.ds.DiscoveryService;
-import webp2p_sim.proxy.Browser;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.util.InfinitTimeToLive;
 import edu.uah.math.distributions.ContinuousUniformDistribution;

@@ -1,5 +1,6 @@
 package webp2p_sim.server;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import webp2p_sim.common.ContentIF;
+import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.ds.PutFileRequest;
@@ -29,7 +32,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	
 	private String name;
 	private DiscoveryService discoveryService;
-	private List<WebServer> adj;
+	private List<NetworkEntity> adj;
 
 	private Map<String, FileInfo> files;
 	private Map<String, ReplicationInfo> replicationMap;
@@ -39,7 +42,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		super(name, distribution);
 		this.name = name;
 		this.discoveryService = discoveryService;
-		this.adj = new LinkedList<WebServer>();
+		this.adj = new LinkedList<NetworkEntity>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();
 		this.files = new HashMap<String, FileInfo>();
 		this.strategyOfReplication = new DefaultReplicationStrategy();
@@ -65,14 +68,14 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		return Collections.unmodifiableSet(this.files.keySet());
 	}
 	
-	void addAdj(WebServer server) {
+	public void addAdj(WebServer server) {
 		LOG.debug( "Connecting server " + this.toString() + " to " + server );
 		
 		this.adj.add(server);
 	}
 	
-	List<WebServer> getAdj() {
-		return this.adj;
+	public List<NetworkEntity> getAdj() {
+		return new ArrayList<NetworkEntity>(this.adj);
 	}
 	
 	@Override
@@ -121,12 +124,12 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	
 	//called by other servers
 	
-	void createReplicaOfUrl(String url, WebServer server) {
+	public void createReplicaOfUrl(String url, WebServer server) {
 		LOG.debug( "Replica creation requested from " + server + " , content url " + url);
 		server.sendMessage(new GetContentForReplicationMessage(url, this));
 	}
 
-	void getContentForReplication(String url, WebServer server) {
+	public void getContentForReplication(String url, WebServer server) {
 		ReplicationInfo info = this.replicationMap.get(url);
 		if (info == null) {
 			LOG.debug( "Trying to replicate an inexistent url " + url + " to " + server);
@@ -137,7 +140,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		}
 	}
 
-	void hereIsReplicaOfUrl(String url, int replicationTTL, int size) {
+	public void hereIsReplicaOfUrl(String url, int replicationTTL, int size) {
 		LOG.debug( "Replica for url " + url + " recevied  ttl " + DEFAULT_REPLICATION_TTL);
 		loadFile(url, size, new TimeToLive(replicationTTL));
 	}

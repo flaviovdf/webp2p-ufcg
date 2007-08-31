@@ -48,7 +48,7 @@ if [ "$1" == "-seq" ]; then
 	VALUES=`seq $FIRST $INC $LAST`
 fi
 
-NRUNS=1000
+NRUNS=10
 for newparam in $VALUES; do
 	
 	sum_mean=0
@@ -72,7 +72,8 @@ for newparam in $VALUES; do
 			sum_sd=`echo "scale = 5; $sum_sd + $sd" | bc`
 		fi
 
-
+		cp simulator.log simulator_${PARAM}-${newparam}_RUN-${i}.log
+		
 		rm -f $NEWPROP
 
 	done

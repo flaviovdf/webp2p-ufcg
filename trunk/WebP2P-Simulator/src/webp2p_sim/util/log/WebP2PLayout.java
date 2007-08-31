@@ -1,4 +1,4 @@
-package webp2p_sim.log;
+package webp2p_sim.util.log;
 
 import java.text.DateFormat;
 import java.util.Date;

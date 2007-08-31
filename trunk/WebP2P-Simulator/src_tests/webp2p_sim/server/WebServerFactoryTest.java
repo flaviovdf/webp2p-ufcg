@@ -24,7 +24,7 @@ public class WebServerFactoryTest extends SmartTestCase {
 		WebServerFactory factory = new WebServerFactory(new DiscoveryService("DS", new NormalDistribution(0, 0)));
 		List<WebServer> servers = new LinkedList<WebServer>(factory.createServers(new File("topology.xml")));
 		
-		assertEquals(3, servers.size());
+		assertEquals(4, servers.size());
 		
 		WebServer server1 = servers.get(0);
 		WebServer server2 = servers.get(1);

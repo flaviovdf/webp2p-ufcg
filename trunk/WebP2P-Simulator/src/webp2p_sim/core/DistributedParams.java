@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.apache.commons.configuration.Configuration;
 
+import webp2p_sim.browser.Browser;
 import webp2p_sim.ds.DiscoveryService;
-import webp2p_sim.proxy.Browser;
 import webp2p_sim.proxy.Proxy;
 import webp2p_sim.server.WebServer;
 import webp2p_sim.server.WebServerFactory;

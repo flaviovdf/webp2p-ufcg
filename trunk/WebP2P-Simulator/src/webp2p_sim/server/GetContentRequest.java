@@ -1,8 +1,9 @@
 package webp2p_sim.server;
 
+import webp2p_sim.common.ContentIF;
+import webp2p_sim.common.RequestCallBack;
 import webp2p_sim.core.entity.AbstractApplicationMessage;
 import webp2p_sim.proxy.Request;
-import webp2p_sim.proxy.RequestCallBack;
 
 public class GetContentRequest extends AbstractApplicationMessage {
 
