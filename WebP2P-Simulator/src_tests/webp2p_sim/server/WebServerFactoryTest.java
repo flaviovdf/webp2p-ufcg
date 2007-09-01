@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import webp2p_sim.core.network.Network;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.util.SmartTestCase;
 import edu.uah.math.distributions.NormalDistribution;
@@ -21,7 +22,8 @@ public class WebServerFactoryTest extends SmartTestCase {
 	}
 	
 	public void testCreateServers() {
-		WebServerFactory factory = new WebServerFactory(new DiscoveryService("DS", new NormalDistribution(0, 0)));
+		Network network = new Network();
+		WebServerFactory factory = new WebServerFactory(new DiscoveryService(createRandomHost(), new NormalDistribution(0, 0), network), network);
 		List<WebServer> servers = new LinkedList<WebServer>(factory.createServers(new File("topology.xml")));
 		
 		assertEquals(4, servers.size());
@@ -29,15 +31,18 @@ public class WebServerFactoryTest extends SmartTestCase {
 		WebServer server1 = servers.get(0);
 		WebServer server2 = servers.get(1);
 		WebServer server3 = servers.get(2);
+		WebServer server4 = servers.get(3);
 		
 		Set<Integer> sizes = new HashSet<Integer>();
 		sizes.add(server1.getFiles().size());
 		sizes.add(server2.getFiles().size());
 		sizes.add(server3.getFiles().size());
-		
+		sizes.add(server4.getFiles().size());
+
 		assertTrue(sizes.contains(3));
 		assertTrue(sizes.contains(4));
 		assertTrue(sizes.contains(5));
+		assertTrue(sizes.contains(1));
 	}
 
 }

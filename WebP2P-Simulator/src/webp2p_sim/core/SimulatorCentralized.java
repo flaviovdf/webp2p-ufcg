@@ -21,7 +21,7 @@ public class SimulatorCentralized extends Simulator {
 		
 		Set<WebServer> servers = new HashSet<WebServer>();
 		servers.add(server);
-		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(centralizedParams.getTrafficDistribution(), getNumberOfTicks(), servers ).generateRequests());
+		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(centralizedParams.getTrafficDistribution(), getNumberOfTicks(), servers ).generateRequests(), centralizedParams.getTrafficUpBand(), centralizedParams.getTrafficDownBand(), centralizedParams.getNetwork());
 		req.loadFile(new File(centralizedParams.getBrowserInputFile()));
 	
 		Clock.getInstance().addEntities(req, server, browser, trafficGenerator);

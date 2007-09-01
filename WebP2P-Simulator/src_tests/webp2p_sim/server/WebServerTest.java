@@ -2,7 +2,8 @@ package webp2p_sim.server;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.ds.DiscoveryService;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.ds.PutFileRequest;
 import webp2p_sim.util.SmartTestCase;
 import webp2p_sim.util.TimeToLive;
@@ -10,14 +11,16 @@ import webp2p_sim.util.TimeToLive;
 
 public class WebServerTest extends SmartTestCase {
 
-	private DiscoveryService dsMock;
+	private Host dsMock;
 	private WebServer ws;
+	private Network network;
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		dsMock = EasyMock.createStrictMock(DiscoveryService.class);
-		this.ws = new WebServer("ws1", ZERO_DIST, dsMock);
+		this.network = EasyMock.createMock(Network.class);
+		this.dsMock = createRandomHost();
+		this.ws = new WebServer(createRandomHost(), ZERO_DIST, network, dsMock);
 	}
 
 	protected void tearDown() throws Exception {
@@ -25,46 +28,46 @@ public class WebServerTest extends SmartTestCase {
 	}
 
 	public void testLoadFile1() {
-		this.dsMock.sendMessage( new PutFileRequest("http://1.2.3.4/file1.txt", this.ws) );
+		this.network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://1.2.3.4/file1.txt", this.ws.getHost()) );
 		
-		EasyMock.replay( this.dsMock );
+		EasyMock.replay( network );
 		assertFalse(this.ws.getFiles().contains( "http://1.2.3.4/file1.txt" ));
 		this.ws.loadFile( "http://1.2.3.4/file1.txt", 123, new TimeToLive(10) );
 		assertTrue(this.ws.getFiles().contains( "http://1.2.3.4/file1.txt" ));
 		assertFalse(this.ws.getFiles().contains( "http://1.2.3.4/file1.exe" ));
-		EasyMock.verify( this.dsMock );
+		EasyMock.verify( network );
 	}
 	
 	public void testLoadFile2() {
-		this.dsMock.sendMessage( new PutFileRequest("http://1.2.3.4/file.txt", this.ws) );
+		this.network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://1.2.3.4/file.txt", this.ws.getHost()) );
 		
-		EasyMock.replay( this.dsMock );
+		EasyMock.replay( network );
 		assertFalse(this.ws.getFiles().contains( "http://1.2.3.4/file.txt" ));
 		this.ws.loadFile( "http://1.2.3.4/file.txt", 123, new TimeToLive(10) );
 		assertTrue(this.ws.getFiles().contains( "http://1.2.3.4/file.txt" ));
 		this.ws.loadFile( "http://1.2.3.4/file.txt", 123, new TimeToLive(1) );
 		assertTrue(this.ws.getFiles().contains( "http://1.2.3.4/file.txt" ));
-		EasyMock.verify( this.dsMock );
+		EasyMock.verify( network );
 	}
 	
 	public void testLoadFile3() {
-		this.dsMock.sendMessage( new PutFileRequest("http://1.2.3.4/file.txt", this.ws) );
-		this.dsMock.sendMessage( new PutFileRequest("http://1.2.3.4/file.txt", this.ws) );
+		this.network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://1.2.3.4/file.txt", this.ws.getHost()) );
+		this.network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://1.2.3.4/file.txt", this.ws.getHost()) );
 		
-		EasyMock.replay( this.dsMock );
+		EasyMock.replay( network );
 		assertFalse(this.ws.getFiles().contains( "http://1.2.3.4/file.txt" ));
 		this.ws.loadFile( "http://1.2.3.4/file.txt", 123, new TimeToLive(10) );
 		assertTrue(this.ws.getFiles().contains( "http://1.2.3.4/file.txt" ));
 		this.ws.loadFile( "http://1.2.3.4/file.txt", 123, new TimeToLive(11) );
 		assertTrue(this.ws.getFiles().contains( "http://1.2.3.4/file.txt" ));
-		EasyMock.verify( this.dsMock );
+		EasyMock.verify( network );
 	}
 	
 	public void testAdjacents() {
 		assertEquals(0, this.ws.getAdj().size());
-		this.ws.addAdj( new WebServer("ws2", ZERO_DIST, this.dsMock) );
+		this.ws.addAdj( createRandomHost() );
 		assertEquals(1, this.ws.getAdj().size());
-		this.ws.addAdj( new WebServer("ws2", ZERO_DIST, this.dsMock) );
+		this.ws.addAdj( createRandomHost() );
 		assertEquals(2, this.ws.getAdj().size());
 	}
 	
@@ -93,32 +96,34 @@ public class WebServerTest extends SmartTestCase {
 	}
 	
 	public void testReplication1() {
-		WebServer wsMock = EasyMock.createStrictMock( WebServer.class );
-		wsMock.sendMessage( new GetContentForReplicationMessage("http://4.3.2.1/f.txt", this.ws) );
+		Host wsMock = createRandomHost();
+		network.sendMessage(ws.getHost(), wsMock, new GetContentForReplicationMessage("http://4.3.2.1/f.txt", this.ws.getHost()) );
 		
-		EasyMock.replay( wsMock );
+		EasyMock.replay( network );
 		this.ws.createReplicaOfUrl( "http://4.3.2.1/f.txt", wsMock );
-		EasyMock.verify( wsMock );
+		EasyMock.verify( network );
 	}
 
 	public void testReplication2() {
-		WebServer wsMock = EasyMock.createStrictMock( WebServer.class );
-		wsMock.sendMessage( new HereIsReplicaOfContent("http://4.3.2.1/f.txt", WebServer.DEFAULT_REPLICATION_TTL, 77) );
+		Host wsMock = createRandomHost();
 		
-		EasyMock.replay( wsMock );
+		network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://4.3.2.1/f.txt", this.ws.getHost()) );
+		network.sendMessage(ws.getHost(), wsMock, new HereIsReplicaOfContent("http://4.3.2.1/f.txt", WebServer.DEFAULT_REPLICATION_TTL, 77) );
+		
+		EasyMock.replay( network );
 		this.ws.loadFile("http://4.3.2.1/f.txt", 77, new TimeToLive(13));
 		this.ws.getContentForReplication( "http://4.3.2.1/f.txt", wsMock );
-		EasyMock.verify( wsMock );
+		EasyMock.verify( network );
 	}
 	
 	public void testReplication3() {
-		this.dsMock.sendMessage( new PutFileRequest("http://1.2.3.4/robots.txt", this.ws) );
+		this.network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://1.2.3.4/robots.txt", this.ws.getHost()) );
 		
-		EasyMock.replay( this.dsMock );
+		EasyMock.replay( network );
 		assertEquals(0, this.ws.getFiles().size());
 		this.ws.hereIsReplicaOfUrl(  "http://1.2.3.4/robots.txt", 77, 123);
 		assertEquals(1, this.ws.getFiles().size());
-		EasyMock.verify( this.dsMock );
+		EasyMock.verify( network );
 	}
 	
 }

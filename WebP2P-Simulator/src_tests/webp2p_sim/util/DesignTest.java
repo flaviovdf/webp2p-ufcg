@@ -27,25 +27,29 @@ public class DesignTest extends SmartTestCase {
 		}
 	}
 	
-	public void testAllEntitiesCommunicateThroughSendMessage() throws Exception {
-//		
-//		MethodNode testedMethod = dw.getMethod("core.entity.SimpleQueuedEntity.sendMessage(core.entity.Message)");
+	public void testAllEntitiesCommunicateNetwork() throws Exception {
+//
 //		ClassNode simpleQueued = this.dw.getClass(SimpleQueuedEntity.class);
 //		
 //		Set<MethodNode> constructors = simpleQueued.getConstructors();
-//		
 //		Set<ClassNode> subClasses = simpleQueued.getSubClasses();
+//		
+//		MethodNode uniqueCase = this.dw.getMethod(SimpleQueuedEntity.class.getName() + ".tickOcurred()");
+//		
 //		for (ClassNode subClass : subClasses) {
 //			
 //			Set<MethodNode> methods = subClass.getAllMethods();
 //			for (MethodNode method: methods) {
-//			
+//				
 //				Set<MethodNode> called = method.getCalledMethods();
 //				for (MethodNode calledMethod: called) {
-//				
-//					if (calledMethod.getParentClass().equals(simpleQueued)) {
-//						assertTrue("The method "+ method.getName() + " calls " + calledMethod.getName(),
-//								calledMethod.equals(testedMethod) || constructors.contains(calledMethod));
+//					
+//					Class<?>[] interfaces = calledMethod.getParentClass().getClass().getInterfaces();
+//					boolean isNetworkEntity = Arrays.asList(interfaces).contains(NetworkEntity.class);
+//					
+//					//Can only call methods from a network entity if it is a super classes or a constructors.
+//					if (isNetworkEntity) {
+//						assertTrue(subClass.getName() + " is calling " + calledMethod, constructors.contains(calledMethod) || calledMethod.equals(uniqueCase));
 //					}
 //				}
 //			}

@@ -2,6 +2,6 @@ package webp2p_sim.core.entity;
 
 public interface NetworkEntity {
 
-	public void sendMessage(ApplicationMessage applicationMessage);
+	public void receiveMessage(ApplicationMessage applicationMessage);
 	
 }

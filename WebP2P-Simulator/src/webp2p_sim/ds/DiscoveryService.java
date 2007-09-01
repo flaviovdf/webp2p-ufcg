@@ -7,46 +7,44 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.proxy.GetResponse;
 import webp2p_sim.proxy.Request;
-import webp2p_sim.server.WebServer;
 import edu.uah.math.distributions.Distribution;
 
 public class DiscoveryService extends SimpleQueuedEntity {
 	
 	private static final Logger LOG = Logger.getLogger( DiscoveryService.class );
 
-	private Map<String, Set<NetworkEntity>> url2servers;
+	private Map<String, Set<Host>> url2servers;
 	
-	public DiscoveryService(String name, Distribution distribution) {
-		super(name, distribution);
-		this.url2servers = new HashMap<String, Set<NetworkEntity>>();
+	public DiscoveryService(Host host, Distribution distribution, Network network) {
+		super(host, distribution, network);
+		this.url2servers = new HashMap<String, Set<Host>>();
 	}
 	
-	private void getRequest(long requestID, String url, NetworkEntity callback) {
-		LOG.debug( "Request " + requestID + " asking for file " + url );
+	private void getRequest(long requestID, String url, Host callback) {
+		LOG.info( "Request " + requestID + " asking for file " + url );
 		
-		Set<NetworkEntity> servers = url2servers.get(url);
-		HashSet<NetworkEntity> response = new HashSet<NetworkEntity>();
+		Set<Host> servers = url2servers.get(url);
+		HashSet<Host> response = new HashSet<Host>();
 		
 		if (servers != null) {
 			response.addAll(servers);
 		}
-		LOG.debug( "Sending WebServer list " + response + " to request " + requestID );
-		callback.sendMessage(new GetResponse(response, requestID));
 		
+		LOG.info( "Sending WebServer list " + response + " to request " + requestID );
+		sendMessage(callback, new GetResponse(response, requestID));
 	}
 	
-	void putRequest(String url, NetworkEntity webServer) {
-		assert webServer instanceof WebServer;
+	void putRequest(String url, Host webServer) {
+		LOG.info( "WebServer " + webServer + " published file " + url );
 		
-		LOG.debug( "WebServer " + webServer + " published file " + url );
-		
-		Set<NetworkEntity> servers = url2servers.get(url);
+		Set<Host> servers = url2servers.get(url);
 		if (servers == null) {
-			servers = new HashSet<NetworkEntity>();
+			servers = new HashSet<Host>();
 			url2servers.put(url, servers);
 		}
 		

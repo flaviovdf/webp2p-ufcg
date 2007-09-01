@@ -11,8 +11,8 @@ public class GetServersForURLRequest extends AbstractApplicationMessage {
 		this.request = request;
 	}
 
-	public void process() {
-		((DiscoveryService) entity).getRequest(request);
+	public void realProcess() {
+		((DiscoveryService) receiverEntity).getRequest(request);
 	}
 
 	@Override

@@ -1,10 +1,9 @@
 package webp2p_sim.server;
 
-import org.easymock.classextension.EasyMock;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.util.SmartTestCase;
 
-import junit.framework.TestCase;
-
-public class ReplicationInfoTest extends TestCase {
+public class ReplicationInfoTest extends SmartTestCase {
 	
 	public void testMustReplicate() {
 		ReplicationInfo replicationInfo = new ReplicationInfo(1,1,"www.anything.com");
@@ -15,14 +14,14 @@ public class ReplicationInfoTest extends TestCase {
 	
 	public void testHasReplica() {
 		ReplicationInfo replicationInfo = new ReplicationInfo(1,1,"www.anything.com");
-		WebServer webServerMock = EasyMock.createMock(WebServer.class);
+		Host webServerMock = createRandomHost();
 		replicationInfo.replicationRequested(webServerMock);
 		assertTrue(replicationInfo.hasReplica(webServerMock));
 	}
 	
 	public void testRemovingReplica() {
 		ReplicationInfo replicationInfo = new ReplicationInfo(1,1,"www.anything.com");
-		WebServer webServerMock = EasyMock.createMock(WebServer.class);
+		Host webServerMock = createRandomHost();
 		
 		replicationInfo.replicationRequested(webServerMock);
 		replicationInfo.replicationDone(webServerMock,1);

@@ -7,38 +7,31 @@ public class Address {
 
 	private final String host;
 	private final long numeric;
-	private final int port;
 
-	public Address(int firstByte, int secondByte, int thirdByte, int fourthByte, int port) {
+	public Address(int firstByte, int secondByte, int thirdByte, int fourthByte) {
 		this.host = firstByte + "." + secondByte + "." + thirdByte + "." + fourthByte;
 		this.numeric = Long.parseLong(firstByte + "" + secondByte + "" + thirdByte + "" + fourthByte);
-		this.port = port;
 	}
 
 	public String getHost() {
 		return host;
 	}
 
-	public int getPort() {
-		return port;
-	}
-	
 	public long getNumericHost() {
 		return numeric;
 	}
 	
 	@Override
 	public String toString() {
-		return getHost() + ":" + getPort();
+		return getHost();
 	}
 
 	@Override
 	public int hashCode() {
-		final int PRIME = 31;
+		final int prime = 31;
 		int result = 1;
-		result = PRIME * result + ((host == null) ? 0 : host.hashCode());
-		result = PRIME * result + (int) (numeric ^ (numeric >>> 32));
-		result = PRIME * result + port;
+		result = prime * result + ((host == null) ? 0 : host.hashCode());
+		result = prime * result + (int) (numeric ^ (numeric >>> 32));
 		return result;
 	}
 
@@ -58,11 +51,9 @@ public class Address {
 			return false;
 		if (numeric != other.numeric)
 			return false;
-		if (port != other.port)
-			return false;
 		return true;
 	}
 
 
-	
+
 }

@@ -5,29 +5,31 @@ import java.util.Set;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.core.entity.NetworkEntity;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.proxy.GetResponse;
 import webp2p_sim.proxy.Request;
-import webp2p_sim.server.WebServer;
 import webp2p_sim.util.SmartTestCase;
 
 public class DiscoveryServiceTest extends SmartTestCase {
 
 	private DiscoveryService ds;
+	private Network network;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		this.ds = new DiscoveryService("DS", ZERO_DIST);
+		this.network = EasyMock.createMock(Network.class);
+		this.ds = new DiscoveryService(createRandomHost(), ZERO_DIST, this.network);
 	}
 	
 	public void testPut() throws Exception {
 		long requestID1 = 123;
 		long requestID2 = 456;
 		
-		WebServer webServerMock1  = EasyMock.createNiceMock(WebServer.class);
-		WebServer webServerMock2  = EasyMock.createNiceMock(WebServer.class);
-		WebServer webServerMock3  = EasyMock.createNiceMock(WebServer.class);
+		Host webServerMock1 = createRandomHost();
+		Host webServerMock2 = createRandomHost();
+		Host webServerMock3 = createRandomHost();
 		
 		ds.putRequest("url1",webServerMock1);
 		ds.putRequest("url1",webServerMock1);
@@ -37,28 +39,28 @@ public class DiscoveryServiceTest extends SmartTestCase {
 		
 		ds.putRequest("url3",webServerMock3);
 		
-		NetworkEntity queued = EasyMock.createStrictMock(NetworkEntity.class);
+		Host queued = createRandomHost();
 
-		Set<NetworkEntity> responseServer1 = new HashSet<NetworkEntity>();
+		Set<Host> responseServer1 = new HashSet<Host>();
 		responseServer1.add(webServerMock1);
 		responseServer1.add(webServerMock2);
 				
-		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer1,requestID1)));
+		network.sendMessage(ds.getHost(), queued, new GetResponse(responseServer1,requestID1));
 		
-		Set<NetworkEntity> responseServer2 = new HashSet<NetworkEntity>();
+		Set<Host> responseServer2 = new HashSet<Host>();
 		responseServer2.add(webServerMock2);
-		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer2,requestID2)));
+		network.sendMessage(ds.getHost(), queued, new GetResponse(responseServer2,requestID2));
 		
-		Set<NetworkEntity> responseServer3 = new HashSet<NetworkEntity>();
+		Set<Host> responseServer3 = new HashSet<Host>();
 		responseServer3.add(webServerMock3);
-		queued.sendMessage(EasyMock.eq(new GetResponse(responseServer3,requestID2)));
+		network.sendMessage(ds.getHost(), queued, new GetResponse(responseServer3,requestID2));
 		
-		EasyMock.replay(queued);
+		EasyMock.replay(network);
 		ds.getRequest(new Request(requestID1, "url1", queued));
 		ds.getRequest(new Request(requestID2, "url2", queued));
 		ds.getRequest(new Request(requestID2, "url3", queued));
 
-		EasyMock.verify(queued);
+		EasyMock.verify(network);
 	}
 	
 }

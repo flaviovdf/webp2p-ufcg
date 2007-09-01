@@ -13,8 +13,8 @@ public class HereIsContentMessage extends AbstractApplicationMessage {
 		this.result = result;
 	}
 
-	public void process() {
-		((RequestCallBack) entity).hereIsContent(request, result);
+	public void realProcess() {
+		((RequestCallBack) receiverEntity).hereIsContent(request, result);
 	}
 
 	@Override

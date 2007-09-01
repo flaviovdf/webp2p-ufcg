@@ -13,9 +13,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import webp2p_sim.common.ContentIF;
-import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
-import webp2p_sim.ds.DiscoveryService;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.ds.PutFileRequest;
 import webp2p_sim.proxy.HereIsContentMessage;
 import webp2p_sim.proxy.Request;
@@ -30,33 +30,31 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	private static final int DEFAULT_THRESHOLD_TTL = 50;
 	static final int DEFAULT_REPLICATION_TTL = 100;
 	
-	private String name;
-	private DiscoveryService discoveryService;
-	private List<NetworkEntity> adj;
+	private Host discoveryService;
+	private List<Host> adj;
 
 	private Map<String, FileInfo> files;
 	private Map<String, ReplicationInfo> replicationMap;
 	private ReplicationStrategy strategyOfReplication;
 	
-	public WebServer(String name, Distribution distribution, DiscoveryService discoveryService) {
-		super(name, distribution);
-		this.name = name;
+	public WebServer(Host host, Distribution distribution, Network network, Host discoveryService) {
+		super(host, distribution, network);
 		this.discoveryService = discoveryService;
-		this.adj = new LinkedList<NetworkEntity>();
+		this.adj = new LinkedList<Host>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();
 		this.files = new HashMap<String, FileInfo>();
 		this.strategyOfReplication = new DefaultReplicationStrategy();
 	}
 
 	public void loadFile(String url, int size, TimeToLive ttl) {
-		LOG.debug( "Loading file " + url + " in server " + this.name );
+		LOG.info( "Loading file " + url + " in server " + this );
 		
 		FileInfo fileInfo = this.files.get(url);
 		
 		if (fileInfo == null || fileInfo.getTTL().remaining() < ttl.remaining()) {
 			this.files.put(url, new FileInfo(ttl, size));
 			this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL,url));
-			this.discoveryService.sendMessage(new PutFileRequest(url, this));
+			sendMessage(discoveryService, new PutFileRequest(url, this.getHost()));
 		}
 	}
 	
@@ -68,14 +66,13 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		return Collections.unmodifiableSet(this.files.keySet());
 	}
 	
-	public void addAdj(WebServer server) {
-		LOG.debug( "Connecting server " + this.toString() + " to " + server );
-		
+	public void addAdj(Host server) {
+		LOG.info( "Connecting server " + this.toString() + " to " + server );
 		this.adj.add(server);
 	}
 	
-	public List<NetworkEntity> getAdj() {
-		return new ArrayList<NetworkEntity>(this.adj);
+	public List<Host> getAdj() {
+		return new ArrayList<Host>(this.adj);
 	}
 	
 	@Override
@@ -87,7 +84,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 			String url = urls.next();
 			FileInfo fileInfo = files.get(url);
 			if (fileInfo.getTTL().decrease() == 0) {
-				LOG.debug( "Removing page " + url + " from server " + this.name );
+				LOG.info( "Removing page " + url + " from server " + this );
 				
 				urls.remove();
 				replicationMap.remove(url);
@@ -103,7 +100,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	//called by proxies
 	
 	public void getContent(Request request) {
-		LOG.debug( "Content for " + request.getUrl() + " requested by " + request.getCallBack() + " request number " + request.getId() );
+		LOG.info( "Content for " + request.getUrl() + " requested by " + request.getCallBack() + " request number " + request.getId() );
 		
 		int result;
 		if (this.files.containsKey(request.getUrl())) {
@@ -118,30 +115,30 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 			result = -1;
 		}
 		
-		LOG.debug( "Sending content to " + request.getCallBack() + " request number " + request.getId());
-		request.getCallBack().sendMessage(new HereIsContentMessage(request.getId(), result));
+		LOG.info( "Sending content to " + request.getCallBack() + " request number " + request.getId());
+		sendMessage(request.getCallBack(), new HereIsContentMessage(request.getId(), result));
 	}
 	
 	//called by other servers
 	
-	public void createReplicaOfUrl(String url, WebServer server) {
-		LOG.debug( "Replica creation requested from " + server + " , content url " + url);
-		server.sendMessage(new GetContentForReplicationMessage(url, this));
+	public void createReplicaOfUrl(String url, Host server) {
+		LOG.info( "Replica creation requested from " + server + " , content url " + url);
+		sendMessage(server, new GetContentForReplicationMessage(url, this.getHost()));
 	}
 
-	public void getContentForReplication(String url, WebServer server) {
+	public void getContentForReplication(String url, Host server) {
 		ReplicationInfo info = this.replicationMap.get(url);
 		if (info == null) {
-			LOG.debug( "Trying to replicate an inexistent url " + url + " to " + server);
+			LOG.info( "Trying to replicate an inexistent url " + url + " to " + server);
 		} else {
-			LOG.debug( "Sending replica for url " + url + " to " + server + " ttl " + DEFAULT_REPLICATION_TTL);
+			LOG.info( "Sending replica for url " + url + " to " + server + " ttl " + DEFAULT_REPLICATION_TTL);
 			info.replicationDone(server, DEFAULT_REPLICATION_TTL);
-			server.sendMessage(new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, this.files.get( url ).getSize()));
+			sendMessage(server, new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, this.files.get( url ).getSize()));
 		}
 	}
 
 	public void hereIsReplicaOfUrl(String url, int replicationTTL, int size) {
-		LOG.debug( "Replica for url " + url + " recevied  ttl " + DEFAULT_REPLICATION_TTL);
+		LOG.info( "Replica for url " + url + " recevied  ttl " + DEFAULT_REPLICATION_TTL);
 		loadFile(url, size, new TimeToLive(replicationTTL));
 	}
 	
@@ -161,6 +158,10 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		public TimeToLive getTTL() {
 			return ttl;
 		}
+	}
+
+	protected void staSendMessage(Host receiver, CreateReplicaOfUrlMessage createReplicaOfUrlMessage) {
+		sendMessage(receiver, createReplicaOfUrlMessage);
 	}
 
 }

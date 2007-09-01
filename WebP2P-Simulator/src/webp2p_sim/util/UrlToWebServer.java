@@ -1,19 +1,19 @@
 package webp2p_sim.util;
 
-import webp2p_sim.server.WebServer;
+import webp2p_sim.core.network.Host;
 
 public class UrlToWebServer {
 	
-	private WebServer server;
+	private Host server;
 	private String url;
 	
-	public UrlToWebServer(WebServer server, String url) {
+	public UrlToWebServer(Host server, String url) {
 		super();
 		this.server = server;
 		this.url = url;
 	}
 
-	public WebServer getServer() {
+	public Host getServer() {
 		return server;
 	}
 

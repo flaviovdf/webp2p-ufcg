@@ -16,6 +16,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import webp2p_sim.core.network.Address;
+import webp2p_sim.core.network.AsymetricBandwidth;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.util.InfinitTimeToLive;
 
@@ -26,9 +30,11 @@ import edu.uah.math.distributions.Distribution;
 public class WebServerFactory {
 	
 	private DiscoveryService discoveryService;
+	private final Network network;
 
-	public WebServerFactory(DiscoveryService discoveryService) {
+	public WebServerFactory(DiscoveryService discoveryService, Network network) {
 		this.discoveryService = discoveryService;
+		this.network = network;
 	}
 
 	public Set<WebServer> createServers(File topologyFile) {
@@ -47,8 +53,12 @@ public class WebServerFactory {
 					
 					Element serverElement = (Element) serverNode;
 					String url = serverElement.getElementsByTagName("url").item(0).getTextContent();
+					long upBand = Long.parseLong(serverElement.getElementsByTagName("upband").item(0).getTextContent());
+					long downBand = Long.parseLong(serverElement.getElementsByTagName("downband").item(0).getTextContent());
+					Host createHost = createHost(url, upBand, downBand);
+					
 					Distribution distribution = this.loadServerDistribution((Element) serverElement.getElementsByTagName("distribution").item(0));
-					WebServer server = new WebServer(url, distribution, this.discoveryService);
+					WebServer server = new WebServer(createHost, distribution, network, this.discoveryService.getHost());
 					
 					NodeList filesList = XPathAPI.selectNodeList(serverElement, "file");
 					for (int j = 0; j < filesList.getLength(); j++) {
@@ -78,8 +88,8 @@ public class WebServerFactory {
 					
 					WebServer server1 = servers.get( server1url );
 					WebServer server2 = servers.get( server2url );
-					server1.addAdj( server2 );
-					server2.addAdj( server1 );
+					server1.addAdj( server2.getHost() );
+					server2.addAdj( server1.getHost() );
 				}
 			}
 			
@@ -142,5 +152,23 @@ public class WebServerFactory {
 			types[i] = double.class;
 		}
 		return types;
+	}
+	
+	private Host createHost(String ip, long upBand, long downBand) {
+		String[] split = ip.split("\\.");
+		if (split.length != 4) {
+			throw new RuntimeException("IP: " + ip + " is invalid");
+		}
+		
+		int[] bytes = new int[4];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = Integer.parseInt(split[i]);
+			
+			if (bytes[i] <= 0 || bytes[i] >= 255) {
+				throw new RuntimeException("IP: " + ip + " is invalid");	
+			}
+		}
+		
+		return new Host(new Address(bytes[0], bytes[1], bytes[2], bytes[3]), new AsymetricBandwidth(upBand, downBand));
 	}
 }

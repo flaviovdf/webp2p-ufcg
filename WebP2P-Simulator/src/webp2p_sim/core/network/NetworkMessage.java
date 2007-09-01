@@ -32,7 +32,4 @@ public class NetworkMessage {
 	public double dataLeft() {
 		return Math.max(0, dataSize - dataTransfered);
 	}
-
-	
-
 }

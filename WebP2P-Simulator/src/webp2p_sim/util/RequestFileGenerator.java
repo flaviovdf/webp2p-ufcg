@@ -12,11 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.server.WebServer;
-import webp2p_sim.server.WebServerFactory;
 import edu.uah.math.distributions.Distribution;
-import edu.uah.math.distributions.ParetoDistribution;
 import edu.uah.math.distributions.RandomVariable;
 
 /**
@@ -96,8 +93,7 @@ public class RequestFileGenerator {
 		
 			times = Math.round(pair.getParetoValue()*result/total);
 			for (int k = 0; k<times; k++) {
-				
-				resultValue.add(new UrlToWebServer(server,pair.getFileName()));
+				resultValue.add(new UrlToWebServer(server.getHost(),pair.getFileName()));
 			}
 		}
 		
@@ -136,12 +132,12 @@ public class RequestFileGenerator {
 	}
 	
 	public static void main(String[] args) {
-		WebServerFactory factory = new WebServerFactory(new DiscoveryService("ds", new ParetoDistribution()));
-		File topologyFile = new File("topology.xml");
-		
-		Set<WebServer> servers = factory.createServers(topologyFile);
-				
-		RequestFileGenerator generator = new RequestFileGenerator(new ParetoDistribution(),10, servers);
-		generator.generateRequestFile("tests"+File.separator+"requests"+File.separator+"paretoInput.txt");
+//		WebServerFactory factory = new WebServerFactory(new DiscoveryService("ds", new ParetoDistribution()));
+//		File topologyFile = new File("topology.xml");
+//		
+//		Set<WebServer> servers = factory.createServers(topologyFile);
+//				
+//		RequestFileGenerator generator = new RequestFileGenerator(new ParetoDistribution(),10, servers);
+//		generator.generateRequestFile("tests"+File.separator+"requests"+File.separator+"paretoInput.txt");
 	}
 }

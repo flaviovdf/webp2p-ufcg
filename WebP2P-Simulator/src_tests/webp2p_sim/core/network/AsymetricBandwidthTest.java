@@ -1,10 +1,10 @@
 package webp2p_sim.core.network;
 
-import junit.framework.TestCase;
-
 import org.easymock.classextension.EasyMock;
 
-public class AsymetricBandwidthTest extends TestCase {
+import webp2p_sim.util.SmartTestCase;
+
+public class AsymetricBandwidthTest extends SmartTestCase {
 
 	public void testAllocateDownBand() {
 		int maxup = 300;
