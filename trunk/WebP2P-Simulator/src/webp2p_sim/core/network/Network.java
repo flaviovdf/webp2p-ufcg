@@ -20,43 +20,33 @@ public class Network implements TimedEntity {
 	private final Map<SenderToReceiver, Connection> connections;
 	private final EndToEndDelay endToEndDelay;
 
-	private static Network instance = null;
-
-	private Network() {
+	public Network() {
 		this.endToEndDelay = new SimpleDistanceDelay();
 		this.entities = new HashMap<Address, NetworkEntity>();
 		this.connections = new HashMap<SenderToReceiver, Connection>();
 		
-		LOG.info("Underlying Network Created");
-	}
-	
-	public static Network getInstance() {
-		if (instance == null) {
-			instance = new Network();
-		}
-		
-		return instance;
+		LOG.debug("Underlying Network Created");
 	}
 	
 	public void bind(Host host, NetworkEntity entity) throws NetworkException {
 		Address address = host.getAddress();
 		if (entities.containsKey(address)) {
-			LOG.info("Unable to bind < " + entity + " >, address < " + address + " > already in use");
+			LOG.debug("Unable to bind < " + entity + " >, address < " + address + " > already in use");
 			throw new NetworkException("Name already in use " + address);
 		}
 		
-		LOG.info("Sucessfully bound < " + entity + " > to address < " + address + " >");
+		LOG.debug("Sucessfully bound < " + entity + " > to address < " + address + " >");
 		entities.put(address, entity);
 	}
 
 	public void unbind(Host host) throws NetworkException {
 		Address address = host.getAddress();
 		if (!entities.containsKey(address)) {
-			LOG.info("Unable to unbind < " + address + " >, not bound");
+			LOG.debug("Unable to unbind < " + address + " >, not bound");
 			throw new NetworkException("Name already in use <" + address + ">");
 		}
 		
-		LOG.info("Sucessfully unbound < " + address + " >");
+		LOG.debug("Sucessfully unbound < " + address + " >");
 		entities.remove(address);
 	}
 	
@@ -65,24 +55,29 @@ public class Network implements TimedEntity {
 		NetworkEntity sendere = entities.get(sender.getAddress());
 		NetworkEntity receivere = entities.get(receiver.getAddress());
 		
+		
 		if (sendere == null || receivere == null) {
 			if (sendere == null) {
-				LOG.info("Unable to send message < " + message + " >, sender not bound < " + sender + " >");
+				LOG.debug("Unable to send message < " + message + " >, sender not bound < " + sender + " >");
 			}
 			else if (receivere == null) {
-				LOG.info("Unable to send message < " + message + " >, receiver not bound < " + receiver + " >");				
+				LOG.debug("Unable to send message < " + message + " >, receiver not bound < " + receiver + " >");				
 			}
 		}
 		else {
+			//Setting sender and receiver
+			message.setCallerEntity(sendere);
+			message.setReceiverEntity(sendere);
+			
 			Connection connection = getConnection(sender, receiver);
 			
 			if (connection == null) {
-				LOG.info("Connection < " + connection + " > stablished");
+				LOG.debug("Connection < " + connection + " > stablished");
 				connection = new Connection(sender, receiver);
 				connections.put(new SenderToReceiver(sender, receiver), connection);
 			}
 			
-			LOG.info("Transmitting message < " + message + " > through connection < " + connection + " >");
+			LOG.debug("Transmitting message < " + message + " > through connection < " + connection + " >");
 			connection.transmitMessage(endToEndDelay, new NetworkMessage(message));
 		}
 	}
@@ -98,10 +93,10 @@ public class Network implements TimedEntity {
 			
 			if (sender == null || receiver == null) {
 				if (sender == null) {
-					LOG.info("Unable to send messages, sender not bound < " + sender + " >");
+					LOG.debug("Unable to send messages, sender not bound < " + sender + " >");
 				}
 				else if (receiver == null) {
-					LOG.info("Unable to send messages, receiver not bound < " + receiver + " >");				
+					LOG.debug("Unable to send messages, receiver not bound < " + receiver + " >");				
 				}
 				
 				//remove connection
@@ -112,7 +107,7 @@ public class Network implements TimedEntity {
 				List<NetworkMessage> messagesDone = con.flushData();
 				
 				for (NetworkMessage nm : messagesDone) {
-					receiver.sendMessage(nm.getApplicationMessage());
+					receiver.receiveMessage(nm.getApplicationMessage());
 				}
 				
 				if (con.noMoreMessages()) {
@@ -120,11 +115,6 @@ public class Network implements TimedEntity {
 				}
 			}
 		}
-	}
-
-	public static void reset() {
-		LOG.info("Underlying Network is going down");
-		Network.instance = null;
 	}
 
 	protected Connection getConnection(Host sender, Host receiver) {
@@ -175,5 +165,9 @@ public class Network implements TimedEntity {
 				return false;
 			return true;
 		}
+	}
+
+	public boolean isBound(Host host) {
+		return entities.containsKey(host.getAddress());
 	}
 }

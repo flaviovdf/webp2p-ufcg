@@ -1,6 +1,7 @@
 package webp2p_sim.core.entity;
 
 import webp2p_sim.core.Clock;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.util.SmartTestCase;
 import edu.uah.math.distributions.ContinuousUniformDistribution;
 
@@ -16,11 +17,11 @@ public class SimpleQueuedEntityTest extends SmartTestCase {
 	
 	public void testSendMessage() {
 		final int NUMBER_OF_TICKS = 5;
-		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity("SQE", new ContinuousUniformDistribution(NUMBER_OF_TICKS, NUMBER_OF_TICKS));
+		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(NUMBER_OF_TICKS, NUMBER_OF_TICKS), new Network());
 		simpleQueue.tickOcurred();
 		
 		TestMessageImpl message = new TestMessageImpl();
-		simpleQueue.sendMessage(message);
+		simpleQueue.receiveMessage(message);
 		
 		assertEquals((double)NUMBER_OF_TICKS, message.getProcessTime());
 		
@@ -34,13 +35,13 @@ public class SimpleQueuedEntityTest extends SmartTestCase {
 	
 	public void testSendMessage2() {
 		double processTime = 0.4;
-		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity("SQE", new ContinuousUniformDistribution(processTime, processTime));
+		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(processTime, processTime), new Network());
 		
 		//10 messages of length 0.4 take excatly 4 units of time to complete (each tick process 2.5 messages).
 		TestMessageImpl[] testMessageImpls = new TestMessageImpl[10];
 		for (int i = 0; i < testMessageImpls.length; i++) {
 			testMessageImpls[i] = new TestMessageImpl();
-			simpleQueue.sendMessage(testMessageImpls[i]);
+			simpleQueue.receiveMessage(testMessageImpls[i]);
 			assertEquals(processTime, testMessageImpls[i].getProcessTime());
 		}
 
@@ -59,13 +60,13 @@ public class SimpleQueuedEntityTest extends SmartTestCase {
 	
 	public void testSendMessage3() {
 		double processTime = 0.4;
-		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity("SQE", new ContinuousUniformDistribution(processTime, processTime));
+		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(processTime, processTime), new Network());
 		
 		//10 messages of length 0.4 take excatly 4 units of time to complete (each tick process 2.5 messages).
 		TestMessageImpl[] testMessageImpls = new TestMessageImpl[3];
 		for (int i = 0; i < testMessageImpls.length; i++) {
 			testMessageImpls[i] = new TestMessageImpl();
-			simpleQueue.sendMessage(testMessageImpls[i]);
+			simpleQueue.receiveMessage(testMessageImpls[i]);
 			assertEquals(processTime, testMessageImpls[i].getProcessTime());
 		}
 

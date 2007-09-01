@@ -15,8 +15,8 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		AsymetricBandwidth band1 = new AsymetricBandwidth(maxUp, maxDown);
 		AsymetricBandwidth band2 = new AsymetricBandwidth(maxUp, maxDown);
 		
-		Host senderHost = new Host(new Address(254,254,254,254, 80), band1);
-		Host receiverHost = new Host(new Address(1,1,1,1, 80), band2);
+		Host senderHost = new Host(new Address(254,254,254,254), band1);
+		Host receiverHost = new Host(new Address(1,1,1,1), band2);
 		
 		Connection connection = new Connection(senderHost, receiverHost);
 		//adding some messages
@@ -45,8 +45,8 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		AsymetricBandwidth band1 = new AsymetricBandwidth(maxUp, maxDown);
 		AsymetricBandwidth band2 = new AsymetricBandwidth(maxUp, maxDown);
 		
-		Host senderHost = new Host(new Address(254,254,254,254, 80), band1);
-		Host receiverHost = new Host(new Address(254,254,254,254, 90), band2);
+		Host senderHost = new Host(new Address(254,254,254,254), band1);
+		Host receiverHost = new Host(new Address(254,254,254,254), band2);
 		
 		Connection connection = new Connection(senderHost, receiverHost);
 		//adding some messages
@@ -74,8 +74,8 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		AsymetricBandwidth band1 = new AsymetricBandwidth(maxUp, maxDown);
 		AsymetricBandwidth band2 = new AsymetricBandwidth(maxUp, maxDown);
 		
-		Host senderHost = new Host(new Address(1,1,1,1, 80), band1);
-		Host receiverHost = new Host(new Address(2,2,2,2, 80), band2);
+		Host senderHost = new Host(new Address(1,1,1,1), band1);
+		Host receiverHost = new Host(new Address(2,2,2,2), band2);
 		
 		Connection connection = new Connection(senderHost, receiverHost);
 		//adding some messages
@@ -103,8 +103,8 @@ public class SimpleDistanceDelayTest extends SmartTestCase {
 		AsymetricBandwidth band1 = new AsymetricBandwidth(maxUp, maxDown);
 		AsymetricBandwidth band2 = new AsymetricBandwidth(maxUp, maxDown);
 		
-		Host senderHost = new Host(new Address(254,254,254,254, 80), band1);
-		Host receiverHost = new Host(new Address(1,1,1,1, 80), band2);
+		Host senderHost = new Host(new Address(254,254,254,254), band1);
+		Host receiverHost = new Host(new Address(1,1,1,1), band2);
 		
 		Connection connection = new Connection(senderHost, receiverHost);
 		//adding some messages

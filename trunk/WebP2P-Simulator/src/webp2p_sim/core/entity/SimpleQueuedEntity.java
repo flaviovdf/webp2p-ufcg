@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import webp2p_sim.core.Clock;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import edu.uah.math.distributions.Distribution;
 import edu.uah.math.distributions.RandomVariable;
 
@@ -15,19 +17,22 @@ public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 
 	private ApplicationMessage currentMessage;
 
-	private String name;
+	private Host myHostAddress;
 
-	public SimpleQueuedEntity(String name, Distribution distribution) {
-		this.name = name;
+	private final Network network;
+
+	public SimpleQueuedEntity(Host host, Distribution distribution, Network network) {
+		this.myHostAddress = host;
+		this.network = network;
 		this.rv = new RandomVariable(distribution);
 		this.queue = new LinkedList<ApplicationMessage>();
 		this.currentMessage = null;
 	}
 
-	public void sendMessage(ApplicationMessage applicationMessage) {
+	public void receiveMessage(ApplicationMessage applicationMessage) {
 		double simulate = rv.simulate();
 		applicationMessage.setProcessTime(simulate);
-		applicationMessage.setEntity(this);
+		applicationMessage.setReceiverEntity(this);
 		queue.addLast(applicationMessage);
 	}
 
@@ -72,27 +77,53 @@ public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 
 	}
 	
-	public String getName() {
-		return this.name;
+	public Host getHost() {
+		return this.myHostAddress;
 	}
 	
+	@Override
 	public String toString() {
-		return this.getName();
+		return this.myHostAddress.getAddress().toString();
 	}
 	
 	@Override
 	public int hashCode() {
-		return this.name.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof SimpleQueuedEntity)) return false;
-		SimpleQueuedEntity parameter = (SimpleQueuedEntity) obj;
-		return this.name.equals(parameter.getName());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((myHostAddress == null) ? 0 : myHostAddress.hashCode());
+		return result;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final SimpleQueuedEntity other = (SimpleQueuedEntity) obj;
+		if (myHostAddress == null) {
+			if (other.myHostAddress != null)
+				return false;
+		} else if (!myHostAddress.equals(other.myHostAddress))
+			return false;
+		return true;
+	}
+
+	public void unbindSelf() {
+		network.unbind(getHost());
+	}
+	
+	public void bindSelf() {
+		network.bind(getHost(), this);
+	}
+	
 	public Queue<ApplicationMessage> getMessageQueue() {
 		return queue;
+	}
+	
+	protected void sendMessage(Host receiver, ApplicationMessage message) {
+		network.sendMessage(getHost(), receiver, message);
 	}
 }

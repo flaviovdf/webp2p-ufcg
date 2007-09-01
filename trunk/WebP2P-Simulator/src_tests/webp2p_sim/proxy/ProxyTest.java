@@ -6,12 +6,10 @@ import java.util.Set;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.browser.Browser;
-import webp2p_sim.core.entity.NetworkEntity;
-import webp2p_sim.ds.DiscoveryService;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.ds.GetServersForURLRequest;
 import webp2p_sim.server.GetContentRequest;
-import webp2p_sim.server.WebServer;
 import webp2p_sim.util.RandomLongGenerator;
 import webp2p_sim.util.SmartTestCase;
 
@@ -20,80 +18,81 @@ public class ProxyTest extends SmartTestCase {
 	private static final String URL = "url1";
 	private Proxy proxy;
 	private RandomLongGenerator generator;
-	private DiscoveryService dsMock;
+	private Host dsMock;
+	private Network network;
 	
 	
 	@Override
 	protected void setUp() throws Exception {
 		this.generator = new RandomLongGenerator();
-		this.dsMock = EasyMock.createMock(DiscoveryService.class);
-		this.proxy = new Proxy("proxy1",ZERO_DIST ,dsMock, generator);
+		this.dsMock = createRandomHost();
+		this.network = EasyMock.createMock(Network.class);
+		this.proxy = new Proxy(createRandomHost(), ZERO_DIST, network, dsMock, generator);
 		super.setUp();
 	}
 	
 	public void testMakeRequest() throws Exception {
-		getContent();
+		getContent(createRandomHost());
 	}
 	
 	public void testHereAreServers() {
-		long reqid = getContent();
+		long reqid = getContent(createRandomHost());
 		
-		WebServer serverMock1 = EasyMock.createMock(WebServer.class);
-		WebServer serverMock2 = EasyMock.createMock(WebServer.class);
+		Host serverMock1 = createRandomHost();
+		Host serverMock2 = createRandomHost();
 		
-		Set<NetworkEntity> servers = new LinkedHashSet<NetworkEntity>();
+		Set<Host> servers = new LinkedHashSet<Host>();
 		servers.add(serverMock1);
 		servers.add(serverMock2);
 		
-		serverMock1.sendMessage(new GetContentRequest(reqid, URL, proxy));
-		EasyMock.replay(serverMock1);
+		network.sendMessage(proxy.getHost(), serverMock1, new GetContentRequest(reqid, URL, proxy.getHost()));
 		
+		EasyMock.replay(network);
 		proxy.hereAreServers(reqid, servers);
-		EasyMock.verify(serverMock1);
+		EasyMock.verify(network);
 	}
 
 	//proxy used to throw excpetion when an empty set was given 
 	public void testHereAreServersNoServersForUrl() {
-		long reqid = getContent();
+		long reqid = getContent(createRandomHost());
 		
-		Set<NetworkEntity> servers = new HashSet<NetworkEntity>();
+		Set<Host> servers = new HashSet<Host>();
 		proxy.hereAreServers(reqid, servers);
 	}
 	
 	//mocks must not be called
 	public void testHereAreServersRequestDoesNotExist() {
-		WebServer serverMock1 = EasyMock.createMock(WebServer.class);
-		WebServer serverMock2 = EasyMock.createMock(WebServer.class);
+		Host serverMock1 = createRandomHost();
+		Host serverMock2 = createRandomHost();
 		
-		Set<NetworkEntity> servers = new HashSet<NetworkEntity>();
+		Set<Host> servers = new HashSet<Host>();
 		servers.add(serverMock1);
 		servers.add(serverMock2);
 		
 		proxy.hereAreServers(12345, servers);
 	}
 	
-	private long getContent() {
+	private long getContent(Host browserMock) {
 		long id = generator.peekNextID();
-		Browser browserMock = EasyMock.createNiceMock(Browser.class);
-		dsMock.sendMessage(EasyMock.eq(new GetServersForURLRequest(new Request(id,URL,proxy))));
-		EasyMock.replay(dsMock);
+		network.sendMessage(proxy.getHost(), dsMock, new GetServersForURLRequest(new Request(id,URL,proxy.getHost())));
+		EasyMock.replay(network);
 		proxy.getContent(new Request(id,URL,browserMock));
-		EasyMock.verify(dsMock);
+		EasyMock.verify(network);
 		
 		assertEquals(proxy.getRequestsMap().get(id).getUrl(),URL);
 		
-		EasyMock.reset(dsMock);
+		EasyMock.reset(network);
 		return id;
 	}
 	
 	public void testHereIsContent() {
-		long reqId = getContent();
+		Host browserMock = createRandomHost();
+		long reqId = getContent(browserMock);
 		
-		NetworkEntity browserMock = this.proxy.getRequestsMap().get(reqId).getBrowser();
-		EasyMock.reset(browserMock);
-		((Browser) browserMock).sendMessage(new HereIsContentMessage(reqId,1));
-		EasyMock.replay(browserMock);
+		network.sendMessage(proxy.getHost(), browserMock, new HereIsContentMessage(reqId,1));
+		
+		EasyMock.replay(network);
 		proxy.hereIsContent(reqId, 1);
-		EasyMock.verify(browserMock);
+		EasyMock.verify(network);
 	}
 }

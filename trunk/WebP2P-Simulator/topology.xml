@@ -1,107 +1,136 @@
 <topology>
 
 	<server>
-		<url>http://192.168.0.1</url>
+		
+		<url>200.249.188.14</url>
+		
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
 			<param>.0142857142</param><!-- rate -->
 		</distribution>
+		
+		<downband>2048</downband>
+		<upband>6144</upband>
+		
 		<file>
 			<path>/test.jpg</path>
-			<size>1</size>
+			<size>250</size>
 		</file>
 		<file>
 			<path>/path/to/file</path>
-			<size>2</size>
+			<size>80</size>
 		</file>
 		<file>
 			<path>/readme.txt</path>
-			<size>1</size>
+			<size>100</size>
 		</file>
+		
 	</server>
 
 	<server>
-		<url>http://192.168.0.2</url>
+		<url>200.129.73.130</url>
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
 			<param>.0142857142</param><!-- location -->
 		</distribution>
+		
+		<downband>2048</downband>
+		<upband>6144</upband>
+		
 		<file>
 			<path>/img.jpg</path>
-			<size>3</size>
+			<size>250</size>
 		</file>
+		
 		<file>
 			<path>/files</path>
-			<size>1</size>
+			<size>64</size>
 		</file>
+		
 		<file>
 			<path>/robots.txt</path>
-			<size>3</size>
+			<size>50</size>
 		</file>
+		
 		<file>
 			<path>/info/robots.txt</path>
-			<size>1</size>
+			<size>50</size>
 		</file>
+		
 		<file>
 			<path>/one/two/three/four.bat</path>
-			<size>1</size>
+			<size>100</size>
 		</file>
+		
 	</server>
 
 	<server>
-		<url>http://10.10.1.1</url>
+		<url>150.165.98.40</url>
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
 			<param>.0142857142</param><!-- rate -->
 		</distribution>
+		
+		<downband>2048</downband>
+		<upband>6144</upband>
+		
 		<file>
 			<path>/test.jpg</path>
-			<size>8</size>
+			<size>250</size>
 		</file>
 		<file>
-			<path>/path/to/images</path>
-			<size>11</size>
+			<path>/path/to/images.html</path>
+			<size>64</size>
 		</file>
 		<file>
 			<path>/help.txt</path>
-			<size>2</size>
+			<size>100</size>
 		</file>
 		<file>
 			<path>/robots.txt</path>
-			<size>1</size>
+			<size>50</size>
 		</file>
+		
 	</server>
 	
 	<server>
-		<url>http://127.0.0.2</url>
+		<url>150.165.111.213</url>
+		
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
 			<param>.0142857142</param><!-- rate -->
 		</distribution>
+		
+		<downband>2048</downband>
+		<upband>6144</upband>
+		
 		<file>
 			<path>/index.html</path>
-			<size>2</size>
+			<size>70</size>
 		</file>
+		
 	</server>
 	
+	
+	<!-- Links -->
 	<link>
-		<server1>http://192.168.0.1</server1>
-		<server2>http://192.168.0.2</server2>
+		<server1>200.249.188.14</server1>
+		<server2>200.129.73.130</server2>
 	</link>
 	
 	<link>
-		<server1>http://192.168.0.2</server1>
-		<server2>http://10.10.1.1</server2>
+		<server1>200.129.73.130</server1>
+		<server2>150.165.98.40</server2>
 	</link>
 	
 	<link>
-		<server1>http://10.10.1.1</server1>
-		<server2>http://127.0.0.2</server2>
+		<server1>150.165.98.40</server1>
+		<server2>150.165.111.213</server2>
 	</link>
 
 	<link>
-		<server1>http://127.0.0.2</server1>
-		<server2>http://192.168.0.1</server2>
+		<server1>150.165.111.213</server1>
+		<server2>200.249.188.14</server2>
 	</link>
 	
 </topology>

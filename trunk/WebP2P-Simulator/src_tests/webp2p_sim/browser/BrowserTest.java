@@ -2,23 +2,26 @@ package webp2p_sim.browser;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.browser.Browser;
-import webp2p_sim.proxy.Proxy;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.server.GetContentRequest;
 import webp2p_sim.util.SmartTestCase;
 
 public class BrowserTest extends SmartTestCase {
 
 	public void testGeneratingRequest() {
-		Proxy proxyMock = EasyMock.createMock(Proxy.class);
-		Browser browser = new Browser("webserver",ZERO_DIST,proxyMock);
+		Host proxyHost = createRandomHost();
+		Network mockNetwork = EasyMock.createMock(Network.class);
 		
-		proxyMock.sendMessage(new GetContentRequest(browser.getRandomRequestGenerator().peekNextID(),"www.anything.com",browser));
+		Browser browser = new Browser(createRandomHost(), ZERO_DIST, mockNetwork, proxyHost);
+		GetContentRequest getContentRequest = new GetContentRequest(browser.getRandomRequestGenerator().peekNextID(),"www.anything.com",browser.getHost());
+		mockNetwork.sendMessage(browser.getHost(), proxyHost, getContentRequest);
 		
-		EasyMock.replay(proxyMock);
+		EasyMock.replay(mockNetwork);
 		
 		browser.generateRequest("www.anything.com");
-		EasyMock.verify(proxyMock);
+		
+		EasyMock.verify(mockNetwork);
 	}
 	
 }

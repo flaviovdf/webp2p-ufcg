@@ -9,8 +9,8 @@ import webp2p_sim.util.SmartTestCase;
 public class NetworkTest extends SmartTestCase {
 
 	public void testBind() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
@@ -24,8 +24,8 @@ public class NetworkTest extends SmartTestCase {
 	}
 
 	public void testUnbind() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
@@ -41,16 +41,16 @@ public class NetworkTest extends SmartTestCase {
 	}
 
 	public void testSendMessage() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
-		Address otherAddress = new Address(250,250,250,250, 80);
+		Address otherAddress = new Address(250,250,250,250);
 		AsymetricBandwidth otherBand = new AsymetricBandwidth(20, 10);
 		Host otherHost = new Host(otherAddress, otherBand);
 		
-		Address yetAnotherAddress = new Address(252,252,252,252, 80);
+		Address yetAnotherAddress = new Address(252,252,252,252);
 		AsymetricBandwidth yetAnotherBand = new AsymetricBandwidth(20, 10);
 		Host yetAnotherHost = new Host(yetAnotherAddress, yetAnotherBand);
 		
@@ -80,23 +80,23 @@ public class NetworkTest extends SmartTestCase {
 		assertEquals(1, network.getConnection(host, yetAnotherHost).getAmountMessagesBeingTransfered());
 		
 		//Unknown receiver
-		network.sendMessage(host, new Host(new Address(1, 1, 1, 1, 1), new SymetricBandwidth(1)), message3);
+		network.sendMessage(host, new Host(new Address(1, 1, 1, 1), new SymetricBandwidth(1)), message3);
 		assertEquals(2, network.getConnection(host, otherHost).getAmountMessagesBeingTransfered());
 		assertEquals(1, network.getConnection(host, yetAnotherHost).getAmountMessagesBeingTransfered());
 		
 		//Unknown sender
-		network.sendMessage(new Host(new Address(1, 1, 1, 1, 1), new SymetricBandwidth(1)), yetAnotherHost, message3);
+		network.sendMessage(new Host(new Address(1, 1, 1, 1), new SymetricBandwidth(1)), yetAnotherHost, message3);
 		assertEquals(2, network.getConnection(host, otherHost).getAmountMessagesBeingTransfered());
 		assertEquals(1, network.getConnection(host, yetAnotherHost).getAmountMessagesBeingTransfered());
 	}
 
 	public void testTickOcurredOneMessage() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
-		Address otherAddress = new Address(250,250,250,250, 80);
+		Address otherAddress = new Address(250,250,250,250);
 		AsymetricBandwidth otherBand = new AsymetricBandwidth(20, 10);
 		Host otherHost = new Host(otherAddress, otherBand);
 		
@@ -110,7 +110,7 @@ public class NetworkTest extends SmartTestCase {
 		network.bind(host, networkEntity);
 		network.bind(otherHost, otherNetworkEntity);
 		
-		otherNetworkEntity.sendMessage(message);
+		otherNetworkEntity.receiveMessage(message);
 		EasyMock.replay(message, otherNetworkEntity);
 		
 		network.sendMessage(host, otherHost, message);
@@ -127,12 +127,12 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessages() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
-		Address otherAddress = new Address(250,250,250,250, 80);
+		Address otherAddress = new Address(250,250,250,250);
 		AsymetricBandwidth otherBand = new AsymetricBandwidth(20, 10);
 		Host otherHost = new Host(otherAddress, otherBand);
 		
@@ -148,8 +148,8 @@ public class NetworkTest extends SmartTestCase {
 		network.bind(host, networkEntity);
 		network.bind(otherHost, otherNetworkEntity);
 		
-		otherNetworkEntity.sendMessage(message);
-		otherNetworkEntity.sendMessage(message2);
+		otherNetworkEntity.receiveMessage(message);
+		otherNetworkEntity.receiveMessage(message2);
 		
 		EasyMock.replay(message, message2, otherNetworkEntity);
 		
@@ -168,12 +168,12 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessages2() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
-		Address otherAddress = new Address(250,250,250,250, 80);
+		Address otherAddress = new Address(250,250,250,250);
 		AsymetricBandwidth otherBand = new AsymetricBandwidth(20, 10);
 		Host otherHost = new Host(otherAddress, otherBand);
 		
@@ -189,8 +189,8 @@ public class NetworkTest extends SmartTestCase {
 		network.bind(host, networkEntity);
 		network.bind(otherHost, otherNetworkEntity);
 		
-		otherNetworkEntity.sendMessage(message);
-		otherNetworkEntity.sendMessage(message2);
+		otherNetworkEntity.receiveMessage(message);
+		otherNetworkEntity.receiveMessage(message2);
 		
 		EasyMock.replay(message, message2, otherNetworkEntity);
 		
@@ -217,12 +217,12 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessagesFailures() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
-		Address otherAddress = new Address(250,250,250,250, 80);
+		Address otherAddress = new Address(250,250,250,250);
 		AsymetricBandwidth otherBand = new AsymetricBandwidth(20, 10);
 		Host otherHost = new Host(otherAddress, otherBand);
 		
@@ -249,12 +249,12 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessagesFailures2() {
-		Network network = Network.getInstance();
-		Address address = new Address(254,254,254,254, 80);
+		Network network = new Network();
+		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
 		
-		Address otherAddress = new Address(250,250,250,250, 80);
+		Address otherAddress = new Address(250,250,250,250);
 		AsymetricBandwidth otherBand = new AsymetricBandwidth(20, 10);
 		Host otherHost = new Host(otherAddress, otherBand);
 		

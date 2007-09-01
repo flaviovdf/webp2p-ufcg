@@ -2,10 +2,10 @@ package webp2p_sim.browser;
 
 import org.apache.log4j.Logger;
 
-import webp2p_sim.common.ContentIF;
 import webp2p_sim.common.RequestCallBack;
-import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.proxy.GeneratorInterested;
 import webp2p_sim.server.GetContentRequest;
 import webp2p_sim.util.RandomLongGenerator;
@@ -15,15 +15,11 @@ public class Browser extends SimpleQueuedEntity implements RequestCallBack, Gene
 
 	private static Logger LOG = Logger.getLogger( Browser.class );
 	
-	private final NetworkEntity proxy;
+	private final Host proxy;
 	private final RandomLongGenerator generator;
 
-	public Browser(String name, Distribution distribution, NetworkEntity proxy) {
-		super(name, distribution);
-		
-		//Integrity check.
-		assert proxy instanceof ContentIF;
-		
+	public Browser(Host host, Distribution distribution, Network network, Host proxy) {
+		super(host, distribution, network);
 		this.proxy = proxy;
 		this.generator = new RandomLongGenerator();
 	}
@@ -39,7 +35,7 @@ public class Browser extends SimpleQueuedEntity implements RequestCallBack, Gene
 	public void generateRequest(String url) {
 		long request = this.generator.getNextID();
 		LOG.info("Request: "+request+" sent to url: "+url);
-		this.proxy.sendMessage(new GetContentRequest(request,url,this));
+		sendMessage(proxy, new GetContentRequest(request, url, this.getHost()));
 	}
 	
 }

@@ -6,7 +6,9 @@ public interface ApplicationMessage extends TimedEntity {
 
 	public boolean isDone();
 
-	public void setEntity(NetworkEntity entity);
+	public void setReceiverEntity(NetworkEntity entity);
+	
+	public void setCallerEntity(NetworkEntity entity);
 
 	public void setProcessTime(double processTime);
 

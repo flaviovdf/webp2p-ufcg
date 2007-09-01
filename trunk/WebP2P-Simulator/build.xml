@@ -22,7 +22,6 @@ Ant build file for WebP2P-Simulator
 		
 		<javac classpath="${java.classpath}" srcdir="${testsrc.dir}" destdir="${classes.dir}" optimize="on">
 			<include name="**" />
-			<exclude name="**/DesignTest.java" />
 		</javac>
 
 		<jar destfile="${dist.jar}">

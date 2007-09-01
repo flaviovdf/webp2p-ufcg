@@ -8,9 +8,9 @@ import org.apache.log4j.Logger;
 
 import webp2p_sim.common.ContentIF;
 import webp2p_sim.common.RequestCallBack;
-import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
-import webp2p_sim.ds.DiscoveryService;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
 import webp2p_sim.ds.GetServersForURLRequest;
 import webp2p_sim.server.GetContentRequest;
 import webp2p_sim.util.RandomLongGenerator;
@@ -20,41 +20,38 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 
 	private static Logger LOG = Logger.getLogger( Proxy.class );
 	
-	private final NetworkEntity discoveryService;
+	private final Host discoveryService;
 	private Map<Long, RequestData> requests; 
 		
-	public Proxy(String name, Distribution distribution, NetworkEntity discoveryService, RandomLongGenerator requestIDGenerator) {
-		super(name, distribution);
-		
-		assert discoveryService instanceof DiscoveryService;
-		
+	public Proxy(Host host, Distribution distribution, Network network, Host discoveryService, RandomLongGenerator requestIDGenerator) {
+		super(host, distribution, network);
 		this.requests = new HashMap<Long, RequestData>();
 		this.discoveryService = discoveryService;
 	}
 	
-	void hereAreServers(long request, Set<NetworkEntity> servers) {
+	void hereAreServers(long request, Set<Host> servers) {
 		RequestData requestData = requests.get(request);
 		if (requestData != null) {
-			LOG.debug( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );
+			LOG.info( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );
 			if (servers != null && !servers.isEmpty()) {
-				NetworkEntity server = servers.iterator().next();
+				Host server = servers.iterator().next();
 				if (server != null) {
-					LOG.debug( "Asking file " + requestData.getUrl() + " to server " + server + ". Request: " + request );
-					server.sendMessage(new GetContentRequest(request, requestData.getUrl(), this));
+					LOG.info( "Asking file " + requestData.getUrl() + " to server " + server + ". Request: " + request );
+					sendMessage(server, new GetContentRequest(request, requestData.getUrl(), this.getHost()));
 				}
 			} else {
-				requestData.entity.sendMessage(new HereIsContentMessage(request, -1)); // empty result
+				sendMessage(requestData.entity, new HereIsContentMessage(request, -1)); // empty result
 			}
 		} else {
-			LOG.debug( "Request " + request + " not found on the proxy map" );
+			LOG.info( "Request " + request + " not found on the proxy map" );
 		}
 	}
 
 	public void hereIsContent(long request, int result) {
-		LOG.debug( "Request " + request + " completed with result " + result );
+		LOG.info( "Request " + request + " completed with result " + result );
 		RequestData requestData = this.requests.get(request);
 		if (requestData != null) {
-			requestData.entity.sendMessage(new HereIsContentMessage(request,result));
+			sendMessage(requestData.entity, new HereIsContentMessage(request,result));
 		}
 	}
 	
@@ -64,21 +61,22 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 	}
 
 	public void getContent(Request request) {
-		LOG.debug( "Asking for file " + request.getUrl() + ". Request: " + request.getId() );
+		LOG.info( "Asking for file " + request.getUrl() + ". Request: " + request.getId() );
+		
 		requests.put(request.getId(), new RequestData(request.getCallBack(),request.getUrl()));
-		discoveryService.sendMessage(new GetServersForURLRequest(new Request(request.getId(), request.getUrl(), this)));
+		sendMessage(discoveryService, new GetServersForURLRequest(new Request(request.getId(), request.getUrl(), this.getHost())));
 	}
 	
 	protected class RequestData {
-		private NetworkEntity entity;
+		private Host entity;
 		private String url;
 		
-		public RequestData(NetworkEntity entity, String url) {
-			this.entity = entity;
+		public RequestData(Host host, String url) {
+			this.entity = host;
 			this.url = url;
 		}
 		
-		public NetworkEntity getBrowser() {
+		public Host getBrowser() {
 			return entity;
 		}
 		

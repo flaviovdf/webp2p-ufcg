@@ -48,7 +48,7 @@ if [ "$1" == "-seq" ]; then
 	VALUES=`seq $FIRST $INC $LAST`
 fi
 
-NRUNS=10
+NRUNS=1000
 for newparam in $VALUES; do
 	
 	sum_mean=0

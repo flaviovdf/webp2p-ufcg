@@ -1,15 +1,15 @@
 package webp2p_sim.proxy;
 
-import webp2p_sim.core.entity.NetworkEntity;
+import webp2p_sim.core.network.Host;
 
 
 public class Request {
 
 	private long id;
 	private String url;
-	private NetworkEntity callBack;
+	private Host callBack;
 	
-	public Request(long id, String url, NetworkEntity callBack) {
+	public Request(long id, String url, Host callBack) {
 		this.id = id;
 		this.callBack = callBack;
 		this.url = url;
@@ -20,7 +20,7 @@ public class Request {
 		return id;
 	}
 
-	public NetworkEntity getCallBack() {
+	public Host getCallBack() {
 		return callBack;
 	}
 
@@ -31,13 +31,15 @@ public class Request {
 
 	@Override
 	public int hashCode() {
-		final int PRIME = 31;
+		final int prime = 31;
 		int result = 1;
-		result = PRIME * result + ((callBack == null) ? 0 : callBack.hashCode());
-		result = PRIME * result + (int) (id ^ (id >>> 32));
-		result = PRIME * result + ((url == null) ? 0 : url.hashCode());
+		result = prime * result
+				+ ((callBack == null) ? 0 : callBack.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -62,4 +64,7 @@ public class Request {
 			return false;
 		return true;
 	}
+
+	
+
 }

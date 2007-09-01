@@ -5,10 +5,16 @@ import java.util.ArrayList;
 
 import org.apache.commons.configuration.Configuration;
 
+import webp2p_sim.core.network.Address;
+import webp2p_sim.core.network.AsymetricBandwidth;
+import webp2p_sim.core.network.Host;
+import webp2p_sim.core.network.Network;
+
 public class Params {
 
 	protected long simTime;
-	protected int seed;
+	
+	private Network network = new Network(); 
 	
 	@SuppressWarnings("unchecked")
 	protected <T> T extractObject(Configuration config, String name) {
@@ -52,11 +58,29 @@ public class Params {
 		}
 	}
 	
+	protected Host createHost(String ip, long upBand, long downBand) {
+		String[] split = ip.split("\\.");
+		if (split.length != 4) {
+			throw new RuntimeException("IP: " + ip + " is invalid");
+		}
+		
+		int[] bytes = new int[4];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = Integer.parseInt(split[i]);
+			
+			if (bytes[i] <= 0 || bytes[i] >= 255) {
+				throw new RuntimeException("IP: " + ip + " is invalid");	
+			}
+		}
+		
+		return new Host(new Address(bytes[0], bytes[1], bytes[2], bytes[3]), new AsymetricBandwidth(upBand, downBand));
+	}
+	
 	public long getSimTime() {
 		return simTime;
 	}
-
-	public int getSeed() {
-		return seed;
+	
+	public Network getNetwork() {
+		return network;
 	}
 }

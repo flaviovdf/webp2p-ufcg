@@ -23,7 +23,7 @@ public class SimulatorDistributed extends Simulator {
 		Browser browser = params.getBrowser();
 		
 		RequestGenerator req = new RequestGenerator(browser);
-		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(params.getTrafficDistribution(), getNumberOfTicks(), servers).generateRequests());
+		TrafficGenerator trafficGenerator = new TrafficGenerator(new RequestFileGenerator(params.getTrafficDistribution(), getNumberOfTicks(), servers).generateRequests(), params.getTrafficUpBand(), params.getTrafficDownBand(), params.getNetwork());
 		req.loadFile(new File(params.getBrowserInputFile()));
 		
 		Clock.getInstance().addEntities(servers.toArray(new TimedEntity[servers.size()]));

@@ -6,7 +6,8 @@ public abstract class AbstractApplicationMessage implements ApplicationMessage {
 
 	private final double PRECISON = 1000;
 	private double processTime;
-	protected NetworkEntity entity;
+	protected NetworkEntity receiverEntity;
+	protected NetworkEntity callerEntity;
 
 	public AbstractApplicationMessage() {
 		this.processTime = 0;
@@ -25,14 +26,25 @@ public abstract class AbstractApplicationMessage implements ApplicationMessage {
 		this.processTime = ((long)(processTime * PRECISON ))/PRECISON;
 	}
 	
-	public final void setEntity(NetworkEntity entity) {
-		this.entity = entity;
+	public final void setReceiverEntity(NetworkEntity entity) {
+		this.receiverEntity = entity;
 	}
 	
-	public double getProcessTime() {
+	public final void setCallerEntity(NetworkEntity entity) {
+		this.callerEntity = entity;
+	}
+	
+	public final double getProcessTime() {
 		return processTime;
 	}
 	
+	public final void process() {
+		assert receiverEntity != null;
+		realProcess();
+	}
+	
+	public abstract void realProcess();
+
 	//FIXME
 	public long size() {
 		return 0;

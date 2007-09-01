@@ -10,13 +10,13 @@ public class HostTest extends SmartTestCase {
 		
 		AsymetricBandwidth band = new AsymetricBandwidth(maxUp, maxDown);
 		
-		Host host = new Host(new Address(254,254,254,254, 80), band);
+		Host host = new Host(new Address(254,254,254,254), band);
 		
-		assertEquals(new Address(254,254,254,254, 80), host.getAddress());
-		assertEquals(new Host(new Address(254,254,254,254, 80), new AsymetricBandwidth(maxUp, maxDown)), host);
-		assertEquals(new Host(new Address(254,254,254,254, 80), null), host);
+		assertEquals(new Address(254,254,254,254), host.getAddress());
+		assertEquals(new Host(new Address(254,254,254,254), new AsymetricBandwidth(maxUp, maxDown)), host);
+		assertEquals(new Host(new Address(254,254,254,254), null), host);
 		
-		assertFalse(host.equals(new Host(new Address(253,253,253,253, 80), new AsymetricBandwidth(maxUp, maxDown))));
+		assertFalse(host.equals(new Host(new Address(253,253,253,253), new AsymetricBandwidth(maxUp, maxDown))));
 	}
 	
 }

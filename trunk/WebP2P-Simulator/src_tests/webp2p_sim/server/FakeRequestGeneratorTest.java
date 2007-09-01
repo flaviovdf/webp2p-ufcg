@@ -1,9 +1,9 @@
 package webp2p_sim.server;
 
-import junit.framework.TestCase;
+import webp2p_sim.util.SmartTestCase;
 
 
-public class FakeRequestGeneratorTest extends TestCase {
+public class FakeRequestGeneratorTest extends SmartTestCase {
 
 	public void testWebServerReceiving() {
 /*		WebServer serverMock = EasyMock.createStrictMock(WebServer.class);
