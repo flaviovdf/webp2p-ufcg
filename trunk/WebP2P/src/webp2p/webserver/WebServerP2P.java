@@ -18,7 +18,11 @@ public class WebServerP2P {
 	
 	private static final String SHAREDFILES_FILENAME = "webserverp2p.sharedfiles";
 	
+	private DataManager dataManager;
+	
 	public WebServerP2P() {
+		this.dataManager = new DataManager();
+		this.dataManager.loadLocalSharedFiles(SHAREDFILES_FILENAME);
 	}
 	
 	static void init() {
@@ -59,11 +63,7 @@ public class WebServerP2P {
 			
 			out.write("\n".getBytes());
 			
-			InputStream in = connection.getInputStream();
-			int nextByte = -1;
-			while ((nextByte = in.read()) != -1) {
-				out.write(nextByte);
-			}
+			out.write(this.dataManager.getData(url));
 			
 			return out.toByteArray();
 		} catch (Exception e) {

@@ -41,7 +41,7 @@ public class DataManager {
 			String url = null;
 			
 			while ((url = reader.readLine()) != null) {
-				if (url.startsWith("#")) continue; // ignoring commented lines
+				if ("".equals(url) || url.startsWith("#")) continue; // ignoring commented lines
 				this.storeLocalData(url);
 			}
 			
@@ -65,7 +65,7 @@ public class DataManager {
 			out = new ByteArrayOutputStream(256);
 			
 			in = urlObj.openStream();
-			int nextByte = -1;
+			int nextByte;
 			while ((nextByte = in.read()) != -1) {
 				out.write(nextByte);
 			}
@@ -87,7 +87,7 @@ public class DataManager {
 	 * @param url The data url.
 	 * @return <code>true</code> if the data can be stored, and <code>false</code> otherwise.
 	 */
-	public boolean storeData(String url) {
+	public boolean storeRemoteData(String url) {
 		return false;
 	}
 	
