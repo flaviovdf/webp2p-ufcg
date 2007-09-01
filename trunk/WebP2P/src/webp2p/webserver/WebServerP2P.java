@@ -3,7 +3,6 @@ package webp2p.webserver;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -17,12 +16,17 @@ import webp2p.webserver.config.WebServerP2PConfig;
 public class WebServerP2P {
 	
 	private static final String SHAREDFILES_FILENAME = "webserverp2p.sharedfiles";
+	private static final String ADJACENTS_FILENAME = "webserverp2p.adjacents";
 	
 	private DataManager dataManager;
+	private Replicator replicator;
 	
 	public WebServerP2P() {
 		this.dataManager = new DataManager();
 		this.dataManager.loadLocalSharedFiles(SHAREDFILES_FILENAME);
+		
+		this.replicator = new Replicator();
+		this.replicator.loadAdjacents(ADJACENTS_FILENAME);
 	}
 	
 	static void init() {
@@ -35,7 +39,7 @@ public class WebServerP2P {
 		String wsFullAddr = "http://" + wsAddr + ":" + wsPort;
 		
 		try {
-			List<String> sharedFiles = LineReader.readFile(new File(SHAREDFILES_FILENAME));
+			List<String> sharedFiles = LineReader.readFile(new File(SHAREDFILES_FILENAME), "#");
 
 			for (String file : sharedFiles) {
 				try {
@@ -71,7 +75,8 @@ public class WebServerP2P {
 		}
 	}
 
-	public boolean createReplica(String url) {
-		return false;
+	public boolean storeReplica(String url) {
+		return this.dataManager.storeRemoteData(url);
 	}
+	
 }
