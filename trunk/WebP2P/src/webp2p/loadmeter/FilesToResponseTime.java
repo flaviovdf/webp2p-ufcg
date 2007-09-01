@@ -7,28 +7,29 @@ package webp2p.loadmeter;
 public class FilesToResponseTime {
 		
 		private String file;
-		private long responseTime;
+		private double responseTime;
 		
-		public FilesToResponseTime(String file, long responseTime) {
+		public FilesToResponseTime(String file, double responseTime2) {
 			this.file = file;
-			this.responseTime = responseTime;
+			this.responseTime = responseTime2;
 		}
 		
 		public String getFile() {
 			return file;
 		}
 		
-		public long getResponseTime() {
+		public double getResponseTime() {
 			return responseTime;
 		}
 
-				
 		@Override
 		public int hashCode() {
 			final int PRIME = 31;
 			int result = 1;
 			result = PRIME * result + ((file == null) ? 0 : file.hashCode());
-			result = PRIME * result + (int) (responseTime ^ (responseTime >>> 32));
+			long temp;
+			temp = Double.doubleToLongBits(responseTime);
+			result = PRIME * result + (int) (temp ^ (temp >>> 32));
 			return result;
 		}
 
@@ -46,7 +47,7 @@ public class FilesToResponseTime {
 					return false;
 			} else if (!file.equals(other.file))
 				return false;
-			if (responseTime != other.responseTime)
+			if (Double.doubleToLongBits(responseTime) != Double.doubleToLongBits(other.responseTime))
 				return false;
 			return true;
 		}

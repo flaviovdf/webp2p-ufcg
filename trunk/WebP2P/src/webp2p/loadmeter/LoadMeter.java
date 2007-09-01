@@ -1,32 +1,36 @@
 package webp2p.loadmeter;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 
 public class LoadMeter {
 
 	private Map<LoadListener,Metric> listeners;
 	private String server;
-	private int port;
+	private int port, bufferSize;
 	
 	public LoadMeter(String server, int port) {
 		this.server = server;
 		this.port = port;
 		listeners = new HashMap<LoadListener, Metric>();
+		
+		//default
+		this.bufferSize = 1024;
+		try {
+			Properties props = new Properties();
+			props.load(this.getClass().getResourceAsStream("/loadmeter.properties"));
+			this.bufferSize = Integer.parseInt(props.getProperty("buffer"));
+		} catch (IOException e) {
+		}
 	}
 	
 	public void addListener(LoadListener listener, Metric metric) {
-		assert listener != null;
-		assert metric != null;
 		this.listeners.put(listener, metric);
 	} 
 	
@@ -34,33 +38,31 @@ public class LoadMeter {
 		this.listeners.remove(listener);
 	} 
 	
-	
 	public String getServer() {
 		return server;
 	}
-
 
 	public int getPort() {
 		return port;
 	}
 
 	public void ping() {
-		Map<String,Long> cache = new HashMap<String,Long>();
+		Map<String,Double> cache = new HashMap<String,Double>();
 		LoadEvent loadEvent = null;
 		boolean mustThrowEvent = false;
 		
-		long responseTime = -1;
+		double download_rate = -1;
 		for (Entry<LoadListener, Metric> entry : listeners.entrySet()) {
 			loadEvent = new LoadEvent(this.server, this.port);
 			
 			for (String file : entry.getValue().getFiles()) {
 				
 				if (!cache.containsKey(file)) {
-					responseTime = extractResponseTime(file);
-					cache.put(file, responseTime);
+					download_rate = extractDownloadRate(file);
+					cache.put(file, download_rate);
 					
-					if (responseTime >= entry.getValue().getTimeOut()) {
-						loadEvent.addPopularFile(new FilesToResponseTime(file, responseTime));
+					if (download_rate >= entry.getValue().getTimeOut()) {
+						loadEvent.addPopularFile(new FilesToResponseTime(file, download_rate));
 						mustThrowEvent = true;
 					}
 				}
@@ -77,23 +79,35 @@ public class LoadMeter {
 	 * @param file
 	 * @return the response time in milliseconds.
 	 */
-	private long extractResponseTime(String file) {
+	private double extractDownloadRate(String file) {
+		byte[] buffer = new byte[this.bufferSize];
 		long startTime = System.currentTimeMillis();
-		this.download(this.server + File.separator +file, 1024);
+		int bytes = this.download(this.server + File.separator +file, buffer);
 		long endTime = System.currentTimeMillis();
-		return 1024/(endTime - startTime)*1000;
+		
+		float f = this.bufferSize;
+		double readedInKb = bytes/f;
+		double timeInSec = (endTime - startTime)/1000f;
+		return readedInKb/timeInSec;
 	}
 	
-	private void download(String file, int numOfBytesToDownload) {
-		URLConnection conn = null;
+	/**
+	 * Download numBytesToBeReaded from file.
+	 * @param file the file to be downloaded.
+	 * @param numBytesToBeReaded the number of bytes to download from the file.
+	 * @return the number of bytes readed.
+	 */
+	private int download(String file, byte[] buffer) {
 		InputStream  in = null;
+		int readed = 0;
 		try {
 			URL url = new URL(file);
-			conn = url.openConnection();
-			in = conn.getInputStream();
-			byte[] buffer = new byte[numOfBytesToDownload];
-			in.read(buffer);
-//			while ((in.read(buffer)) != -1) {}
+			in = url.openStream();
+			
+			int cont = 0;
+			while ( (cont = in.read(buffer)) != -1 ) {
+				readed+=cont;
+			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
@@ -104,5 +118,6 @@ public class LoadMeter {
 			} catch (IOException ioe) {
 			}
 		}
+		return readed;
 	}
 }

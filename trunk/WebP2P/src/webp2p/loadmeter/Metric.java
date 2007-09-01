@@ -5,22 +5,22 @@ import java.util.List;
 public class Metric {
 
 	private List<String> files;
-	private int timeout;
+	private int download_rate;
 	
 	/**
 	 * 
 	 * @param files The files to be monitored.
-	 * @param timeout
+	 * @param the minimum download rate (KB/s).
 	 */
-	public Metric(List<String> files, int timeout) {
+	public Metric(List<String> files, int download_rate) {
 		this.files = files;
-		this.timeout = timeout;
+		this.download_rate = download_rate;
 	}
 	
 	public List<String> getFiles() {
 		return files;
 	}
 	public int getTimeOut() {
-		return timeout;
+		return download_rate;
 	}
 }
