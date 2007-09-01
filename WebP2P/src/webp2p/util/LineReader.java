@@ -14,17 +14,19 @@ public class LineReader {
 	 * Reads the entire file and returns its lines in a <code>List</code>.
 	 * 
 	 * @param f The file to be read.
+	 * @param skipWord A line that starts with this string will be ignored.
 	 * @return The file lines or <code>null</code> if the lines cannot be read.
 	 * @throws FileNotFoundException if the file cannot be found.
 	 */
-	public static List<String> readFile(File f) throws FileNotFoundException {
+	public static List<String> readFile(File f, String skipWord) throws FileNotFoundException {
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		try {
 			
 			List<String> result = new LinkedList<String>();
-			String line = null;
+			String line;
 			
 			while ((line = br.readLine()) != null) {
+				if (line.startsWith(skipWord)) continue;
 				result.add(line);
 			}
 			

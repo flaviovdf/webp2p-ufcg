@@ -1,15 +1,17 @@
 package webp2p.webserver;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import webp2p.util.LineReader;
 
 /**
  * A <code>DataManager</code> instance manages the <code>WebServer</code> dataset.
@@ -19,13 +21,14 @@ import java.util.Map;
  */
 public class DataManager {
 	
-	private Map<String, Pair<URL, byte[]>> localData;
+	private Map<String, Pair<URL, byte[]>> localData, remoteData;
 
 	/**
 	 * Creates a new <code>DataManager</code>.
 	 */
 	public DataManager() {
 		this.localData = new HashMap<String, Pair<URL, byte[]>>();
+		this.remoteData = new HashMap<String, Pair<URL, byte[]>>();
 	}
 
 	/**
@@ -37,18 +40,13 @@ public class DataManager {
 	 */
 	public void loadLocalSharedFiles(String sharedFiles) {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(sharedFiles));
-			String url = null;
+			List<String> filesToLoad = LineReader.readFile(new File(sharedFiles), "#");
 			
-			while ((url = reader.readLine()) != null) {
-				if ("".equals(url) || url.startsWith("#")) continue; // ignoring commented lines
+			for (String url : filesToLoad) {
 				this.storeLocalData(url);
 			}
-			
 		} catch (FileNotFoundException e) {
 			throw new IllegalArgumentException("File " + sharedFiles + " not found", e);
-		} catch (IOException e) {
-			new RuntimeException("Could not read the file " + sharedFiles, e);
 		}
 	}
 	
@@ -58,11 +56,26 @@ public class DataManager {
 	 * @param url The data url.
 	 */
 	public void storeLocalData(String url) {
+		this.localData.put(url, this.getDataPair(url));
+	}
+	
+	/**
+	 * Stores a remote data given a url.
+	 * 
+	 * @param url The data url.
+	 * @return <code>true</code> if the data can be stored, and <code>false</code> otherwise.
+	 */
+	public boolean storeRemoteData(String url) {
+		this.remoteData.put(url, this.getDataPair(url));
+		return true;
+	}
+	
+	private Pair<URL, byte[]> getDataPair(String url) {
 		ByteArrayOutputStream out = null;
 		InputStream in = null;
 		try {
-			URL urlObj = new URL(url);
 			out = new ByteArrayOutputStream(256);
+			URL urlObj = new URL(url);
 			
 			in = urlObj.openStream();
 			int nextByte;
@@ -70,7 +83,7 @@ public class DataManager {
 				out.write(nextByte);
 			}
 			
-			this.localData.put(url, new Pair<URL, byte[]>(urlObj, out.toByteArray()));
+			return new Pair<URL, byte[]>(urlObj, out.toByteArray());
 		} catch (MalformedURLException e) {
 			throw new IllegalArgumentException("The URL " + url + " is not valid", e);
 		} catch (IOException e) {
@@ -82,23 +95,16 @@ public class DataManager {
 	}
 	
 	/**
-	 * Stores a remote data given a url.
-	 * 
-	 * @param url The data url.
-	 * @return <code>true</code> if the data can be stored, and <code>false</code> otherwise.
-	 */
-	public boolean storeRemoteData(String url) {
-		return false;
-	}
-	
-	/**
 	 * Returns the data as an array of bytes.
+	 * It first looks in the local data repository
+	 * and then, if it is not found, in the remote repository.
 	 * 
 	 * @param url The url of the data.
 	 * @return The data as an array of bytes.
 	 */
 	public byte[] getData(String url) {
 		Pair<URL, byte[]> pair = this.localData.get(url);
+		if (pair == null) pair = this.remoteData.get(url);
 		return pair != null ? pair.second : null;
 	}
 
