@@ -37,6 +37,7 @@ public class Main {
 			int wsPort = WebServerP2PConfig.getInstance().getWebServerP2PPort();
 			String wsFullAddr = "http://" + wsAddr + ":" + wsPort;
 			
+			LOG.info("Using the DiscoveryService " + dsAddr + ":" + dsPort);
 			init(discoveryService, wsFullAddr);
 			
 			XMLRPCSkeleton webserverp2pSkel = new XMLRPCSkeleton("ws", WebServerP2P.class);
@@ -57,7 +58,6 @@ public class Main {
 	 */
 	private static void init(DiscoveryServiceStub discoveryService, String wsFullAddr) {
 		LOG.info("Initializing the WebServerP2P: " + wsFullAddr);
-		LOG.info("Using the DiscoveryService " + wsFullAddr);
 		
 		try {
 			List<String> sharedFiles = LineReader.readFile(new File(SHAREDFILES_FILENAME), "#");

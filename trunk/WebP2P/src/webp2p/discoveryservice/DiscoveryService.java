@@ -7,10 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+import webp2p.webserver.WebServerP2P;
+
 /**
  * The <code>DiscoveryService</code> is a catalog which holds information about where the files are.
  */
 public class DiscoveryService {
+	
+	private static final Logger LOG = Logger.getLogger(DiscoveryService.class);
 
 	/**
 	 * The list of web servers by a given file.
@@ -32,11 +38,13 @@ public class DiscoveryService {
 	 * @return <code>true</code> if it is a first entry for the specified file, <code>false</code> otherwise.
 	 */
 	public boolean put(String wsAddr, String file) {
+		LOG.info("Adding file " + file + " to WebServerP2P " + wsAddr);
 		boolean firstEntryForFile = false;
 
 		if (! this.table.containsKey(file)) {
 			this.table.put(file, new HashSet<String>());
 			firstEntryForFile = true;
+			LOG.debug("First entry for the file " + file + " in " + wsAddr);
 		}
 
 		Set<String> webservers = this.table.get(file);
@@ -52,8 +60,10 @@ public class DiscoveryService {
 	 * @return The WebServer addresses list.
 	 */
 	public List<String> get(String file) {
+		LOG.info("File " + file + " requested");
 		Set<String> webservers = this.table.get(file);
 		
+		LOG.debug("Answer: " + webservers);
 		if (webservers == null) return new LinkedList<String>();
 		
 		return new LinkedList<String>(webservers);
@@ -67,14 +77,20 @@ public class DiscoveryService {
 	 * @return <code>true</code> if the operation is successfully performed, <code>false</code> otherwise.
 	 */
 	public boolean delete(String wsAddr, String file) {
+		LOG.info("Removing file " + file + " from WebServerP2P " + wsAddr);
 		boolean result = false;
 		
 		Set<String> webservers = this.table.get(file);
 		
-		if (webservers != null) {
+		if (webservers == null) {
+			LOG.debug("No entries were found for file " + file);
+		} else {
 			result = webservers.remove(wsAddr);
 			
-			if (webservers.isEmpty()) this.table.remove(file);
+			if (webservers.isEmpty()) {
+				this.table.remove(file);
+				LOG.debug("No more entries for file " + file);
+			}
 		}
 		
 		return result;

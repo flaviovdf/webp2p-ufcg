@@ -34,6 +34,7 @@
 	<target name="jar" depends="compile">
 		<jar destfile="${jar}">
 			<fileset dir="${classes}" />
+			<fileset file="${src}/**.properties" />
 		</jar>
 	</target>
 
