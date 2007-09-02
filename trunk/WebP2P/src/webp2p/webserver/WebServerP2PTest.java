@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 public class WebServerP2PTest extends TestCase {
 
 	static {
-		WebServerP2P.init();
+		WebServerP2P.init(null,null);
 	}
 
 	protected void setUp() throws Exception {
@@ -15,8 +15,18 @@ public class WebServerP2PTest extends TestCase {
 	}
 
 	public void testGetContent() {
-//		dataManagerMock = EasyMock.create
-//		WebServerP2P ws = new WebServerP2P(dataManagerMock, replicatorMock);
+		DataManager dataManagerMock = EasyMock.createStrictMock(DataManager.class);
+		Replicator replicatorMock = EasyMock.createStrictMock(Replicator.class);
+		
+		
+		EasyMock.replay(dataManagerMock, replicatorMock);
+		
+		WebServerP2P ws = new WebServerP2P(dataManagerMock, replicatorMock);
+		
+		
+		
+		
+		EasyMock.verify(dataManagerMock, replicatorMock);
 	}
 
 }
