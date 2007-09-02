@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/easymockclassextension.jar"/>
 	<classpathentry kind="lib" path="lib/cglib.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
