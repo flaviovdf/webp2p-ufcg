@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p.discoveryservice.DiscoveryServiceStub;
-
 public class WebServerP2PTest extends TestCase {
 	
 	protected void setUp() throws Exception {
@@ -13,19 +11,29 @@ public class WebServerP2PTest extends TestCase {
 	}
 
 	public void testGetContent() {
-		DiscoveryServiceStub discoveryServiceMock = EasyMock.createMock(DiscoveryServiceStub.class);
-		DataManager dataManagerMock = EasyMock.createStrictMock(DataManager.class);
-		Replicator replicatorMock = EasyMock.createStrictMock(Replicator.class);
+		DataManager dataManagerMock = EasyMock.createMock(DataManager.class);
 		
+		EasyMock.expect(dataManagerMock.getData("file:resources/Lenna.png")).andReturn(new byte[] {});
 		
-//		EasyMock.replay(discoveryServiceMock, dataManagerMock, replicatorMock);
-//		
-//		WebServerP2P ws = new WebServerP2P(dataManagerMock, replicatorMock);
-//		
-//		
-//		
-//		
-//		EasyMock.verify(discoveryServiceMock, dataManagerMock, replicatorMock);
+		EasyMock.replay(dataManagerMock);
+		
+		WebServerP2P ws = new WebServerP2P(dataManagerMock, null);
+		ws.getContent("file:resources/Lenna.png");
+		
+		EasyMock.verify(dataManagerMock);
+	}
+	
+	public void testStoreReplica() {
+		DataManager dataManagerMock = EasyMock.createMock(DataManager.class);
+		
+		EasyMock.expect(dataManagerMock.storeRemoteData("file:resources/Lenna.png")).andReturn(true);
+		
+		EasyMock.replay(dataManagerMock);
+		
+		WebServerP2P ws = new WebServerP2P(dataManagerMock, null);
+		ws.storeReplica("file:resources/Lenna.png");
+		
+		EasyMock.verify(dataManagerMock);
 	}
 
 }

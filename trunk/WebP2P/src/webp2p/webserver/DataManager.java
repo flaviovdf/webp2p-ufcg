@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import webp2p.util.LineReader;
 
 /**
@@ -20,6 +22,8 @@ import webp2p.util.LineReader;
  * so that the returned data is always up-to-date.
  */
 public class DataManager {
+	
+	private static final Logger LOG = Logger.getLogger(DataManager.class);
 	
 	private Map<String, Pair<URL, byte[]>> localData, remoteData;
 
@@ -39,6 +43,7 @@ public class DataManager {
 	 * @param sharedFiles The filename.
 	 */
 	public void loadLocalSharedFiles(String sharedFiles) {
+		LOG.info("Loading local files: " + sharedFiles);
 		try {
 			List<String> filesToLoad = LineReader.readFile(new File(sharedFiles), "#");
 			
@@ -46,6 +51,7 @@ public class DataManager {
 				this.storeLocalData(url);
 			}
 		} catch (FileNotFoundException e) {
+			LOG.error("File " + sharedFiles + " not found", e);
 			throw new IllegalArgumentException("File " + sharedFiles + " not found", e);
 		}
 	}
@@ -57,6 +63,7 @@ public class DataManager {
 	 */
 	public void storeLocalData(String url) {
 		this.localData.put(url, this.getDataPair(url));
+		LOG.debug("Local file loaded: " + url);
 	}
 	
 	/**
@@ -67,6 +74,7 @@ public class DataManager {
 	 */
 	public boolean storeRemoteData(String url) {
 		this.remoteData.put(url, this.getDataPair(url));
+		LOG.debug("Remote file loaded: " + url);
 		return true;
 	}
 	
