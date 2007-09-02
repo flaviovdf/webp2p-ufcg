@@ -89,10 +89,10 @@ public class ProxyTest extends SmartTestCase {
 		Host browserMock = createRandomHost();
 		long reqId = getContent(browserMock);
 		
-		network.sendMessage(proxy.getHost(), browserMock, new HereIsContentMessage(reqId,1));
+		network.sendMessage(proxy.getHost(), browserMock, new HereIsContentMessage(reqId,1, 10));
 		
 		EasyMock.replay(network);
-		proxy.hereIsContent(reqId, 1);
+		proxy.hereIsContent(reqId, 1, 10);
 		EasyMock.verify(network);
 	}
 }

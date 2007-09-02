@@ -28,8 +28,8 @@ public class Browser extends SimpleQueuedEntity implements RequestCallBack, Gene
 		return this.generator;
 	}
 
-	public void hereIsContent(long request, int result) {
-		LOG.info("Request: "+request+" received with result value: "+result);
+	public void hereIsContent(long request, int result, long size) {
+		LOG.info("Request: "+request+" received " + size +" bits with result value: "+result);
 	}
 
 	public void generateRequest(String url) {

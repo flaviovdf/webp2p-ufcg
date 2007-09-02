@@ -69,7 +69,8 @@ public class WebServerFactory {
 							String path = fileElement.getElementsByTagName("path").item(0).getTextContent();
 							int size = Integer.parseInt(fileElement.getElementsByTagName("size").item(0).getTextContent());
 							
-							server.loadFile(url + path, size, new InfinitTimeToLive());
+							//Converting from KB to bits
+							server.loadFile(url + path, size * 1024 * 8, new InfinitTimeToLive());
 						}
 					}
 					

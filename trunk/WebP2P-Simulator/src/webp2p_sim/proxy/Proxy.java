@@ -40,18 +40,18 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 					sendMessage(server, new GetContentRequest(request, requestData.getUrl(), this.getHost()));
 				}
 			} else {
-				sendMessage(requestData.entity, new HereIsContentMessage(request, -1)); // empty result
+				sendMessage(requestData.entity, new HereIsContentMessage(request, -1, 0)); // empty result
 			}
 		} else {
 			LOG.info( "Request " + request + " not found on the proxy map" );
 		}
 	}
 
-	public void hereIsContent(long request, int result) {
+	public void hereIsContent(long request, int result, long size) {
 		LOG.info( "Request " + request + " completed with result " + result );
 		RequestData requestData = this.requests.get(request);
 		if (requestData != null) {
-			sendMessage(requestData.entity, new HereIsContentMessage(request,result));
+			sendMessage(requestData.entity, new HereIsContentMessage(request, result, size));
 		}
 	}
 	

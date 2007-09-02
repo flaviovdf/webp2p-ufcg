@@ -1,4 +1,7 @@
-package webp2p_sim.core.entity;
+package webp2p_sim.core.network;
+
+import webp2p_sim.core.entity.NetworkEntity;
+import webp2p_sim.core.entity.TimedEntity;
 
 public interface ApplicationMessage extends TimedEntity {
 

@@ -2,14 +2,14 @@ package webp2p_sim.core.network;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.core.entity.ApplicationMessage;
 import webp2p_sim.core.entity.NetworkEntity;
+import webp2p_sim.core.network.Network.Type;
 import webp2p_sim.util.SmartTestCase;
 
 public class NetworkTest extends SmartTestCase {
 
 	public void testBind() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -24,7 +24,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 
 	public void testUnbind() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -41,7 +41,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 
 	public void testSendMessage() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -91,7 +91,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 
 	public void testTickOcurredOneMessage() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -127,7 +127,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessages() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -168,7 +168,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessages2() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -217,7 +217,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessagesFailures() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);
@@ -249,7 +249,7 @@ public class NetworkTest extends SmartTestCase {
 	}
 	
 	public void testTickOcurredManyMessagesFailures2() {
-		Network network = new Network();
+		Network network = new Network(Type.TEST);
 		Address address = new Address(254,254,254,254);
 		AsymetricBandwidth band = new AsymetricBandwidth(10, 10);
 		Host host = new Host(address, band);

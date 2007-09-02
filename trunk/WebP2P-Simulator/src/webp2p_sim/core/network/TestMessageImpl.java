@@ -1,4 +1,5 @@
-package webp2p_sim.core.entity;
+package webp2p_sim.core.network;
+
 
 public class TestMessageImpl extends AbstractApplicationMessage {
 

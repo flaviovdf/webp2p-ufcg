@@ -5,10 +5,10 @@ import java.util.Map;
 
 import webp2p_sim.common.RequestCallBack;
 import webp2p_sim.core.Clock;
-import webp2p_sim.core.entity.ApplicationMessage;
 import webp2p_sim.core.entity.SimpleQueuedEntity;
 import webp2p_sim.core.entity.TimedEntity;
 import webp2p_sim.core.network.Address;
+import webp2p_sim.core.network.ApplicationMessage;
 import webp2p_sim.core.network.AsymetricBandwidth;
 import webp2p_sim.core.network.Host;
 import webp2p_sim.core.network.Network;
@@ -66,7 +66,7 @@ public class TrafficGenerator implements TimedEntity {
 			super(host, new ContinuousUniformDistribution(0, 0), network);
 		}
 
-		public void hereIsContent(long request, int result) {
+		public void hereIsContent(long request, int result, long size) {
 			unbindSelf();
 		}
 
