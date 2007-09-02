@@ -7,21 +7,15 @@ import java.util.List;
 public class LoadEvent {
 
 	private String server;
-	private int port;
 	private List<FilesToDownloadRate> files;
 	
-	public LoadEvent(String server, int port) {
+	public LoadEvent(String server) {
 		this.server = server;
-		this.port = port;
 		this.files = new LinkedList<FilesToDownloadRate>();
 	}
 	
 	public String getServer() {
 		return server;
-	}
-	
-	public int getPort() {
-		return port;
 	}
 	
 	/**
@@ -39,13 +33,14 @@ public class LoadEvent {
 		this.files.add(fileToResponseTime);
 	}
 
+	
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		final int PRIME = 31;
 		int result = 1;
-		result = prime * result + ((files == null) ? 0 : files.hashCode());
-		result = prime * result + port;
-		result = prime * result + ((server == null) ? 0 : server.hashCode());
+		result = PRIME * result + ((files == null) ? 0 : files.hashCode());
+		result = PRIME * result + ((server == null) ? 0 : server.hashCode());
 		return result;
 	}
 
@@ -63,8 +58,6 @@ public class LoadEvent {
 				return false;
 		} else if (!files.equals(other.files))
 			return false;
-		if (port != other.port)
-			return false;
 		if (server == null) {
 			if (other.server != null)
 				return false;
@@ -72,9 +65,9 @@ public class LoadEvent {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return this.server + " " + this.port + " " + this.files;
+		return this.server + " " + this.files;
 	}
 }

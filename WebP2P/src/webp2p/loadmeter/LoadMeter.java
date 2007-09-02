@@ -1,51 +1,73 @@
 package webp2p.loadmeter;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+
+import webp2p.loadmeter.exception.InconsistenWebServerFilesListException;
 
 public class LoadMeter {
 
 	private Map<LoadListener,Metric> listeners;
+	private int bufferSize;
 	private String server;
-	private int port, bufferSize;
 	
-	public LoadMeter(String server, int port) {
-		this.server = server;
-		this.port = port;
+	/**
+	 * Creates a new LoadMeter. This object measures the load
+	 * of a webserver trying to download a file using the bufferSize.
+	 * @param bufferSize the size of the buffer.
+	 */
+	public LoadMeter(String server, int bufferSize) {
 		listeners = new HashMap<LoadListener, Metric>();
-		
-		//default
-		this.bufferSize = 1024;
-		try {
-			Properties props = new Properties();
-			props.load(new BufferedInputStream(new FileInputStream("loadmeter.properties")));
-			this.bufferSize = Integer.parseInt(props.getProperty("buffer"));
-		} catch (IOException e) {
-		}
+		this.server = server;
+		this.bufferSize = bufferSize;
 	}
 	
-	public void addListener(LoadListener listener, Metric metric) {
+	public void addListener(LoadListener listener, Metric metric) throws InconsistenWebServerFilesListException {
+		if (!verifyConsistencyAmongFiles(metric)) throw new InconsistenWebServerFilesListException();
 		this.listeners.put(listener, metric);
 	} 
 	
+	/**
+	 * Verifies if exists different servers in the list. Servers are indentified by method getHost() from <code>URL</code>.
+	 * @param metric
+	 * @return
+	 */
+	public boolean verifyConsistencyAmongFiles(Metric metric) {
+		String server = null;
+		
+		if (!metric.getFiles().isEmpty())
+		try {
+			server = extractServerName(metric.getFiles().get(0));
+		} catch (MalformedURLException e1) {
+			return false;
+		}
+		
+		for (String file : metric.getFiles()) {
+			try {
+				if (!server.equals(extractServerName(file))) return false;
+			} catch (MalformedURLException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String extractServerName(String file) throws MalformedURLException {
+		URL url = new URL(file);
+		return url.getHost();
+	}
+
 	public void removeListener(LoadListener listener) {
 		this.listeners.remove(listener);
 	} 
 	
 	public String getServer() {
 		return server;
-	}
-
-	public int getPort() {
-		return port;
 	}
 
 	public void ping() {
@@ -55,7 +77,7 @@ public class LoadMeter {
 		
 		double download_rate = -1;
 		for (Entry<LoadListener, Metric> entry : listeners.entrySet()) {
-			loadEvent = new LoadEvent(this.server, this.port);
+			loadEvent = new LoadEvent(this.server);
 			
 			for (String file : entry.getValue().getFiles()) {
 				
@@ -84,7 +106,7 @@ public class LoadMeter {
 	private double extractDownloadRate(String file) {
 		byte[] buffer = new byte[this.bufferSize];
 		long startTime = System.currentTimeMillis();
-		int bytes = this.download(this.server + File.separator +file, buffer);
+		int bytes = this.download(file, buffer);
 		long endTime = System.currentTimeMillis();
 		
 		float f = this.bufferSize;
