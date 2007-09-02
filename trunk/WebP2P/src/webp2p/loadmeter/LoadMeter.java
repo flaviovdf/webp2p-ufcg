@@ -8,22 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 import webp2p.loadmeter.exception.InconsistenWebServerFilesListException;
 
 public class LoadMeter {
 
+	private static final Logger LOG = Logger.getLogger(LoadMeter.class);
 	private Map<LoadListener,Metric> listeners;
 	private int bufferSize;
-	private String server;
 	
 	/**
 	 * Creates a new LoadMeter. This object measures the load
 	 * of a webserver trying to download a file using the bufferSize.
 	 * @param bufferSize the size of the buffer.
 	 */
-	public LoadMeter(String server, int bufferSize) {
+	public LoadMeter(int bufferSize) {
 		listeners = new HashMap<LoadListener, Metric>();
-		this.server = server;
 		this.bufferSize = bufferSize;
 	}
 	
@@ -66,10 +67,6 @@ public class LoadMeter {
 		this.listeners.remove(listener);
 	} 
 	
-	public String getServer() {
-		return server;
-	}
-
 	public void ping() {
 		Map<String,Double> cache = new HashMap<String,Double>();
 		LoadEvent loadEvent = null;
@@ -77,7 +74,7 @@ public class LoadMeter {
 		
 		double download_rate = -1;
 		for (Entry<LoadListener, Metric> entry : listeners.entrySet()) {
-			loadEvent = new LoadEvent(this.server);
+			loadEvent = new LoadEvent();
 			
 			for (String file : entry.getValue().getFiles()) {
 				
@@ -86,13 +83,15 @@ public class LoadMeter {
 					cache.put(file, download_rate);
 					
 					if (download_rate <= entry.getValue().getMinimumDowloadRate()) {
+						LOG.info("Overhead detected while trying to download " + file);
+						LOG.debug("Creating overhead event for " + file + " with download rate: "+ download_rate);
 						loadEvent.addPopularFile(new FilesToDownloadRate(file, download_rate));
 						mustThrowEvent = true;
 					}
 				}
 			}
 			if (mustThrowEvent) {
-				entry.getKey().overheadedServerDetected(loadEvent);
+				entry.getKey().overheadDetected(loadEvent);
 				mustThrowEvent = false;
 			}
 		}

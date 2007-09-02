@@ -2,7 +2,9 @@ package webp2p.webserver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.AsyncCallback;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -11,6 +13,7 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 public class WebServerStub {
 	
 	private XmlRpcClient client;
+	private static final Logger LOG = Logger.getLogger(WebServerStub.class);
 	
 	public WebServerStub(String wsAddr) {
 		XmlRpcClientConfigImpl pConfig = new XmlRpcClientConfigImpl();
@@ -31,5 +34,8 @@ public class WebServerStub {
 	public void storeReplica(String url, AsyncCallback callback) throws XmlRpcException {
 		this.client.executeAsync("ws.storeReplica", new Object[] { url }, callback);
 	}
-
+	
+	public void overheadDetected(List<String> files, AsyncCallback callback) throws XmlRpcException {
+		this.client.executeAsync("ws.overheadDetected", files.toArray(), callback);
+	}
 }
