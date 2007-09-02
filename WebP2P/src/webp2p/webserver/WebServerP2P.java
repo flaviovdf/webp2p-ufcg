@@ -65,5 +65,12 @@ public class WebServerP2P {
 		LOG.info("Storing replica of url " + url);
 		return this.dataManager.storeRemoteData(url);
 	}
-	
+
+	public boolean overheadDetected(String[] files) {
+		LOG.debug("Notification of overhead for the following files: "+files);
+		// pega o primeiro e replica.
+		replicator.replicateContent(files[0]);
+		LOG.debug(files[0]+" replicated.");
+		return true;
+	}
 }

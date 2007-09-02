@@ -36,5 +36,4 @@ public class DiscoveryServiceStub {
 	public void delete(String wsAddr, String file) throws XmlRpcException {
 		this.client.execute("ds.delete", new Object[] { wsAddr, file });
 	}
-
 }

@@ -10,7 +10,7 @@ public class LoadEventTest extends TestCase {
 
 	public void testPriorityList() {
 			
-		LoadEvent event = new LoadEvent("whatherver");
+		LoadEvent event = new LoadEvent();
 		event.addPopularFile(new FilesToDownloadRate("one", 10));
 		event.addPopularFile(new FilesToDownloadRate("two", 2));
 		event.addPopularFile(new FilesToDownloadRate("three", 100));
@@ -29,29 +29,4 @@ public class LoadEventTest extends TestCase {
 		assertEquals(list.get(5), new FilesToDownloadRate("seven",100));
 		assertEquals(list.get(6), new FilesToDownloadRate("four",10000));
 	}
-
-	/*public void testAddingEvent() {
-		LoadListener mockListener = EasyMock.createMock(LoadListener.class);
-		
-		LoadMeter meter = new LoadMeter("http://www.dsc.ufcg.edu.br/~jarthur/upload",80);
-		
-		List<String> list = new LinkedList<String>();
-		list.add("delay-10.png");
-		list.add("delay-20.png");
-		
-		
-		Metric metric = new Metric(list,1000000000);
-		meter.addListener(mockListener, metric);
-		
-		LoadEvent event = new LoadEvent("http://www.dsc.ufcg.edu.br/~jarthur/upload",80);
-		event.addPopularFile(new FilesToDownloadRate("delay-10.png",200));
-		event.addPopularFile(new FilesToDownloadRate("delay-20.png",200));
-		
-		// expected behavior
-		mockListener.overheadedServerDetected(event);
-		
-		EasyMock.replay(mockListener);
-		meter.ping();
-		EasyMock.verify(mockListener);
-	}*/
 }

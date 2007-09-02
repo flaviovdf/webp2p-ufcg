@@ -12,7 +12,7 @@ public class LoadMeterTest extends TestCase {
 	
 	public void testExtractserver() throws MalformedURLException {
 		String file = "http://www.java.com/getjava/";
-		LoadMeter meter = new LoadMeter("whatever",10);
+		LoadMeter meter = new LoadMeter(10);
 		assertEquals("www.java.com",meter.extractServerName(file));
 		file = "http://www.apl.jhu.edu/~hall/java/";
 		assertEquals("www.apl.jhu.edu",meter.extractServerName(file));
@@ -27,7 +27,7 @@ public class LoadMeterTest extends TestCase {
 	public void testVerifyConsistence() {
 		List<String> files = new LinkedList<String>();
 		Metric metric = new Metric(files,10);
-		LoadMeter meter = new LoadMeter("whatever",10);
+		LoadMeter meter = new LoadMeter(10);
 		assertTrue(meter.verifyConsistencyAmongFiles(metric));
 		
 		files.add("http://www.apl.jhu.edu/~hall/java/");

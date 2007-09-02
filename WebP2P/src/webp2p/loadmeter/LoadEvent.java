@@ -6,16 +6,10 @@ import java.util.List;
 
 public class LoadEvent {
 
-	private String server;
 	private List<FilesToDownloadRate> files;
 	
-	public LoadEvent(String server) {
-		this.server = server;
+	public LoadEvent() {
 		this.files = new LinkedList<FilesToDownloadRate>();
-	}
-	
-	public String getServer() {
-		return server;
 	}
 	
 	/**
@@ -27,20 +21,21 @@ public class LoadEvent {
 		return this.files;
 	}
 
+	/**
+	 * 
+	 * @param fileToResponseTime
+	 */
 	public void addPopularFile(FilesToDownloadRate fileToResponseTime) {
 		assert fileToResponseTime.getFile() != null;
 		assert fileToResponseTime.getDownloadRate() > 0;
 		this.files.add(fileToResponseTime);
 	}
 
-	
-	
 	@Override
 	public int hashCode() {
 		final int PRIME = 31;
 		int result = 1;
 		result = PRIME * result + ((files == null) ? 0 : files.hashCode());
-		result = PRIME * result + ((server == null) ? 0 : server.hashCode());
 		return result;
 	}
 
@@ -58,16 +53,6 @@ public class LoadEvent {
 				return false;
 		} else if (!files.equals(other.files))
 			return false;
-		if (server == null) {
-			if (other.server != null)
-				return false;
-		} else if (!server.equals(other.server))
-			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return this.server + " " + this.files;
 	}
 }
