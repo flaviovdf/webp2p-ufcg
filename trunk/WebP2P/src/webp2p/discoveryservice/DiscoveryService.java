@@ -32,7 +32,6 @@ public class DiscoveryService {
 	 * @return <code>true</code> if it is a first entry for the specified file, <code>false</code> otherwise.
 	 */
 	public boolean put(String wsAddr, String file) {
-System.out.println("DiscoveryService.put() " + wsAddr + " -> "+file);
 		boolean firstEntryForFile = false;
 
 		if (! this.table.containsKey(file)) {

@@ -1,19 +1,12 @@
 package webp2p.webserver;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
-
-import webp2p.discoveryservice.DiscoveryServiceStub;
-import webp2p.util.LineReader;
 
 public class WebServerP2P {
 	
@@ -41,28 +34,6 @@ public class WebServerP2P {
 		this.replicator = replicator;
 	}
 	
-	static void init(DiscoveryServiceStub discoveryService, String wsFullAddr) {
-		LOG.info("Initializing the WebServerP2P: " + wsFullAddr);
-		LOG.info("Using the DiscoveryService " + wsFullAddr);
-		
-		try {
-			List<String> sharedFiles = LineReader.readFile(new File(SHAREDFILES_FILENAME), "#");
-
-			for (String file : sharedFiles) {
-				try {
-					LOG.debug("Publishing file: " + file);
-					discoveryService.put(wsFullAddr, file);
-				} catch (XmlRpcException e) {
-					// the file could not be published
-					LOG.error("Could not publish the file " + file, e);
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// the shared file could not be read
-			LOG.error("Could not find the shared file " + SHAREDFILES_FILENAME, e);
-		}
-	}
-
 	public byte[] getContent(String url) {
 		LOG.info("The content " + url + " was requested");
 		try {
