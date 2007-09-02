@@ -1,6 +1,8 @@
 package webp2p.loadmeter;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,7 +26,7 @@ public class LoadMeter {
 		this.bufferSize = 1024;
 		try {
 			Properties props = new Properties();
-			props.load(this.getClass().getResourceAsStream("/loadmeter.properties"));
+			props.load(new BufferedInputStream(new FileInputStream("loadmeter.properties")));
 			this.bufferSize = Integer.parseInt(props.getProperty("buffer"));
 		} catch (IOException e) {
 		}
@@ -61,8 +63,8 @@ public class LoadMeter {
 					download_rate = extractDownloadRate(file);
 					cache.put(file, download_rate);
 					
-					if (download_rate >= entry.getValue().getTimeOut()) {
-						loadEvent.addPopularFile(new FilesToResponseTime(file, download_rate));
+					if (download_rate <= entry.getValue().getMinimumDowloadRate()) {
+						loadEvent.addPopularFile(new FilesToDownloadRate(file, download_rate));
 						mustThrowEvent = true;
 					}
 				}
