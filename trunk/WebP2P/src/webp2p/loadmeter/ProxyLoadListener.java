@@ -31,17 +31,20 @@ public class ProxyLoadListener implements LoadListener, AsyncCallback {
 		try {
 			stub.overheadDetected(files,this);
 		} catch (XmlRpcException e) {
-			// TODO logar.
+			e.printStackTrace();
+			//TODO logar
 		}
 	}
 
 
 	public void handleError(XmlRpcRequest pRequest, Throwable pError) {
 		// TODO Auto-generated method stub
+		LOG.error(pError);
 	}
 
 
 	public void handleResult(XmlRpcRequest pRequest, Object pResult) {
 		// TODO Auto-generated method stub
+		LOG.debug(pResult);
 	}
 }
