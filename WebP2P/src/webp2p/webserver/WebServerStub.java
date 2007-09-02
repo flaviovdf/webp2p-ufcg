@@ -36,6 +36,6 @@ public class WebServerStub {
 	}
 	
 	public void overheadDetected(List<String> files, AsyncCallback callback) throws XmlRpcException {
-		this.client.executeAsync("ws.overheadDetected", files.toArray(), callback);
+		this.client.executeAsync("ws.overheadDetected", new Object[] { files }, callback);
 	}
 }

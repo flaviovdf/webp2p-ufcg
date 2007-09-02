@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -66,11 +67,11 @@ public class WebServerP2P {
 		return this.dataManager.storeRemoteData(url);
 	}
 
-	public boolean overheadDetected(String[] files) {
+	public boolean overheadDetected(List<String> files) {
 		LOG.debug("Notification of overhead for the following files: "+files);
 		// pega o primeiro e replica.
-		replicator.replicateContent(files[0]);
-		LOG.debug(files[0]+" replicated.");
+		replicator.replicateContent(files.get(0));
+		LOG.debug(files.get(0)+" replicated.");
 		return true;
 	}
 }
