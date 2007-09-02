@@ -14,7 +14,6 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import webp2p.discoveryservice.DiscoveryServiceStub;
 import webp2p.util.LineReader;
-import webp2p.webserver.config.WebServerP2PConfig;
 
 public class WebServerP2P {
 	
@@ -42,16 +41,9 @@ public class WebServerP2P {
 		this.replicator = replicator;
 	}
 	
-	static void init() {
-		String dsAddr = WebServerP2PConfig.getInstance().getDiscoveryServiceAddress();
-		int dsPort = WebServerP2PConfig.getInstance().getDiscoveryServicePort();
-		DiscoveryServiceStub discoveryService = new DiscoveryServiceStub(dsAddr, dsPort);
-		
-		String wsAddr = WebServerP2PConfig.getInstance().getWebServerP2PAddress();
-		int wsPort = WebServerP2PConfig.getInstance().getWebServerP2PPort();
-		String wsFullAddr = "http://" + wsAddr + ":" + wsPort;
+	static void init(DiscoveryServiceStub discoveryService, String wsFullAddr) {
 		LOG.info("Initializing the WebServerP2P: " + wsFullAddr);
-		LOG.info("Using the DiscoveryService " + dsAddr + ":" + dsPort);
+		LOG.info("Using the DiscoveryService " + wsFullAddr);
 		
 		try {
 			List<String> sharedFiles = LineReader.readFile(new File(SHAREDFILES_FILENAME), "#");
