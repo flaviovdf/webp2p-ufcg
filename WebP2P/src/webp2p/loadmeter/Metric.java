@@ -20,7 +20,7 @@ public class Metric {
 	public List<String> getFiles() {
 		return files;
 	}
-	public int getTimeOut() {
+	public int getMinimumDowloadRate() {
 		return download_rate;
 	}
 }

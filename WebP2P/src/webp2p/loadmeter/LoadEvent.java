@@ -8,12 +8,12 @@ public class LoadEvent {
 
 	private String server;
 	private int port;
-	private List<FilesToResponseTime> files;
+	private List<FilesToDownloadRate> files;
 	
 	public LoadEvent(String server, int port) {
 		this.server = server;
 		this.port = port;
-		this.files = new LinkedList<FilesToResponseTime>();
+		this.files = new LinkedList<FilesToDownloadRate>();
 	}
 	
 	public String getServer() {
@@ -25,17 +25,17 @@ public class LoadEvent {
 	}
 	
 	/**
-	 * Retorna uma lista de prioridade onde os primeiros elementos da listas são os de 
+	 * Retorna uma lista de prioridade onde os primeiros elementos da listas sï¿½o os de 
 	 * maior responseTime.
 	 */
-	public List<FilesToResponseTime> getRankFilesList() {
+	public List<FilesToDownloadRate> getRankFilesList() {
 		Collections.sort(this.files,new RankCompartor());
 		return this.files;
 	}
 
-	public void addPopularFile(FilesToResponseTime fileToResponseTime) {
+	public void addPopularFile(FilesToDownloadRate fileToResponseTime) {
 		assert fileToResponseTime.getFile() != null;
-		assert fileToResponseTime.getResponseTime() > 0;
+		assert fileToResponseTime.getDownloadRate() > 0;
 		this.files.add(fileToResponseTime);
 	}
 

@@ -4,12 +4,12 @@ package webp2p.loadmeter;
  * Tupla para representar os arquivos e seus respectivos tempos de respostas.
  * @author Jo�o Arthur Brunet Monteiro - jarthur@dsc.ufcg.edu.br
  */
-public class FilesToResponseTime {
+public class FilesToDownloadRate {
 		
 		private String file;
 		private double responseTime;
 		
-		public FilesToResponseTime(String file, double responseTime2) {
+		public FilesToDownloadRate(String file, double responseTime2) {
 			this.file = file;
 			this.responseTime = responseTime2;
 		}
@@ -18,7 +18,7 @@ public class FilesToResponseTime {
 			return file;
 		}
 		
-		public double getResponseTime() {
+		public double getDownloadRate() {
 			return responseTime;
 		}
 
@@ -41,7 +41,7 @@ public class FilesToResponseTime {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			final FilesToResponseTime other = (FilesToResponseTime) obj;
+			final FilesToDownloadRate other = (FilesToDownloadRate) obj;
 			if (file == null) {
 				if (other.file != null)
 					return false;
