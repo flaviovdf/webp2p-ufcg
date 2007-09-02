@@ -10,7 +10,7 @@ public class LoadEventTest extends TestCase {
 
 	public void testPriorityList() {
 			
-		LoadEvent event = new LoadEvent("whatherver", 9);
+		LoadEvent event = new LoadEvent("whatherver");
 		event.addPopularFile(new FilesToDownloadRate("one", 10));
 		event.addPopularFile(new FilesToDownloadRate("two", 2));
 		event.addPopularFile(new FilesToDownloadRate("three", 100));
@@ -29,7 +29,7 @@ public class LoadEventTest extends TestCase {
 		assertEquals(list.get(5), new FilesToDownloadRate("seven",100));
 		assertEquals(list.get(6), new FilesToDownloadRate("four",10000));
 	}
-	
+
 	/*public void testAddingEvent() {
 		LoadListener mockListener = EasyMock.createMock(LoadListener.class);
 		
