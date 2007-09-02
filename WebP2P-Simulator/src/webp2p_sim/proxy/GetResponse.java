@@ -2,7 +2,7 @@ package webp2p_sim.proxy;
 
 import java.util.Set;
 
-import webp2p_sim.core.entity.AbstractApplicationMessage;
+import webp2p_sim.core.network.AbstractApplicationMessage;
 import webp2p_sim.core.network.Host;
 
 public class GetResponse extends AbstractApplicationMessage {

@@ -1,6 +1,6 @@
 package webp2p_sim.server;
 
-import webp2p_sim.core.entity.AbstractApplicationMessage;
+import webp2p_sim.core.network.AbstractApplicationMessage;
 import webp2p_sim.core.network.Host;
 
 public class CreateReplicaOfUrlMessage extends AbstractApplicationMessage {

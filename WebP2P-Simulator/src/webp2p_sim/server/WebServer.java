@@ -103,7 +103,8 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		LOG.info( "Content for " + request.getUrl() + " requested by " + request.getCallBack() + " request number " + request.getId() );
 		
 		int result;
-		if (this.files.containsKey(request.getUrl())) {
+		FileInfo fileInfo = this.files.get(request.getUrl());
+		if (fileInfo != null) {
 			result = 0;
 			
 			ReplicationInfo info = this.replicationMap.get(request.getUrl());
@@ -111,12 +112,14 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 			if (info.mustReplicate()) {
 				this.strategyOfReplication.performReplication(this, info);
 			}
+			
+			sendMessage(request.getCallBack(), new HereIsContentMessage(request.getId(), result, fileInfo.getSize()));
 		} else {
 			result = -1;
+			sendMessage(request.getCallBack(), new HereIsContentMessage(request.getId(), result, 0));
 		}
 		
 		LOG.info( "Sending content to " + request.getCallBack() + " request number " + request.getId());
-		sendMessage(request.getCallBack(), new HereIsContentMessage(request.getId(), result));
 	}
 	
 	//called by other servers

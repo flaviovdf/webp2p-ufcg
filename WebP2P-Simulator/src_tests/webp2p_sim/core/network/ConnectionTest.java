@@ -2,7 +2,6 @@ package webp2p_sim.core.network;
 
 import org.easymock.classextension.EasyMock;
 
-import webp2p_sim.core.entity.ApplicationMessage;
 import webp2p_sim.util.SmartTestCase;
 
 public class ConnectionTest extends SmartTestCase {
@@ -99,8 +98,8 @@ public class ConnectionTest extends SmartTestCase {
 		EasyMock.expect(delay.getDelayBetweenConnection(connection)).andReturn(new Double(2)).andReturn(new Double(3));
 		EasyMock.replay(delay);
 		
-		NetworkMessage message1 = new NetworkMessage(appMsg1);
-		NetworkMessage message2 = new NetworkMessage(appMsg2);
+		NetworkMessage message1 = new NetworkMessage(appMsg1, 0);
+		NetworkMessage message2 = new NetworkMessage(appMsg2, 0);
 		connection.transmitMessage(delay, message1);
 		connection.transmitMessage(delay, message2);
 		assertEquals(300d, message1.dataLeft());

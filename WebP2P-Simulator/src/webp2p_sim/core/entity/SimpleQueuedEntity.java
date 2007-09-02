@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import webp2p_sim.core.Clock;
+import webp2p_sim.core.network.ApplicationMessage;
 import webp2p_sim.core.network.Host;
 import webp2p_sim.core.network.Network;
 import edu.uah.math.distributions.Distribution;
@@ -32,7 +33,6 @@ public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 	public void receiveMessage(ApplicationMessage applicationMessage) {
 		double simulate = rv.simulate();
 		applicationMessage.setProcessTime(simulate);
-		applicationMessage.setReceiverEntity(this);
 		queue.addLast(applicationMessage);
 	}
 

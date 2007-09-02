@@ -9,12 +9,13 @@ import webp2p_sim.core.network.Address;
 import webp2p_sim.core.network.AsymetricBandwidth;
 import webp2p_sim.core.network.Host;
 import webp2p_sim.core.network.Network;
+import webp2p_sim.core.network.Network.Type;
 
 public class Params {
 
 	protected long simTime;
 	
-	private Network network = new Network(); 
+	private Network network = new Network(Type.TCP); 
 	
 	@SuppressWarnings("unchecked")
 	protected <T> T extractObject(Configuration config, String name) {

@@ -1,12 +1,11 @@
 package webp2p_sim.core.network;
 
-import webp2p_sim.core.entity.ApplicationMessage;
-
-
 
 public class NetworkMessage {
 
-	private static final long DEFAULT_SIZE = 0;
+	//128 bits
+	public static final long DEFAULT_SIZE = 192;
+	
 	private final ApplicationMessage applicationMessage;
 	private final long dataSize;
 	private double dataTransfered;
@@ -14,6 +13,12 @@ public class NetworkMessage {
 	public NetworkMessage(ApplicationMessage applicationMessage) {
 		this.applicationMessage = applicationMessage;
 		this.dataSize = applicationMessage.size() + DEFAULT_SIZE;
+		this.dataTransfered = 0l;
+	}
+	
+	public NetworkMessage(ApplicationMessage applicationMessage, long size) {
+		this.applicationMessage = applicationMessage;
+		this.dataSize = applicationMessage.size() + size;
 		this.dataTransfered = 0l;
 	}
 	

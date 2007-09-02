@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import webp2p_sim.core.entity.ApplicationMessage;
 import webp2p_sim.core.entity.NetworkEntity;
 import webp2p_sim.core.entity.TimedEntity;
 
@@ -16,11 +15,16 @@ public class Network implements TimedEntity {
 
 	private static Logger LOG = Logger.getLogger(Network.class);
 	
+	public enum Type {TEST, TCP}
+	
 	private final Map<Address, NetworkEntity> entities;
 	private final Map<SenderToReceiver, Connection> connections;
 	private final EndToEndDelay endToEndDelay;
 
-	public Network() {
+	private final Type type;
+
+	public Network(Type type) {
+		this.type = type;
 		this.endToEndDelay = new SimpleDistanceDelay();
 		this.entities = new HashMap<Address, NetworkEntity>();
 		this.connections = new HashMap<SenderToReceiver, Connection>();
@@ -78,7 +82,7 @@ public class Network implements TimedEntity {
 			}
 			
 			LOG.debug("Transmitting message < " + message + " > through connection < " + connection + " >");
-			connection.transmitMessage(endToEndDelay, new NetworkMessage(message));
+			connection.transmitMessage(endToEndDelay, NetworkMessageFactory.newMessage(message, type));
 		}
 	}
 	
