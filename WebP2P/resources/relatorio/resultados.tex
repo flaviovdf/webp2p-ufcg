@@ -1,4 +1,5 @@
-\chapter{Soluções Propostas}
+\chapter{Resultados TODO}
+\section{Soluções Propostas}
 
 A solução proposta pela nossa equipe difere das demais citadas nas seções anteriores pelo fato de não abordar o problema sobre o âmbito de cache distribuído. Para fins de simplificação abordamos os participantes do sistema em duas classes: Usuários de Browser e Provedores de Conteúdo (Web Servers). A maneira que estas classes utilizam o sistema é descrita abaixo.
 
@@ -8,7 +9,7 @@ Levando em consideração os provedores de conteúdo, a solução consiste em criar u
 
 Entitulamos a solução proposta como WebP2P e vamos, a partir de agora, detalhar a sua arquitetura e seu funcionamento.
 
-\section{Arquitetura}
+\subsection{Arquitetura}
 
 Vamos explicar a arquitetura do WebP2P através de um exemplo simples. Esse exemplo consiste em um usuário que deseja acessar um conteúdo, através de um browser, na rede WebP2P. A ações para efetuar tal tarefa são descritas nos passos abaixo:
 
@@ -30,7 +31,7 @@ Uma visão geral da arquitetura é mostrada na figura \ref{fig-arquitetura_cliente
 \label{fig-arquitetura_cliente}
 \end{figure}
 
-\subsection{Distribuição de Conteúdo}
+\subsubsection{Distribuição de Conteúdo}
 
 \begin{itemize}
 	\item Como dito acima, uma camada de software será utilizada para publicar conteúdo. Esta se comunica com o deamon http já existente na máquina.
@@ -48,7 +49,7 @@ A figura \ref{fig-arquitetura_server} ilustra uma rede de distribuição de conteú
 \label{fig-arquitetura_server}
 \end{figure}
 
-\subsection{Descoberta de Conteúdo}
+\subsubsection{Descoberta de Conteúdo}
 
 Inicialmente optamos, por motivos de simplicidade, fazer a descoberta do conteúdo através de um diretório central, onde os Web Servers publicam os conteúdos providos por eles. A figura \ref{fig-arquitetura_discovery} ilustra essa idéia. Se essa solução centralizada tornar-se não escalável em relação ao crescimento da rede, vamos apromorar o serviço através da inclusão de uma DHT. Soluções de DHT escaláveis e robustas já existem e estão disponíveis para uso, tais como o Bamboo \cite{bamboo}. Por este motivo, esta técnica será utilizada caso necessário.
 
@@ -61,7 +62,7 @@ A manutenção desta DHT será feita pelos Web Servers ou utilizaremos o projeto Op
 \label{fig-arquitetura_discovery}
 \end{figure}
 
-\section{Desafios}
+\subsection{Desafios}
 
 A solução proposta ainda não aborda questões como segurança, confidencialidade, descoberta e versionamento de conteúdo etc.
 
