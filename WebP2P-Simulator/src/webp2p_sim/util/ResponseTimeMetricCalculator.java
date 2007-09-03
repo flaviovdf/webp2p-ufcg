@@ -10,8 +10,8 @@ import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 
 public class ResponseTimeMetricCalculator {
 
-	private static final String REQUESTMADE= "webp2p_sim.proxy.Browser.generateRequest";
-	private static final String REQUESTRESPONSE = "webp2p_sim.proxy.Browser.hereIsContent";
+	private static final String REQUESTMADE= "webp2p_sim.browser.Browser.generateRequest";
+	private static final String REQUESTRESPONSE = "webp2p_sim.browser.Browser.hereIsContent";
 			
 	private MetricCollector collector;
 
@@ -30,6 +30,7 @@ public class ResponseTimeMetricCalculator {
 				
 				Long time = Long.parseLong(tokens[7]);
 				Long request = Long.parseLong(tokens[14]);
+				
 				this.collector.requestMade(request, time);
 				
 			} else if (line.contains(REQUESTRESPONSE)) {
@@ -38,7 +39,6 @@ public class ResponseTimeMetricCalculator {
 				Long request = Long.parseLong(tokens[14]);
 
 				this.collector.requestFinished(request, time);
-				
 			}
 		}
 		
@@ -51,9 +51,13 @@ public class ResponseTimeMetricCalculator {
 	
 	public static void main(String[] args) throws Exception {
 		ResponseTimeMetricCalculator calc = new ResponseTimeMetricCalculator();
-		calc.parseLog(new File(args[0]));
+		
+		for(int i = 0; i < args.length; i++) {
+			calc.parseLog(new File(args[i]));
+		}
 		
 		DescriptiveStatistics stats = calc.getStats();
+		
 		System.out.println(stats.getMean() + "\t" + stats.getStandardDeviation());
 	}
 	

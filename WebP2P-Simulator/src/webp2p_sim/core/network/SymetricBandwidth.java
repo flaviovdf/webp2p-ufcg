@@ -16,6 +16,11 @@ public class SymetricBandwidth implements Bandwidth {
 	private Set<Connection> upConnnections;
 	private Set<Connection> downConnnections;
 	
+	/**
+	 * Creates a new SymetricBandwidth.
+	 * 
+	 * @param maxTotal In bits per second
+	 */
 	public SymetricBandwidth(long maxTotal) {
 		this.maxTotal = maxTotal;
 		this.upConnnections = new HashSet<Connection>();
@@ -60,6 +65,16 @@ public class SymetricBandwidth implements Bandwidth {
 		}
 		
 		this.upConnnections.remove(connection);
+	}
+
+	@Override
+	public long getTotalDownBand() {
+		return (long) maxTotal;
+	}
+
+	@Override
+	public long getTotalUpBand() {
+		return (long) maxTotal;
 	}
 
 }

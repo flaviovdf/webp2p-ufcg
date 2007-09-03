@@ -3,7 +3,7 @@ package webp2p_sim.core.network;
 
 public class NetworkMessage {
 
-	//128 bits
+	//192 bits
 	public static final long DEFAULT_SIZE = 192;
 	
 	private final ApplicationMessage applicationMessage;

@@ -8,7 +8,7 @@ public abstract class AbstractApplicationMessage implements ApplicationMessage {
 	//2KB in bytes
 	private static final long DEFAULT_XML_RPC_SIZE = 2 * 1024 * 8;
 	
-	private final double PRECISON = 1000;
+	private final double PRECISON = 100000;
 	private double processTime;
 	
 	protected NetworkEntity receiverEntity;

@@ -20,10 +20,8 @@ public class DistributedParams extends Params {
 	private Browser browser;
 	private String browserInputFile;
 	private Set<WebServer> webServers;
-	private Distribution trafficDist;
 	private Proxy proxy;
-	private long trafficUpBand;
-	private long trafficDownBand;
+	private double webServerTrafficMean;
 
 	public DistributedParams(Configuration config) {
 		long simTime = config.getLong("sim.runtime");
@@ -32,8 +30,8 @@ public class DistributedParams extends Params {
 		String browserInputFile = config.getString("browser.inputfile");
 		
 		String browserIP = config.getString("browser.ip");
-		long browserUpBand = config.getLong("browser.upband");
-		long browserDownBand = config.getLong("browser.downband");
+		long browserUpBand = config.getLong("browser.upband") * 1024;
+		long browserDownBand = config.getLong("browser.downband") * 1024;
 		
 		Host browserHost = createHost(browserIP, browserUpBand, browserDownBand);
 		
@@ -41,48 +39,44 @@ public class DistributedParams extends Params {
 		
 		//Proxy
 		String proxyIP = config.getString("proxy.ip");
-		long proxyUpBand = config.getLong("proxy.upband");
-		long proxyDownBand = config.getLong("proxy.downband");
+		long proxyUpBand = config.getLong("proxy.upband") * 1024;
+		long proxyDownBand = config.getLong("proxy.downband") * 1024;
 		
 		Host proxyHost = createHost(proxyIP, proxyUpBand, proxyDownBand);
 		
 		Distribution proxyDist = extractObject(config, "proxy.process.distribution");
 		
 		//Traffic
-		Distribution trafficDist = extractObject(config, "server.traffic.distribution");
-		long trafficUpBand = config.getLong("server.traffic.upband");
-		long trafficDownBand = config.getLong("server.traffic.downband");
+		long trafficMean = config.getLong("server.traffic.mean");
 		
 		//DS
-		String dsIP = config.getString("browser.ip");
+		String dsIP = config.getString("ds.ip");
 		Distribution dsDist = extractObject(config, "ds.process.distribution");
-		long dsUpBand = config.getLong("ds.upband");
-		long dsDownBand = config.getLong("ds.downband");
+		long dsUpBand = config.getLong("ds.upband") * 1024;
+		long dsDownBand = config.getLong("ds.downband") * 1024;
 		
 		Host dsHost = createHost(dsIP, dsUpBand, dsDownBand);
 		
 		//Servers
 		File topologyXML = new File(config.getString("server.topologyfile"));
 		
-		buildMe(simTime, browserInputFile, browserDist, browserHost, proxyHost, proxyDist, trafficDist, dsDist, dsHost, topologyXML, trafficUpBand, trafficDownBand);
+		buildMe(simTime, browserInputFile, browserDist, browserHost, proxyHost, proxyDist, dsDist, dsHost, topologyXML, trafficMean);
 	}
 	
-	public DistributedParams(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution trafficDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficUpBand, long trafficDownBand) {
-		buildMe(simTime, browserInputFile, browserDist, browserIP, proxyIP, proxyDist, trafficDist, dsDist, dsIP, topologyXML, trafficUpBand, trafficDownBand);
+	public DistributedParams(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficMean) {
+		buildMe(simTime, browserInputFile, browserDist, browserIP, proxyIP, proxyDist, dsDist, dsIP, topologyXML, trafficMean);
 	}
 	
-	private void buildMe(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution trafficDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficUpBand, long trafficDownBand) {
+	private void buildMe(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficMean) {
 		this.browserInputFile = browserInputFile;
 		this.simTime = simTime;
 		
-		this.trafficDist = trafficDist;
-		this.trafficUpBand = trafficUpBand;
-		this.trafficDownBand = trafficDownBand;
+		this.webServerTrafficMean = trafficMean;
 		
-		this.ds = new DiscoveryService(dsIP, dsDist, getNetwork());
-		this.proxy = new Proxy(proxyIP, proxyDist, getNetwork(), ds.getHost(), new RandomLongGenerator());
-		this.webServers = new WebServerFactory(ds, getNetwork()).createServers(topologyXML);
-		this.browser = new Browser(browserIP, browserDist, getNetwork(), proxy.getHost());
+		this.ds = new DiscoveryService(dsIP, dsDist, getNetwork(), true);
+		this.proxy = new Proxy(proxyIP, proxyDist, getNetwork(), ds.getHost(), new RandomLongGenerator(), true);
+		this.webServers = new WebServerFactory(dsIP, getNetwork()).createServers(topologyXML, true);
+		this.browser = new Browser(browserIP, browserDist, getNetwork(), proxy.getHost(), true);
 	}
 
 	public String getBrowserInputFile() {
@@ -101,19 +95,11 @@ public class DistributedParams extends Params {
 		return browser;
 	}
 
-	public Distribution getTrafficDistribution() {
-		return trafficDist;
+	public double getTrafficMean() {
+		return webServerTrafficMean;
 	}
 
 	public Proxy getProxy() {
 		return proxy;
-	}
-	
-	public long getTrafficUpBand() {
-		return trafficUpBand;
-	}
-	
-	public long getTrafficDownBand() {
-		return trafficDownBand;
 	}
 }

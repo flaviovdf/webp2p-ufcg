@@ -20,7 +20,7 @@ public class WebServerTest extends SmartTestCase {
 		
 		this.network = EasyMock.createMock(Network.class);
 		this.dsMock = createRandomHost();
-		this.ws = new WebServer(createRandomHost(), ZERO_DIST, network, dsMock);
+		this.ws = new WebServer(createRandomHost(), ZERO_DIST, network, dsMock, false);
 	}
 
 	protected void tearDown() throws Exception {

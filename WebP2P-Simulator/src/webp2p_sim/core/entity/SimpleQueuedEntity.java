@@ -22,18 +22,28 @@ public class SimpleQueuedEntity implements NetworkEntity, TimedEntity {
 
 	private final Network network;
 
-	public SimpleQueuedEntity(Host host, Distribution distribution, Network network) {
+	public SimpleQueuedEntity(Host host, Distribution distribution, Network network, boolean bindSelf) {
 		this.myHostAddress = host;
 		this.network = network;
 		this.rv = new RandomVariable(distribution);
 		this.queue = new LinkedList<ApplicationMessage>();
 		this.currentMessage = null;
+		
+		
+		if (bindSelf) {
+			bindSelf();
+		}
 	}
 
 	public void receiveMessage(ApplicationMessage applicationMessage) {
 		double simulate = rv.simulate();
 		applicationMessage.setProcessTime(simulate);
-		queue.addLast(applicationMessage);
+		
+		if (queue.isEmpty() && applicationMessage.isDone()) {
+			applicationMessage.process();
+		} else {
+			queue.addLast(applicationMessage);
+		}
 	}
 
 	public void tickOcurred() {

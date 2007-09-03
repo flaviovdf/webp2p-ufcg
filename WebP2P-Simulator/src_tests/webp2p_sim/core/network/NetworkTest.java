@@ -118,7 +118,7 @@ public class NetworkTest extends SmartTestCase {
 		
 		EndToEndDelay delay = network.getDelay();
 		double delayBetweenConnection = delay.getDelayBetweenConnection(network.getConnection(host, otherHost));
-		for (int i = 1; i<= Math.round(delayBetweenConnection); i++) {
+		for (int i = 1; i<= Math.ceil(delayBetweenConnection); i++) {
 			network.tickOcurred();
 		}
 		assertNull(network.getConnection(host, otherHost));
@@ -159,7 +159,7 @@ public class NetworkTest extends SmartTestCase {
 		
 		EndToEndDelay delay = network.getDelay();
 		double delayBetweenConnection = delay.getDelayBetweenConnection(network.getConnection(host, otherHost));
-		for (int i = 1; i<= Math.round(delayBetweenConnection); i++) {
+		for (int i = 1; i<= Math.ceil(delayBetweenConnection); i++) {
 			network.tickOcurred();
 		}
 		assertNull(network.getConnection(host, otherHost));
@@ -208,7 +208,7 @@ public class NetworkTest extends SmartTestCase {
 		assertEquals(2, network.getConnection(host, otherHost).getAmountMessagesBeingTransfered());
 		
 		double newDelayBetwenn = delay.getDelayBetweenConnection(network.getConnection(host, otherHost));
-		for (int i = 1; i<= Math.round(newDelayBetwenn); i++) {
+		for (int i = 1; i<= Math.ceil(newDelayBetwenn); i++) {
 			network.tickOcurred();
 		}
 		assertNull(network.getConnection(host, otherHost));
@@ -231,7 +231,7 @@ public class NetworkTest extends SmartTestCase {
 		
 		ApplicationMessage message = EasyMock.createNiceMock(ApplicationMessage.class);
 		
-		EasyMock.expect(message.size()).andReturn(1l);
+		EasyMock.expect(message.size()).andReturn(10000l);
 		
 		network.bind(host, networkEntity);
 		network.bind(otherHost, otherNetworkEntity);
@@ -263,7 +263,7 @@ public class NetworkTest extends SmartTestCase {
 		
 		ApplicationMessage message = EasyMock.createNiceMock(ApplicationMessage.class);
 		
-		EasyMock.expect(message.size()).andReturn(1l);
+		EasyMock.expect(message.size()).andReturn(10000l);
 		
 		network.bind(host, networkEntity);
 		network.bind(otherHost, otherNetworkEntity);

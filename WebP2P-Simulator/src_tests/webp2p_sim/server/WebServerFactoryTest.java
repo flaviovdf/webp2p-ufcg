@@ -8,9 +8,7 @@ import java.util.Set;
 
 import webp2p_sim.core.network.Network;
 import webp2p_sim.core.network.Network.Type;
-import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.util.SmartTestCase;
-import edu.uah.math.distributions.NormalDistribution;
 
 public class WebServerFactoryTest extends SmartTestCase {
 
@@ -24,8 +22,8 @@ public class WebServerFactoryTest extends SmartTestCase {
 	
 	public void testCreateServers() {
 		Network network = new Network(Type.TEST);
-		WebServerFactory factory = new WebServerFactory(new DiscoveryService(createRandomHost(), new NormalDistribution(0, 0), network), network);
-		List<WebServer> servers = new LinkedList<WebServer>(factory.createServers(new File("topology.xml")));
+		WebServerFactory factory = new WebServerFactory(createRandomHost(), network);
+		List<WebServer> servers = new LinkedList<WebServer>(factory.createServers(new File("topology.xml"), false));
 		
 		assertEquals(4, servers.size());
 		

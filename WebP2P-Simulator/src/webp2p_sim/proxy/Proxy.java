@@ -23,8 +23,8 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 	private final Host discoveryService;
 	private Map<Long, RequestData> requests; 
 		
-	public Proxy(Host host, Distribution distribution, Network network, Host discoveryService, RandomLongGenerator requestIDGenerator) {
-		super(host, distribution, network);
+	public Proxy(Host host, Distribution distribution, Network network, Host discoveryService, RandomLongGenerator requestIDGenerator, boolean bindSelf) {
+		super(host, distribution, network, bindSelf);
 		this.requests = new HashMap<Long, RequestData>();
 		this.discoveryService = discoveryService;
 	}

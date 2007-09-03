@@ -37,8 +37,8 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	private Map<String, ReplicationInfo> replicationMap;
 	private ReplicationStrategy strategyOfReplication;
 	
-	public WebServer(Host host, Distribution distribution, Network network, Host discoveryService) {
-		super(host, distribution, network);
+	public WebServer(Host host, Distribution distribution, Network network, Host discoveryService, boolean bindSelf) {
+		super(host, distribution, network, bindSelf);
 		this.discoveryService = discoveryService;
 		this.adj = new LinkedList<Host>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();

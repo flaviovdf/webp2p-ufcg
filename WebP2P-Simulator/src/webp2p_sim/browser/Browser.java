@@ -18,8 +18,8 @@ public class Browser extends SimpleQueuedEntity implements RequestCallBack, Gene
 	private final Host proxy;
 	private final RandomLongGenerator generator;
 
-	public Browser(Host host, Distribution distribution, Network network, Host proxy) {
-		super(host, distribution, network);
+	public Browser(Host host, Distribution distribution, Network network, Host proxy, boolean bindSelf) {
+		super(host, distribution, network, bindSelf);
 		this.proxy = proxy;
 		this.generator = new RandomLongGenerator();
 	}

@@ -19,7 +19,7 @@ public class SimpleQueuedEntityTest extends SmartTestCase {
 	
 	public void testSendMessage() {
 		final int NUMBER_OF_TICKS = 5;
-		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(NUMBER_OF_TICKS, NUMBER_OF_TICKS), new Network(Type.TEST));
+		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(NUMBER_OF_TICKS, NUMBER_OF_TICKS), new Network(Type.TEST), false);
 		simpleQueue.tickOcurred();
 		
 		TestMessageImpl message = new TestMessageImpl();
@@ -37,7 +37,7 @@ public class SimpleQueuedEntityTest extends SmartTestCase {
 	
 	public void testSendMessage2() {
 		double processTime = 0.4;
-		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(processTime, processTime), new Network(Type.TEST));
+		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(processTime, processTime), new Network(Type.TEST), false);
 		
 		//10 messages of length 0.4 take excatly 4 units of time to complete (each tick process 2.5 messages).
 		TestMessageImpl[] testMessageImpls = new TestMessageImpl[10];
@@ -62,7 +62,7 @@ public class SimpleQueuedEntityTest extends SmartTestCase {
 	
 	public void testSendMessage3() {
 		double processTime = 0.4;
-		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(processTime, processTime), new Network(Type.TEST));
+		SimpleQueuedEntity simpleQueue = new SimpleQueuedEntity(createRandomHost(), new ContinuousUniformDistribution(processTime, processTime), new Network(Type.TEST), false);
 		
 		//10 messages of length 0.4 take excatly 4 units of time to complete (each tick process 2.5 messages).
 		TestMessageImpl[] testMessageImpls = new TestMessageImpl[3];

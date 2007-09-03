@@ -13,4 +13,4 @@ setclasspath() {
 #MAIN
 find_self && setclasspath
 
-java -Xms512m -Xmx1024m -cp $CLASSPATH webp2p_sim.util.ResponseTimeMetricCalculator  $1
+java -Xms512m -Xmx1024m -cp $CLASSPATH webp2p_sim.util.ResponseTimeMetricCalculator  $*

@@ -6,7 +6,7 @@
 		
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
-			<param>.0142857142</param><!-- rate -->
+			<param>70</param><!-- rate -->
 		</distribution>
 		
 		<downband>2048</downband>
@@ -31,7 +31,7 @@
 		<url>200.129.73.130</url>
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
-			<param>.0142857142</param><!-- location -->
+			<param>70</param><!-- location -->
 		</distribution>
 		
 		<downband>2048</downband>
@@ -68,7 +68,7 @@
 		<url>150.165.98.40</url>
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
-			<param>.0142857142</param><!-- rate -->
+			<param>70</param><!-- rate -->
 		</distribution>
 		
 		<downband>2048</downband>
@@ -98,7 +98,7 @@
 		
 		<distribution>
 			<name>edu.uah.math.distributions.ExponentialDistribution</name>
-			<param>.0142857142</param><!-- rate -->
+			<param>70</param><!-- rate -->
 		</distribution>
 		
 		<downband>2048</downband>

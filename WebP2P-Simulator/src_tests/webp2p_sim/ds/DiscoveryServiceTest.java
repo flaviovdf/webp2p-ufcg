@@ -20,7 +20,7 @@ public class DiscoveryServiceTest extends SmartTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		this.network = EasyMock.createMock(Network.class);
-		this.ds = new DiscoveryService(createRandomHost(), ZERO_DIST, this.network);
+		this.ds = new DiscoveryService(createRandomHost(), ZERO_DIST, this.network, false);
 	}
 	
 	public void testPut() throws Exception {

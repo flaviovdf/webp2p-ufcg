@@ -14,4 +14,7 @@ public interface Bandwidth {
 
 	public void deallocateUpBand(Connection connection);
 	
+	public long getTotalUpBand();
+	
+	public long getTotalDownBand();
 }

@@ -17,6 +17,10 @@ public class Params {
 	
 	private Network network = new Network(Type.TCP); 
 	
+	public Params() {
+		Clock.getInstance().addEntities(network);
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected <T> T extractObject(Configuration config, String name) {
 		ArrayList<String> defitinion = new ArrayList<String>();
