@@ -24,34 +24,41 @@
 \listoffigures
 
 \chapter{Introdução}
-
 Desde o surgimento da Internet, a disponibilização de conteúdo vem sendo utilizada em grande escala, tornando-a cada vez mais popular. Essa popularidade é diretamente responsável pela enorme procura por informações pelos usuários, o que aumenta o número de acessos aos provedores de conteúdo. A maioria das soluções existentes que disponibilizam conteúdo (páginas web) são centralizadas e acabam sendo o gargalo em momentos em que o número de acessos é elevado. Exemplos dessas soluções são o Apache (http://httpd.apache.org) e o AOLServer (http://www.aolserver.com). Soluções como estas não são facilmente configuráveis por usuários domésticos e algumas outras da mesma natureza são pagas. Em compensação, estes usuários podem usar serviços como o GooglePages (http://pages.google.com) que lhes oferecem espaço para armazenamento na web gratuitamente.
 
-Acreditamos que as soluções descritas acima não são adequadas para alguns sites em determinados momentos. Um exemplo é uma página que disponibiliza o resultado de um concurso, o número de acessos no momento da divulgação atinge um estado no qual o site não suporta todas as requisições. Isso traz problemas tanto para os usuários, que não conseguem acessar o conteúdo, como também para o administrador, que pode vir a sofrer prejuízos financeiros e/ou reputacionais.
+Já foi analisado em outros trabalhos \cite{perucao} que as soluções descritas acima não são adequadas para alguns sites em determinados momentos. Um exemplo deste cenário é o servidor responsável por disponibilizar o conteúdo do resultado de um concurso. O número de acessos no momento da divulgação atinge um estado no qual o site não suporta todas as requisições, tornando o conteúdo indisponível no momento. Isso traz problemas tanto para os usuários, que não conseguem acessar o conteúdo, como também para o administrador, que pode vir a sofrer prejuízos financeiros e/ou reputacionais. A indisponibilidade do conteúdo, nestes casos, normalmente ocorre em decorrência do grande número de acessos a um único servidor. Algumas empresas adotam a compra de várias máquinas para resolver o problema de indisponibilidade. Essas máquinas respondem por um mesmo endereço, balanceando assim a carga(número de acessos ao servidor). No entanto, esta solução não é viável para pequenas empresas ou ou instituições que não possuem recursos para investir em máquinas novas.
 
-\section{Cronograma}
+A necessidade de manter disponíveis conteúdos em momentos de pico é extremamente importante para a credibilidade de um servidor. Provedores de conteúdo necessitam mantlo disponível o maior tempo possível afim de aumentar o número de clientes o tempo em que o cliente navega pelo site. Contratos entre servidores e empresas interessadas em disponibilizar conteúdo, por muitas vezes, são feitos levando em consideração o tempo de disponibilidade da informação. Neste cenário, indisponibilidade de acesso ao conteúdo se traduzem em prejuízo para o provedor que hospeda a informação, por não ter cumprido o contrato, e para a empresa interessada em disponibilizar a informação, por não ter o seu produto exposto.
 
-Nosso plano de projeto é analisar as solução existentes e propor uma alternativa distribuída para solucionar o problema descrito acima. Nossa solução é baseada na distribuição do conteúdo de um site entre diversos hóspedes em uma rede sobreposta Peer-to-Peer (P2P), assim acreditamos que será possível balancear a banda necessária para um site entre os diversos hóspedes e aumentar a disponibilidade do site. O projeto foi dividido em duas etapas:
+Este trabalho tem por objetivo prover uma solução para a indisponibilidade temporária de conteúdo dos servidores web. A nossa solução visa balancear a carga dos servidores sobrecarregados fazendo uso de uma rede peer-to-peer de servidores web onde o conteúdo é distribuído entre os peers. Com a replicacão e distribuição do conteúdo, requisições que são enviadas a um servidor sobrecarregado são redirecionadas para outro servidor que contém um replica do conteúdo requisitado. Desta maneira, o serviço não fica indisponível para o cliente. Além disso, o servidor sobrecarregado tem oportunidade de se reestabelecer, uma vez que as requisições que chegam a ele, enquanto está sobrecarregado, são redirecionadas a outros servidores. À nossa solução demos o nome de WebP2P, uma alusão à servidores web e sistemas peer-to-perr.
 
-\vspace{1em}
+WebP2P trata-se de uma solução onde vários servidores cooperam entre si de forma a manter seus conteúdos acessíveis ao usuário. É uma alternativa barata em relação à compra de outras máquinas para balancear a carga que chega ao servidor web. Para o administrador de um servidor web, basta apenas entrar na rede WebP2P para que o seu conteúdo seja replicado entre os outros servidores da rede. Quando for detectado que este servidor está sobrecarregado, o nosso sistema toma as decisões necessárias para redirecionar as requisições direcionadas ao servidor para outros da rede, tornando disponível em outro servidor web o conteúdo requisitado. O balanceamento de carga é totalmente transparente ao usuário de um navegador.
 
-Na Primeira iremos:
-\begin{enumerate}
-	\item Fazer análise experimental das soluções existentes;
-	\item Levantar problemas das soluções com base na etapa de análise;
-	\item Gerar um documento com uma arquitetura proposta;
-	\item Implementar um protótipo inicial da solução distribuída.
-\end{enumerate}
+Apresentamos neste documento uma solução peer-to-peer para a indisponibilidade temporária de conteúdo nos servidores web. Na seção ...
 
-
-Na Segunda iremos:
-\begin{enumerate}
-	\item Concluir implementação da solução distribuída;
-	\item Fazer uma avaliação da solução proposta;
-	\item Fazer um comparativo entre as soluções existentes e a solução proposta;
-	\item Gerar um documento com os resultados obtidos em todas as etapas.
-\end{enumerate}
-
+% \section{Cronograma}
+% 
+% Nosso plano de projeto é analisar as solução existentes e propor uma alternativa distribuída para solucionar o problema descrito acima. Nossa solução é baseada na distribuição do conteúdo de um site entre diversos hóspedes em uma rede sobreposta Peer-to-Peer (P2P), assim acreditamos que será possível balancear a banda necessária para um site entre os diversos hóspedes e aumentar a disponibilidade do site. O projeto foi dividido em duas etapas:
+% 
+% \vspace{1em}
+% 
+% Na Primeira iremos:
+% \begin{enumerate}
+% % 	\item Fazer análise experimental das soluções existentes;
+% 	\item Levantar problemas das soluções com base na etapa de análise;
+% 	\item Gerar um documento com uma arquitetura proposta;
+% 	\item Implementar um protótipo inicial da solução distribuída.
+% \end{enumerate}
+% 
+% 
+% Na Segunda iremos:
+% \begin{enumerate}
+% 	\item Concluir implementação da solução distribuída;
+% 	\item Fazer uma avaliação da solução proposta;
+% 	\item Fazer um comparativo entre as soluções existentes e a solução proposta;
+% 	\item Gerar um documento com os resultados obtidos em todas as etapas.
+% \end{enumerate}
+% 
 
 \chapter{Trabalhos Relacionados}
 
@@ -368,4 +375,33 @@ São sete os serviços básicos fornecidos pela plataforma JXTA e, a princípio, pro
 \bibliographystyle{abbrv}
 \bibliography{bibs}
 
+\chapter{Metodologia}
+
+\section{Aquisição do embasamento teórico}
+
+Por se tratar de um projeto voltado à pesquisa, as primeiras etapas do nosso trabalho foram dedicadas à execução de uma extensa revisão bibliográfica na qual levantamos as soluções existentes para disponoibilização de conteúdo, bem como os problemas existentes nas mesmas. Essa revisão foi efetuada através da leitura de artigos tais como \cite{1,2,3,4,5 ...}.
+
+Ao longo das primeiras semanas do projeto, todos os integrantes eram responsáveis por ler um artigo e fazer o seu resumo. A cada encontro semanal, havia um seminário de nivelamento onde o responsável pelo artigo destacava pontos importantes a serem discutidos e levados em consideração para a composição da solução WebP2P. A equipe se reunia com o cliente, o professor Marco Aurélio Spohn, e discutia aspectos relevantes do artigo, além de possíveis soluções e abordagens semelhantes às estudadas. Neste cenário, o professor Marco teve o importante papel de orientador de nossa pesquisa. Instruindo-nos a efetuar um trabalho inicial de pesquisa de qualidade, nos apontando os aspectos que deveríamos focar e quais abordagens seriam interessantes de serem atacadas.
+
+% A maior dificuldade nessa etapa do projeto foi encontrar um artigo que descrevesse o comportamento das requisições que chegam em um servidor web. A tese \cite{tese do iraquiano} mostra gráficos e versa sobre as distribuições que as requisições em um servidor web seguem. Com este documento em mãos, pudemos ter idéia de quais parâmetros analisar durante a experimentação de nossa solução.
+
+Com o fim dos seminários de nivelamento e da atividade de revisão bibliográfica, propusemos ao cliente o desenvolvimento de um simulador que modelaria o sistema e validaria a nossa solução em ambiente simulado. A idéia da implementação do simulador surgiu da dificuldade de se ter acesso a um cenário realístico que serviria de base para a validação de nossa solução. Neste caso, um simulador que executasse os dois cenários diferentes (centralizado e distribuído) facilitaria a experimentação de nossa solução, uma vez que nos permitiria controlar uma quantidade maior de parâmetros relevantes.
+
+Além disso, a construção de um simulador nos daria uma visão mais detalhada e crítica do problema que estávamos atacando. De fato, o entendimento por parte dos integrantes em relação a técnica que adotaríamos foi sendo lapidado durante o desenvolvimento do mesmo. Ao término, pudemos chegar a um consenso em relação às abordagens que deveríamos utilizar, bem como à arquitetura a ser desenvolvida.
+
+Na seção \ref{desenvolvimento_simulador} descrevemos em detalhes como se deu o desenvolvimento do simulador.
+
+\section{Desenvolvimento de um simulador}
+\label{desenvolvimento_simulador}
+O desenvolvimento do simulador se deu durante o período da disciplina Projeto 1, se estendendo até parte da disciplina de Projeto 2.
+
+A equipe do nosso projeto não possuía conhecimentos aprofundados em simulação, tendo por esse motivo que buscar referências em livros como \cite{performance_by_design}. O código foi produzido fazendo 
+
+// estudo de teoria das filas.
+// 
+
+
+
+\section{Desenvolvimento da solução}
+O desenvolvimento de nossa solução se deu, em sua maior parte, no laboratório de sistemas distribuídos (LSD). Por se tratar de uma equipe pequena, composta apenas por três integrantes, optamos por aplicar uma metodologia ágil de desenvolvimento do código. A metodologia adotada foi Extremming Programming (XP). Entre as técnicas que usamos durante o desenvolvimento, destacamos o uso de programação em par como sendo uma das mais usadas e importantes para que 
 \end{document}
