@@ -20,7 +20,6 @@ import webp2p_sim.core.network.Address;
 import webp2p_sim.core.network.AsymetricBandwidth;
 import webp2p_sim.core.network.Host;
 import webp2p_sim.core.network.Network;
-import webp2p_sim.ds.DiscoveryService;
 import webp2p_sim.util.InfinitTimeToLive;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
@@ -29,15 +28,15 @@ import edu.uah.math.distributions.Distribution;
 
 public class WebServerFactory {
 	
-	private DiscoveryService discoveryService;
+	private final Host discoveryService;
 	private final Network network;
 
-	public WebServerFactory(DiscoveryService discoveryService, Network network) {
+	public WebServerFactory(Host discoveryService, Network network) {
 		this.discoveryService = discoveryService;
 		this.network = network;
 	}
 
-	public Set<WebServer> createServers(File topologyFile) {
+	public Set<WebServer> createServers(File topologyFile, boolean bind) {
 		Map<String, WebServer> servers = new HashMap<String, WebServer>();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		
@@ -53,12 +52,12 @@ public class WebServerFactory {
 					
 					Element serverElement = (Element) serverNode;
 					String url = serverElement.getElementsByTagName("url").item(0).getTextContent();
-					long upBand = Long.parseLong(serverElement.getElementsByTagName("upband").item(0).getTextContent());
-					long downBand = Long.parseLong(serverElement.getElementsByTagName("downband").item(0).getTextContent());
+					long upBand = Long.parseLong(serverElement.getElementsByTagName("upband").item(0).getTextContent()) * 1024;
+					long downBand = Long.parseLong(serverElement.getElementsByTagName("downband").item(0).getTextContent()) * 1024;
 					Host createHost = createHost(url, upBand, downBand);
 					
 					Distribution distribution = this.loadServerDistribution((Element) serverElement.getElementsByTagName("distribution").item(0));
-					WebServer server = new WebServer(createHost, distribution, network, this.discoveryService.getHost());
+					WebServer server = new WebServer(createHost, distribution, network, this.discoveryService, bind);
 					
 					NodeList filesList = XPathAPI.selectNodeList(serverElement, "file");
 					for (int j = 0; j < filesList.getLength(); j++) {

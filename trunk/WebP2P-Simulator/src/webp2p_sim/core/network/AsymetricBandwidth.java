@@ -17,6 +17,12 @@ public class AsymetricBandwidth implements Bandwidth {
 	private Set<Connection> upConnnections;
 	private Set<Connection> downConnnections;
 	
+	/**
+	 * Creates a new AsymetricBandwidth.
+	 * 
+	 * @param maxUp In bits per second
+	 * @param maxDown In bits per second
+	 */
 	public AsymetricBandwidth(long maxUp, long maxDown) {
 		this.maxUp = maxUp;
 		this.maxDown = maxDown;
@@ -62,6 +68,16 @@ public class AsymetricBandwidth implements Bandwidth {
 		}
 		
 		this.upConnnections.remove(connection);
+	}
+
+	@Override
+	public long getTotalDownBand() {
+		return (long) maxDown;
+	}
+
+	@Override
+	public long getTotalUpBand() {
+		return (long) maxUp;
 	}
 
 }

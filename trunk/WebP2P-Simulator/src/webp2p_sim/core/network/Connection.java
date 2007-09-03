@@ -85,7 +85,9 @@ public class Connection {
 			
 			//not leaving loop
 			if (extraDataToFlush > 0) {
-				dataToFlushPerMessage = extraDataToFlush / messages.size();
+				if (!messages.isEmpty()) {
+					dataToFlushPerMessage = extraDataToFlush / messages.size();
+				}
 			}
 			
 		} while(extraDataToFlush > 0 && !messages.isEmpty());
@@ -108,7 +110,7 @@ public class Connection {
 	
 	@Override
 	public String toString() {
-		return "Client: " + sender.toString() + " - Server:" + receiver.toString();
+		return "Client: " + sender.toString() + " - Server: " + receiver.toString();
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class ProxyTest extends SmartTestCase {
 		this.generator = new RandomLongGenerator();
 		this.dsMock = createRandomHost();
 		this.network = EasyMock.createMock(Network.class);
-		this.proxy = new Proxy(createRandomHost(), ZERO_DIST, network, dsMock, generator);
+		this.proxy = new Proxy(createRandomHost(), ZERO_DIST, network, dsMock, generator, false);
 		super.setUp();
 	}
 	

@@ -1,9 +1,11 @@
 package webp2p_sim.core.network;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -25,7 +27,7 @@ public class Network implements TimedEntity {
 
 	public Network(Type type) {
 		this.type = type;
-		this.endToEndDelay = new SimpleDistanceDelay();
+		this.endToEndDelay = new BandwidthOnlyDelay();
 		this.entities = new HashMap<Address, NetworkEntity>();
 		this.connections = new HashMap<SenderToReceiver, Connection>();
 		
@@ -59,7 +61,6 @@ public class Network implements TimedEntity {
 		NetworkEntity sendere = entities.get(sender.getAddress());
 		NetworkEntity receivere = entities.get(receiver.getAddress());
 		
-		
 		if (sendere == null || receivere == null) {
 			if (sendere == null) {
 				LOG.debug("Unable to send message < " + message + " >, sender not bound < " + sender + " >");
@@ -71,26 +72,32 @@ public class Network implements TimedEntity {
 		else {
 			//Setting sender and receiver
 			message.setCallerEntity(sendere);
-			message.setReceiverEntity(sendere);
+			message.setReceiverEntity(receivere);
 			
 			Connection connection = getConnection(sender, receiver);
 			
 			if (connection == null) {
-				LOG.debug("Connection < " + connection + " > stablished");
 				connection = new Connection(sender, receiver);
 				connections.put(new SenderToReceiver(sender, receiver), connection);
+				LOG.debug("Connection < " + connection + " > stablished");
 			}
 			
 			LOG.debug("Transmitting message < " + message + " > through connection < " + connection + " >");
-			connection.transmitMessage(endToEndDelay, NetworkMessageFactory.newMessage(message, type));
+			NetworkMessage newMessage = NetworkMessageFactory.newMessage(message, type);
+			connection.transmitMessage(endToEndDelay, newMessage);
 		}
 	}
 	
 	//FIXME Since entities will ignore errors, no notification is sent in case one occurs
 	public void tickOcurred() {
-		Iterator<Entry<SenderToReceiver, Connection>> it = connections.entrySet().iterator();
+		//A message can be sent while iterating, thats why we clone
+		Iterator<Entry<SenderToReceiver, Connection>> it = new HashMap<SenderToReceiver, Connection>(connections).entrySet().iterator();
+		
+		Set<SenderToReceiver> toDelete = new HashSet<SenderToReceiver>();
+		
 		while(it.hasNext()) {
-			Connection con = it.next().getValue();
+			Entry<SenderToReceiver, Connection> next = it.next();
+			Connection con = next.getValue();
 			
 			NetworkEntity sender = entities.get(con.getSenderAddress());
 			NetworkEntity receiver = entities.get(con.getReceiverAddress());
@@ -104,7 +111,8 @@ public class Network implements TimedEntity {
 				}
 				
 				//remove connection
-				it.remove();
+				toDelete.add(next.getKey());
+//				it.remove();
 			}
 			else {
 				//flush data for one tick.
@@ -115,9 +123,14 @@ public class Network implements TimedEntity {
 				}
 				
 				if (con.noMoreMessages()) {
-					it.remove();
+					toDelete.add(next.getKey());
+//					it.remove();
 				}
 			}
+		}
+		
+		for (SenderToReceiver s : toDelete) {
+			connections.remove(s);
 		}
 	}
 
@@ -141,10 +154,12 @@ public class Network implements TimedEntity {
 
 		@Override
 		public int hashCode() {
-			final int PRIME = 31;
+			final int prime = 31;
 			int result = 1;
-			result = PRIME * result + ((receiver == null) ? 0 : receiver.hashCode());
-			result = PRIME * result + ((sender == null) ? 0 : sender.hashCode());
+			result = prime * result
+					+ ((receiver == null) ? 0 : receiver.hashCode());
+			result = prime * result
+					+ ((sender == null) ? 0 : sender.hashCode());
 			return result;
 		}
 
@@ -169,6 +184,9 @@ public class Network implements TimedEntity {
 				return false;
 			return true;
 		}
+
+		
+		
 	}
 
 	public boolean isBound(Host host) {

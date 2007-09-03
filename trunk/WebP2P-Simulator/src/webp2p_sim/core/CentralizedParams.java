@@ -1,4 +1,4 @@
-	package webp2p_sim.core;
+package webp2p_sim.core;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -18,9 +18,7 @@ public class CentralizedParams extends Params {
 	private WebServer webServer;
 	private Browser browser;
 	private String browserInputFile;
-	private Distribution webServerTrafficDist;
-	private long trafficUpBand;
-	private long trafficDownBand;
+	private double webServerTrafficMean;
 
 	public CentralizedParams(Configuration config) {
 		long simTime = config.getLong("sim.runtime");
@@ -29,45 +27,42 @@ public class CentralizedParams extends Params {
 		String browserInputFile = config.getString("browser.inputfile");
 		
 		String browserIP = config.getString("browser.ip");
-		long browserUpBand = config.getLong("browser.upband");
-		long browserDownBand = config.getLong("browser.downband");
+		long browserUpBand = config.getLong("browser.upband") * 1024;
+		long browserDownBand = config.getLong("browser.downband") * 1024;
 		Host browserHost = createHost(browserIP, browserUpBand, browserDownBand);
 		
 		Distribution browserDist = extractObject(config, "browser.process.distribution");
 
 		//Server
 		String webServerIP = config.getString("server.ip");
-		long serverUpBand = config.getLong("server.upband");
-		long serverDownBand = config.getLong("server.downband");
+		long serverUpBand = config.getLong("server.upband") * 1024;
+		long serverDownBand = config.getLong("server.downband") * 1024;
 		Host serverHost = createHost(webServerIP, serverUpBand, serverDownBand);
 		
 		Distribution webServerDist = extractObject(config, "server.process.distribution");
 		String webServerFile = config.getString("server.file");
 		
 		//Traffic
-		Distribution webServerTrafficDist = extractObject(config, "server.traffic.distribution");
-		long trafficUpBand = config.getLong("server.traffic.upband");
-		long trafficDownBand = config.getLong("server.traffic.downband");
+		long trafficMean = config.getLong("server.traffic.mean");
 		
-		buildMe(simTime,  browserInputFile, browserHost, browserDist, webServerDist, serverHost, webServerFile, webServerTrafficDist, trafficUpBand, trafficDownBand);
+		buildMe(simTime,  browserInputFile, browserHost, browserDist, webServerDist, serverHost, webServerFile, trafficMean);
 	}
 	
-	public CentralizedParams(long simTime, String browserInputFile, Host browserHost, Distribution browserDist, Distribution webServerDist, Host webServerHost, String  webServerFile, Distribution webServerTrafficDist, long trafficUpBand, long trafficDownBand) {
-		buildMe(simTime, browserInputFile,  browserHost, browserDist, webServerDist, webServerHost, webServerFile, webServerTrafficDist, trafficUpBand, trafficDownBand);
+	public CentralizedParams(long simTime, String browserInputFile, Host browserHost, Distribution browserDist, Distribution webServerDist, Host webServerHost, String  webServerFile, long trafficMean) {
+		buildMe(simTime, browserInputFile,  browserHost, browserDist, webServerDist, webServerHost, webServerFile, trafficMean);
 	}
 	
-	private void buildMe(long simTime, String browserInputFile,  Host browserHost, Distribution browserDist, Distribution webServerDist, Host webServerHost, String  webServerFile, Distribution webServerTrafficDist, long trafficUpBand, long trafficDownBand) {
+	private void buildMe(long simTime, String browserInputFile,  Host browserHost, Distribution browserDist, Distribution webServerDist, Host webServerHost, String  webServerFile, long trafficMean) {
 		this.browserInputFile = browserInputFile;
 		this.simTime = simTime;
+
+		this.webServerTrafficMean = trafficMean;
 		
-		this.webServerTrafficDist = webServerTrafficDist;
-		this.trafficUpBand = trafficUpBand;
-		this.trafficDownBand = trafficDownBand;
+		this.ds = new DiscoveryService(new Host(new Address(127, 0, 0, 1), new AsymetricBandwidth(Long.MAX_VALUE, Long.MAX_VALUE)), new ContinuousUniformDistribution(0, 0), getNetwork(), true);
+		this.webServer = new WebServer(webServerHost, webServerDist, getNetwork(), ds.getHost(), true);
+		this.browser = new Browser(browserHost, browserDist, getNetwork(), webServer.getHost(), true);
 		
-		this.ds = new DiscoveryService(new Host(new Address(127, 0, 0, 1), new AsymetricBandwidth(Long.MAX_VALUE, Long.MAX_VALUE)), new ContinuousUniformDistribution(0, 0), getNetwork());
-		this.webServer = new WebServer(webServerHost, webServerDist, getNetwork(), ds.getHost());
-		this.webServer.loadFile(webServerFile, 1, new InfinitTimeToLive());
-		this.browser = new Browser(browserHost, browserDist, getNetwork(), webServer.getHost());
+		this.webServer.loadFile(webServerFile, 70 * 1024 * 8, new InfinitTimeToLive());
 	}
 
 	public String getBrowserInputFile() {
@@ -86,16 +81,8 @@ public class CentralizedParams extends Params {
 		return browser;
 	}
 
-	public Distribution getTrafficDistribution() {
-		return webServerTrafficDist;
-	}
-
-	public long getTrafficUpBand() {
-		return trafficUpBand;
-	}
-	
-	public long getTrafficDownBand() {
-		return trafficDownBand;
+	public double getTrafficMean() {
+		return webServerTrafficMean;
 	}
 }
 

@@ -13,7 +13,7 @@ public class BrowserTest extends SmartTestCase {
 		Host proxyHost = createRandomHost();
 		Network mockNetwork = EasyMock.createMock(Network.class);
 		
-		Browser browser = new Browser(createRandomHost(), ZERO_DIST, mockNetwork, proxyHost);
+		Browser browser = new Browser(createRandomHost(), ZERO_DIST, mockNetwork, proxyHost, false);
 		GetContentRequest getContentRequest = new GetContentRequest(browser.getRandomRequestGenerator().peekNextID(),"www.anything.com",browser.getHost());
 		mockNetwork.sendMessage(browser.getHost(), proxyHost, getContentRequest);
 		

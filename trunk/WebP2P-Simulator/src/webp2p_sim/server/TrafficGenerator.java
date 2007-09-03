@@ -22,15 +22,30 @@ public class TrafficGenerator implements TimedEntity {
 	
 	private final Map<Long, List<UrlToWebServer>> tickToRequests;
 	private final RandomLongGenerator longGenrator = new RandomLongGenerator();
-	private final long upBand;
-	private final long downBand;
-	private final Network network;
+	private final MockCallback[] mockCallbacks;
+	private final int nMocks = 10;
+	private int mockToUse;
 
-	public TrafficGenerator(Map<Long, List<UrlToWebServer>> tickToRequests, long upBand, long downBand, Network network) {
+	public TrafficGenerator(Map<Long, List<UrlToWebServer>> tickToRequests, Network network, long upBand, long downBand) {
 		this.tickToRequests = tickToRequests;
-		this.upBand = upBand;
-		this.downBand = downBand;
-		this.network = network;
+		
+		Host host = null;
+		
+		this.mockCallbacks = new MockCallback[nMocks];
+		for(int i = 0; i < nMocks; i++) {
+			do {
+				int byte1 = (int) (Math.random() * 253 + 1);
+				int byte2 = (int) (Math.random() * 253 + 1);
+				int byte3 = (int) (Math.random() * 253 + 1);
+				int byte4 = (int) (Math.random() * 253 + 1);
+				
+				host = new Host(new Address(byte1, byte2, byte3, byte4), new AsymetricBandwidth(upBand, downBand));
+				
+			} while (network.isBound(host));
+			this.mockCallbacks[i] = new MockCallback(host, network);
+		}
+		
+		this.mockToUse = 0;
 	}
 
 	public void tickOcurred() {
@@ -39,35 +54,23 @@ public class TrafficGenerator implements TimedEntity {
 		
 		if (list != null) {
 			for (UrlToWebServer urlTo : list) {
-				
-				Host host = null;
-				do {
-					int byte1 = (int) (Math.random() * 253 + 1);
-					int byte2 = (int) (Math.random() * 253 + 1);
-					int byte3 = (int) (Math.random() * 253 + 1);
-					int byte4 = (int) (Math.random() * 253 + 1);
-					
-					host = new Host(new Address(byte1, byte2, byte3, byte4), new AsymetricBandwidth(upBand, downBand));
-					
-				} while (network.isBound(host));
-				
-				
-				MockCallback mockCallback = new MockCallback(host, network);
-				network.bind(host, mockCallback);
-				network.sendMessage(mockCallback.getHost(), urlTo.getServer(), new GetContentRequest(longGenrator.getNextID(), urlTo.getUrl(), mockCallback.getHost()));
+				MockCallback mockCallback = mockCallbacks[mockToUse];
+				GetContentRequest getContentRequest = new GetContentRequest(longGenrator.getNextID(), urlTo.getUrl(), mockCallback.getHost());
+				getContentRequest.setReceiverEntity(urlTo.getServer());
+				urlTo.getServer().receiveMessage(getContentRequest);
 			}
 		}
 		
+		mockToUse = (mockToUse + 1) % nMocks;
 	}
 
 	private class MockCallback extends SimpleQueuedEntity implements RequestCallBack {
 
 		public MockCallback(Host host, Network network) {
-			super(host, new ContinuousUniformDistribution(0, 0), network);
+			super(host, new ContinuousUniformDistribution(0, 0), network, true);
 		}
 
 		public void hereIsContent(long request, int result, long size) {
-			unbindSelf();
 		}
 
 		public void receiveMessage(ApplicationMessage applicationMessage) {
