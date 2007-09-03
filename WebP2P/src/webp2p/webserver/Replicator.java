@@ -108,10 +108,14 @@ public class Replicator implements AsyncCallback {
 		
 	}
 
-	public void handleError(XmlRpcRequest request, Throwable error) {
+	public void handleError(XmlRpcRequest pRequest, Throwable pError) {
+		// TODO Auto-generated method stub
+		LOG.error(pError);
 	}
 
-	public void handleResult(XmlRpcRequest request, Object result) {
+	public void handleResult(XmlRpcRequest pRequest, Object pResult) {
+		// TODO Auto-generated method stub
+		LOG.debug(pResult);
 	}
 	
 }

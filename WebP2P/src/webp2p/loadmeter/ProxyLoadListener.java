@@ -13,10 +13,11 @@ import webp2p.webserver.WebServerStub;
 public class ProxyLoadListener implements LoadListener, AsyncCallback {
 
 	private static final Logger LOG = Logger.getLogger(ProxyLoadListener.class);
-	private WebServerStub stub;
+	
+	private WebServerStub webServerStub;
 	
 	public ProxyLoadListener(String webServerAddress) {
-		this.stub = new WebServerStub(webServerAddress);
+		this.webServerStub = new WebServerStub(webServerAddress);
 	}
 	
 	
@@ -27,12 +28,13 @@ public class ProxyLoadListener implements LoadListener, AsyncCallback {
 		for (FilesToDownloadRate file: metric) {
 			files.add(file.getFile());
 		}
-		LOG.debug("Load Meter delivered the notification of overhead for the following files: "+files);
+		
+		LOG.debug("LoadMeter delivered the notification of overhead for the following files: "+files);
+		
 		try {
-			stub.overheadDetected(files,this);
+			webServerStub.overheadDetected(files, this);
 		} catch (XmlRpcException e) {
-			e.printStackTrace();
-			//TODO logar
+			LOG.error("Could not notify the server", e);
 		}
 	}
 
