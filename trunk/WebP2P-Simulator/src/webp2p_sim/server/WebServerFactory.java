@@ -55,9 +55,13 @@ public class WebServerFactory {
 					long upBand = Long.parseLong(serverElement.getElementsByTagName("upband").item(0).getTextContent()) * 1024;
 					long downBand = Long.parseLong(serverElement.getElementsByTagName("downband").item(0).getTextContent()) * 1024;
 					Host createHost = createHost(url, upBand, downBand);
+
+					int threshold = Integer.parseInt(serverElement.getElementsByTagName("threshold").item(0).getTextContent());
+					int thresholdTTL = Integer.parseInt(serverElement.getElementsByTagName("thresholdTTL").item(0).getTextContent());
+					int replicationTTL = Integer.parseInt(serverElement.getElementsByTagName("replicationTTL").item(0).getTextContent());
 					
 					Distribution distribution = this.loadServerDistribution((Element) serverElement.getElementsByTagName("distribution").item(0));
-					WebServer server = new WebServer(createHost, distribution, network, this.discoveryService, bind);
+					WebServer server = new WebServer(createHost, distribution, network, this.discoveryService, bind, threshold, thresholdTTL, replicationTTL);
 					
 					NodeList filesList = XPathAPI.selectNodeList(serverElement, "file");
 					for (int j = 0; j < filesList.getLength(); j++) {

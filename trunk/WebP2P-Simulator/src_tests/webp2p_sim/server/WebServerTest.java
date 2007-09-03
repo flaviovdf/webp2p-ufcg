@@ -20,7 +20,7 @@ public class WebServerTest extends SmartTestCase {
 		
 		this.network = EasyMock.createMock(Network.class);
 		this.dsMock = createRandomHost();
-		this.ws = new WebServer(createRandomHost(), ZERO_DIST, network, dsMock, false);
+		this.ws = new WebServer(createRandomHost(), ZERO_DIST, network, dsMock, false, 20, 10, 100);
 	}
 
 	protected void tearDown() throws Exception {
@@ -108,7 +108,7 @@ public class WebServerTest extends SmartTestCase {
 		Host wsMock = createRandomHost();
 		
 		network.sendMessage(ws.getHost(), dsMock, new PutFileRequest("http://4.3.2.1/f.txt", this.ws.getHost()) );
-		network.sendMessage(ws.getHost(), wsMock, new HereIsReplicaOfContent("http://4.3.2.1/f.txt", WebServer.DEFAULT_REPLICATION_TTL, 77) );
+		network.sendMessage(ws.getHost(), wsMock, new HereIsReplicaOfContent("http://4.3.2.1/f.txt", 100, 77) );
 		
 		EasyMock.replay( network );
 		this.ws.loadFile("http://4.3.2.1/f.txt", 77, new TimeToLive(13));

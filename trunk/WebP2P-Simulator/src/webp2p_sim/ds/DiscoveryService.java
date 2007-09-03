@@ -1,9 +1,9 @@
 package webp2p_sim.ds;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -18,18 +18,18 @@ public class DiscoveryService extends SimpleQueuedEntity {
 	
 	private static final Logger LOG = Logger.getLogger( DiscoveryService.class );
 
-	private Map<String, Set<Host>> url2servers;
+	private Map<String, List<Host>> url2servers;
 	
 	public DiscoveryService(Host host, Distribution distribution, Network network, boolean bindSelf) {
 		super(host, distribution, network, bindSelf);
-		this.url2servers = new HashMap<String, Set<Host>>();
+		this.url2servers = new HashMap<String, List<Host>>();
 	}
 	
 	private void getRequest(long requestID, String url, Host callback) {
 		LOG.info( "Request " + requestID + " asking for file " + url );
 		
-		Set<Host> servers = url2servers.get(url);
-		HashSet<Host> response = new HashSet<Host>();
+		List<Host> servers = url2servers.get(url);
+		ArrayList<Host> response = new ArrayList<Host>();
 		
 		if (servers != null) {
 			response.addAll(servers);
@@ -42,9 +42,9 @@ public class DiscoveryService extends SimpleQueuedEntity {
 	void putRequest(String url, Host webServer) {
 		LOG.info( "WebServer " + webServer + " published file " + url );
 		
-		Set<Host> servers = url2servers.get(url);
+		List<Host> servers = url2servers.get(url);
 		if (servers == null) {
-			servers = new HashSet<Host>();
+			servers = new ArrayList<Host>();
 			url2servers.put(url, servers);
 		}
 		

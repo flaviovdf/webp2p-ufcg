@@ -1,8 +1,6 @@
 package webp2p_sim.proxy;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
 import org.easymock.classextension.EasyMock;
 
@@ -41,7 +39,7 @@ public class ProxyTest extends SmartTestCase {
 		Host serverMock1 = createRandomHost();
 		Host serverMock2 = createRandomHost();
 		
-		Set<Host> servers = new LinkedHashSet<Host>();
+		ArrayList<Host> servers = new ArrayList<Host>();
 		servers.add(serverMock1);
 		servers.add(serverMock2);
 		
@@ -56,7 +54,7 @@ public class ProxyTest extends SmartTestCase {
 	public void testHereAreServersNoServersForUrl() {
 		long reqid = getContent(createRandomHost());
 		
-		Set<Host> servers = new HashSet<Host>();
+		ArrayList<Host> servers = new ArrayList<Host>();
 		proxy.hereAreServers(reqid, servers);
 	}
 	
@@ -65,7 +63,7 @@ public class ProxyTest extends SmartTestCase {
 		Host serverMock1 = createRandomHost();
 		Host serverMock2 = createRandomHost();
 		
-		Set<Host> servers = new HashSet<Host>();
+		ArrayList<Host> servers = new ArrayList<Host>();
 		servers.add(serverMock1);
 		servers.add(serverMock2);
 		

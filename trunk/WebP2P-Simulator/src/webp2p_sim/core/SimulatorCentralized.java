@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import webp2p_sim.browser.Browser;
-import webp2p_sim.core.network.Bandwidth;
 import webp2p_sim.proxy.RequestGenerator;
 import webp2p_sim.server.TrafficGenerator;
 import webp2p_sim.server.WebServer;
@@ -29,8 +28,7 @@ public class SimulatorCentralized extends Simulator {
 		servers.add(server);
 		
 		Map<Long, List<UrlToWebServer>> generateRequests = new RequestFileGenerator(centralizedParams.getTrafficMean(), getNumberOfTicks(), servers ).generateRequests();
-		Bandwidth bandwidth = browser.getHost().getBandwidth();
-		TrafficGenerator trafficGenerator = new TrafficGenerator(generateRequests, centralizedParams.getNetwork(), bandwidth.getTotalUpBand(), bandwidth.getTotalDownBand());
+		TrafficGenerator trafficGenerator = new TrafficGenerator(generateRequests, centralizedParams.getNetwork());
 		
 		Clock.getInstance().addEntities(req, server, browser, trafficGenerator);
 	}
