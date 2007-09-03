@@ -53,7 +53,7 @@ public class Replicator implements AsyncCallback {
 	public void replicateContent(String... files) {
 		if (! this.adjacents.isEmpty() ) {
 				for (String url : files) {
-					int random = (int) Math.round(Math.random() * this.adjacents.size());
+					int random = (int) (Math.random() * this.adjacents.size());
 					String webServerAddr = this.adjacents.get(random);
 					
 					LOG.debug("Trying to replicate the content " + url + " to " + webServerAddr);
