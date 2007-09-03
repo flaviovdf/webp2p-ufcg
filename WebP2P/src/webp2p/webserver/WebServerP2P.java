@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import webp2p.webserver.config.WebServerP2PConfig;
+
 public class WebServerP2P {
 	
 	private static final Logger LOG = Logger.getLogger(WebServerP2P.class);
@@ -23,7 +25,7 @@ public class WebServerP2P {
 		this.dataManager = new DataManager();
 		this.dataManager.loadLocalSharedFiles(SHAREDFILES_FILENAME);
 		
-		this.replicator = new Replicator();
+		this.replicator = new Replicator(WebServerP2PConfig.getInstance().getReplicaValidity());
 		this.replicator.loadAdjacents(ADJACENTS_FILENAME);
 	}
 	
@@ -69,9 +71,7 @@ public class WebServerP2P {
 
 	public boolean overheadDetected(List<String> files) {
 		LOG.debug("Notification of overhead for the following files: "+files);
-		// pega o primeiro e replica.
-		replicator.replicateContent(files.get(0));
-		LOG.debug(files.get(0)+" replicated.");
+		replicator.replicateContent(files.toArray(new String[0]));
 		return true;
 	}
 }
