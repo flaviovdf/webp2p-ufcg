@@ -71,11 +71,7 @@ public class WebServerP2P {
 
 	public boolean overheadDetected(List<String> files) {
 		LOG.debug("Notification of overhead for the following files: "+files);
-		try{
-		replicator.replicateContent(files.toArray(new String[0]));
-		} catch(Throwable e) {
-			LOG.error(e);
-		}
+		replicator.replicateContent(files.toArray(new String[files.size()]));
 		return true;
 	}
 }
