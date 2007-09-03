@@ -52,10 +52,11 @@ public class Replicator implements AsyncCallback {
 	
 	public void replicateContent(String... files) {
 		if (! this.adjacents.isEmpty() ) {
-			try {
 				for (String url : files) {
 					int random = (int) Math.round(Math.random() * this.adjacents.size());
 					String webServerAddr = this.adjacents.get(random);
+					
+					LOG.debug("Trying to replicate the content " + url + " to " + webServerAddr);
 					
 					synchronized (this.currentReplicas) {
 						if (! this.currentReplicas.containsKey(url) ) {
@@ -66,16 +67,19 @@ public class Replicator implements AsyncCallback {
 						if (! servers.contains(webServerAddr) ) {
 							servers.add(webServerAddr);
 
-							Timer timer = new Timer();
-							timer.schedule(new ReplicaManager(this.currentReplicas, url, webServerAddr), this.replicaValidity);
+							LOG.debug("Scheduling a thread to remove the file " + url + " from server " + webServerAddr + " in " + this.replicaValidity + " milliseconds");
+							new Timer().schedule(new ReplicaManager(this.currentReplicas, url, webServerAddr), this.replicaValidity);
 
-							new WebServerStub(webServerAddr).storeReplica(url, this);
+							try {
+								new WebServerStub(webServerAddr).storeReplica(url, this);
+							} catch (XmlRpcException e) {
+								LOG.error("Could not replicate the content " + url + " for the server " + webServerAddr, e);
+							}
+						} else {
+							LOG.debug("Skipping the server " + webServerAddr + " because it already has a replica for file " + url);
 						}
 					}
 				}
-			} catch (XmlRpcException e) {
-				// could not replicate the content
-			}
 		} else {
 			LOG.debug("Empty adjacents list");
 		}
@@ -95,6 +99,7 @@ public class Replicator implements AsyncCallback {
 
 		@Override
 		public void run() {
+			LOG.debug("Removing the replica " + this.url + " from server " + this.webServerAddr);
 			synchronized (this.currentReplicas) {
 				Set<String> list = this.currentReplicas.get(this.url);
 				if (list != null) list.remove(this.webServerAddr);
