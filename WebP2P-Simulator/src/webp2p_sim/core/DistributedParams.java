@@ -1,6 +1,9 @@
 package webp2p_sim.core;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.configuration.Configuration;
@@ -22,6 +25,8 @@ public class DistributedParams extends Params {
 	private Set<WebServer> webServers;
 	private Proxy proxy;
 	private double webServerTrafficMean;
+	private long overloadedMean;
+	private ArrayList<String> overLoaded;
 
 	public DistributedParams(Configuration config) {
 		long simTime = config.getLong("sim.runtime");
@@ -48,6 +53,8 @@ public class DistributedParams extends Params {
 		
 		//Traffic
 		long trafficMean = config.getLong("server.traffic.mean");
+		String[] overloadedServers = config.getStringArray("server.overloaded");
+		long overloadedMean = config.getLong("server.overloaded.mean");
 		
 		//DS
 		String dsIP = config.getString("ds.ip");
@@ -60,22 +67,25 @@ public class DistributedParams extends Params {
 		//Servers
 		File topologyXML = new File(config.getString("server.topologyfile"));
 		
-		buildMe(simTime, browserInputFile, browserDist, browserHost, proxyHost, proxyDist, dsDist, dsHost, topologyXML, trafficMean);
+		buildMe(simTime, browserInputFile, browserDist, browserHost, proxyHost, proxyDist, dsDist, dsHost, topologyXML, trafficMean, overloadedServers, overloadedMean);
 	}
 	
-	public DistributedParams(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficMean) {
-		buildMe(simTime, browserInputFile, browserDist, browserIP, proxyIP, proxyDist, dsDist, dsIP, topologyXML, trafficMean);
+	public DistributedParams(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficMean, String[] overloadedServers, long overloadedMean) {
+		buildMe(simTime, browserInputFile, browserDist, browserIP, proxyIP, proxyDist, dsDist, dsIP, topologyXML, trafficMean, overloadedServers, overloadedMean);
 	}
 	
-	private void buildMe(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficMean) {
+	private void buildMe(long simTime, String browserInputFile, Distribution browserDist, Host browserIP, Host proxyIP, Distribution proxyDist, Distribution dsDist, Host dsIP, File topologyXML, long trafficMean, String[] overloadedServers, long overloadedMean) {
 		this.browserInputFile = browserInputFile;
 		this.simTime = simTime;
 		
 		this.webServerTrafficMean = trafficMean;
+		this.overloadedMean = overloadedMean;
 		
 		this.ds = new DiscoveryService(dsIP, dsDist, getNetwork(), true);
 		this.proxy = new Proxy(proxyIP, proxyDist, getNetwork(), ds.getHost(), new RandomLongGenerator(), true);
 		this.webServers = new WebServerFactory(dsIP, getNetwork()).createServers(topologyXML, true);
+		
+		this.overLoaded = new ArrayList<String>(Arrays.asList(overloadedServers));
 		this.browser = new Browser(browserIP, browserDist, getNetwork(), proxy.getHost(), true);
 	}
 
@@ -101,5 +111,13 @@ public class DistributedParams extends Params {
 
 	public Proxy getProxy() {
 		return proxy;
+	}
+
+	public long getOverloadedMean() {
+		return overloadedMean;
+	}
+	
+	public List<String> getFilesToOverload() {
+		return overLoaded;
 	}
 }

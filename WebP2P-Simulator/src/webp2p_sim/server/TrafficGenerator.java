@@ -23,10 +23,10 @@ public class TrafficGenerator implements TimedEntity {
 	private final Map<Long, List<UrlToWebServer>> tickToRequests;
 	private final RandomLongGenerator longGenrator = new RandomLongGenerator();
 	private final MockCallback[] mockCallbacks;
-	private final int nMocks = 10;
+	private final int nMocks = 5;
 	private int mockToUse;
 
-	public TrafficGenerator(Map<Long, List<UrlToWebServer>> tickToRequests, Network network, long upBand, long downBand) {
+	public TrafficGenerator(Map<Long, List<UrlToWebServer>> tickToRequests, Network network) {
 		this.tickToRequests = tickToRequests;
 		
 		Host host = null;
@@ -39,7 +39,7 @@ public class TrafficGenerator implements TimedEntity {
 				int byte3 = (int) (Math.random() * 253 + 1);
 				int byte4 = (int) (Math.random() * 253 + 1);
 				
-				host = new Host(new Address(byte1, byte2, byte3, byte4), new AsymetricBandwidth(upBand, downBand));
+				host = new Host(new Address(byte1, byte2, byte3, byte4), new AsymetricBandwidth(Long.MAX_VALUE, Long.MAX_VALUE));
 				
 			} while (network.isBound(host));
 			this.mockCallbacks[i] = new MockCallback(host, network);

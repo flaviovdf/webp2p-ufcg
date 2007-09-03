@@ -59,7 +59,7 @@ public class CentralizedParams extends Params {
 		this.webServerTrafficMean = trafficMean;
 		
 		this.ds = new DiscoveryService(new Host(new Address(127, 0, 0, 1), new AsymetricBandwidth(Long.MAX_VALUE, Long.MAX_VALUE)), new ContinuousUniformDistribution(0, 0), getNetwork(), true);
-		this.webServer = new WebServer(webServerHost, webServerDist, getNetwork(), ds.getHost(), true);
+		this.webServer = new WebServer(webServerHost, webServerDist, getNetwork(), ds.getHost(), true, 100, 100, 100);
 		this.browser = new Browser(browserHost, browserDist, getNetwork(), webServer.getHost(), true);
 		
 		this.webServer.loadFile(webServerFile, 70 * 1024 * 8, new InfinitTimeToLive());

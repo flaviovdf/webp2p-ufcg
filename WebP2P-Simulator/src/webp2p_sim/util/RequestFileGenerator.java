@@ -5,10 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import webp2p_sim.server.WebServer;
@@ -21,10 +21,10 @@ import webp2p_sim.server.WebServer;
 public class RequestFileGenerator {
 
 	private final long numberOfTicks;
-	private final Set<WebServer> webServers;
+	private final Collection<WebServer> webServers;
 	private final double meanPerTick;
 	
-	public RequestFileGenerator(double meanPerTick, long numberOfTicks, Set<WebServer> webServers) {
+	public RequestFileGenerator(double meanPerTick, long numberOfTicks, Collection<WebServer> webServers) {
 		this.meanPerTick = meanPerTick;
 		this.numberOfTicks = numberOfTicks;
 		this.webServers = webServers;

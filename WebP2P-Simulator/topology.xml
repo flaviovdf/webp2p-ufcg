@@ -12,6 +12,10 @@
 		<downband>2048</downband>
 		<upband>6144</upband>
 		
+		<threshold>60</threshold>
+		<thresholdTTL>1</thresholdTTL>
+		<replicationTTL>500</replicationTTL>
+		
 		<file>
 			<path>/test.jpg</path>
 			<size>250</size>
@@ -36,6 +40,10 @@
 		
 		<downband>2048</downband>
 		<upband>6144</upband>
+		
+		<threshold>60</threshold>
+		<thresholdTTL>1</thresholdTTL>
+		<replicationTTL>500</replicationTTL>
 		
 		<file>
 			<path>/img.jpg</path>
@@ -74,6 +82,10 @@
 		<downband>2048</downband>
 		<upband>6144</upband>
 		
+		<threshold>60</threshold>
+		<thresholdTTL>1</thresholdTTL>
+		<replicationTTL>500</replicationTTL>
+		
 		<file>
 			<path>/test.jpg</path>
 			<size>250</size>
@@ -103,6 +115,10 @@
 		
 		<downband>2048</downband>
 		<upband>6144</upband>
+		
+		<threshold>60</threshold>
+		<thresholdTTL>1</thresholdTTL>
+		<replicationTTL>500</replicationTTL>
 		
 		<file>
 			<path>/index.html</path>

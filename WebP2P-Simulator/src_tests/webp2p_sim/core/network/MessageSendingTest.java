@@ -16,7 +16,9 @@ public class MessageSendingTest extends SmartTestCase {
 		Receiver r = new Receiver(new Host(new Address(192,168,254,2), new AsymetricBandwidth(256 * 1024, 512 * 1024)), new ContinuousUniformDistribution(0, 0), network, true);
 		
 		Clock.getInstance().addEntities(s, r, network);
-		s.sendTestMessage(r.getHost());
+		s.sendTestMessage(r.getHost(), 300 * 1024);
+		
+		assertFalse(r.received);
 		
 		Clock.getInstance().countToTick(1);
 		assertFalse(r.received);
@@ -31,8 +33,8 @@ public class MessageSendingTest extends SmartTestCase {
 			super(host, distribution, network, bindSelf);
 		}
 		
-		public void sendTestMessage(Host host) {
-			sendMessage(host, new SimpleMessage());
+		public void sendTestMessage(Host host, long size) {
+			sendMessage(host, new SimpleMessage(size));
 		}
 	}
 	
@@ -51,6 +53,10 @@ public class MessageSendingTest extends SmartTestCase {
 	
 	private class SimpleMessage extends AbstractApplicationMessage {
 
+		public SimpleMessage(long size) {
+			super(size);
+		}
+		
 		@Override
 		public void realProcess() {
 			((Receiver) receiverEntity).hereIsMessage();

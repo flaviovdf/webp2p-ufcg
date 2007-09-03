@@ -1,8 +1,8 @@
 package webp2p_sim.proxy;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -29,7 +29,7 @@ public class Proxy extends SimpleQueuedEntity implements RequestCallBack, Conten
 		this.discoveryService = discoveryService;
 	}
 	
-	void hereAreServers(long request, Set<Host> servers) {
+	void hereAreServers(long request, List<Host> servers) {
 		RequestData requestData = requests.get(request);
 		if (requestData != null) {
 			LOG.info( "Server list " + servers + " received for url "+requestData.getUrl()+" with request " + request );

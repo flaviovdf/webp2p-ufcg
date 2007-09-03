@@ -26,9 +26,9 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	
 	private static final Logger LOG = Logger.getLogger( WebServer.class );
 	
-	private static final int DEFAULT_THRESHOLD = 20;
-	private static final int DEFAULT_THRESHOLD_TTL = 50;
-	static final int DEFAULT_REPLICATION_TTL = 100;
+	private final int threshhold;
+	private final int thresholdTTL;
+	private final int replicationTTL;
 	
 	private Host discoveryService;
 	private List<Host> adj;
@@ -36,10 +36,14 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 	private Map<String, FileInfo> files;
 	private Map<String, ReplicationInfo> replicationMap;
 	private ReplicationStrategy strategyOfReplication;
+
 	
-	public WebServer(Host host, Distribution distribution, Network network, Host discoveryService, boolean bindSelf) {
+	public WebServer(Host host, Distribution distribution, Network network, Host discoveryService, boolean bindSelf, int threshhold, int thresholdTTL, int replicationTTL) {
 		super(host, distribution, network, bindSelf);
 		this.discoveryService = discoveryService;
+		this.threshhold = threshhold;
+		this.thresholdTTL = thresholdTTL;
+		this.replicationTTL = replicationTTL;
 		this.adj = new LinkedList<Host>();
 		this.replicationMap = new HashMap<String, ReplicationInfo>();
 		this.files = new HashMap<String, FileInfo>();
@@ -53,7 +57,7 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		
 		if (fileInfo == null || fileInfo.getTTL().remaining() < ttl.remaining()) {
 			this.files.put(url, new FileInfo(ttl, size));
-			this.replicationMap.put(url, new ReplicationInfo(DEFAULT_THRESHOLD, DEFAULT_THRESHOLD_TTL,url));
+			this.replicationMap.put(url, new ReplicationInfo(threshhold, thresholdTTL,url));
 			sendMessage(discoveryService, new PutFileRequest(url, this.getHost()));
 		}
 	}
@@ -134,14 +138,14 @@ public class WebServer extends SimpleQueuedEntity implements ContentIF {
 		if (info == null) {
 			LOG.info( "Trying to replicate an inexistent url " + url + " to " + server);
 		} else {
-			LOG.info( "Sending replica for url " + url + " to " + server + " ttl " + DEFAULT_REPLICATION_TTL);
-			info.replicationDone(server, DEFAULT_REPLICATION_TTL);
-			sendMessage(server, new HereIsReplicaOfContent(url, DEFAULT_REPLICATION_TTL, this.files.get( url ).getSize()));
+			LOG.info( "Sending replica for url " + url + " to " + server + " ttl " + replicationTTL);
+			info.replicationDone(server, replicationTTL);
+			sendMessage(server, new HereIsReplicaOfContent(url, replicationTTL, this.files.get( url ).getSize()));
 		}
 	}
 
 	public void hereIsReplicaOfUrl(String url, int replicationTTL, int size) {
-		LOG.info( "Replica for url " + url + " recevied  ttl " + DEFAULT_REPLICATION_TTL);
+		LOG.info( "Replica for url " + url + " recevied  ttl " + replicationTTL);
 		loadFile(url, size, new TimeToLive(replicationTTL));
 	}
 	
