@@ -33,19 +33,19 @@ public class ProxyServlet extends HttpServlet {
 		BufferedReader byteReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(content)));
 		String line = null;
 		
-System.out.println("Setting the HTTP response header...");
+//System.out.println("Setting the HTTP response header...");
 		while ((line = byteReader.readLine()) != null && !"".equals(line)) {
 			StringTokenizer tks = new StringTokenizer(line, ":", true);
 			String name = tks.nextToken().trim();
 			tks.nextToken(); // skip delim
 			String value = tks.nextToken("\n").trim();
-System.out.println("> "+name+" # "+value);
+//System.out.println("> "+name+" # "+value);
 			response.addHeader(name, value);
 		}
 		
 		// sending the content
 		int nextByte = -1;
-System.out.println("Setting the HTTP response content...");
+//System.out.println("Setting the HTTP response content...");
 		while ((nextByte = byteReader.read()) != -1) {
 			response.getWriter().write(nextByte);
 		}

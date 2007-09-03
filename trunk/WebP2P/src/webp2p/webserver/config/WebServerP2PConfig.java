@@ -12,9 +12,10 @@ public class WebServerP2PConfig {
 	
 	public static final String PROP_WEBSERVERP2P_EXTERNAL_ADDRESS = "ws.external.addr";
 	public static final String PROP_WEBSERVERP2P_EXTERNAL_PORT = "ws.external.port";
+	private static final String PROP_WEBSERVERP2P_REPLICA_VALIDITY = "replica.validity";
+	private static final String PROP_WEBSERVERP2P_MINIMUM_DOWNLOAD_RATE = "min.download.rate";
 	
 	private static final String PROPERTIES_FILENAME = "webserverp2p.properties";
-	private static final String PROP_WEBSERVERP2P_MINIMUM_DOWNLOAD_RATE = "min.download.rate";
 	
 	private Properties props;
 
@@ -52,6 +53,10 @@ public class WebServerP2PConfig {
 	
 	public int getWebServerP2PPort() {
 		return Integer.parseInt(this.props.getProperty(PROP_WEBSERVERP2P_EXTERNAL_PORT));
+	}
+	
+	public int getReplicaValidity() {
+		return Integer.parseInt(this.props.getProperty(PROP_WEBSERVERP2P_REPLICA_VALIDITY));
 	}
 	
 	public int getMinimumDownloadRateForFile() {

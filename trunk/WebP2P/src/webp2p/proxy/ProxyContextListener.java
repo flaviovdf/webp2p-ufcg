@@ -7,13 +7,14 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import webp2p.discoveryservice.DiscoveryServiceStub;
-import webp2p.proxy.arbitrator.ChooseFirstWebServerArbitrator;
+import webp2p.proxy.arbitrator.ChooseRandomWebServerArbitrator;
+import webp2p.proxy.arbitrator.WebServerArbitrator;
 
 public class ProxyContextListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		DiscoveryServiceStub dsStub = null;
-		ChooseFirstWebServerArbitrator arbitrator = new ChooseFirstWebServerArbitrator();
+		WebServerArbitrator arbitrator = new ChooseRandomWebServerArbitrator();
 		
 		try {
 			Properties props = new Properties();
