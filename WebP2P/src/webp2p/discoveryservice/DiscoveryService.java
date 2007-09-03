@@ -9,8 +9,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import webp2p.webserver.WebServerP2P;
-
 /**
  * The <code>DiscoveryService</code> is a catalog which holds information about where the files are.
  */

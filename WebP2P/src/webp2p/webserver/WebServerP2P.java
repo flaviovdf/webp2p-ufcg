@@ -8,7 +8,9 @@ import java.net.URLConnection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
 
+import webp2p.discoveryservice.DiscoveryServiceStub;
 import webp2p.webserver.config.WebServerP2PConfig;
 
 public class WebServerP2P {
@@ -66,7 +68,26 @@ public class WebServerP2P {
 
 	public boolean storeReplica(String url) {
 		LOG.info("Storing replica of url " + url);
-		return this.dataManager.storeRemoteData(url);
+		
+		if (this.dataManager.storeRemoteData(url)) {
+			String dsAddr = WebServerP2PConfig.getInstance().getDiscoveryServiceAddress();
+			int dsPort = WebServerP2PConfig.getInstance().getDiscoveryServicePort();
+			DiscoveryServiceStub discoveryService = new DiscoveryServiceStub(dsAddr, dsPort);
+			
+			String wsAddr = WebServerP2PConfig.getInstance().getWebServerP2PAddress();
+			int wsPort = WebServerP2PConfig.getInstance().getWebServerP2PPort();
+			String wsFullAddr = "http://" + wsAddr + ":" + wsPort;
+			
+			try {
+				LOG.debug("Publishing the file " + url);
+				discoveryService.put(wsFullAddr, url);
+			} catch (XmlRpcException e) {
+				LOG.error("Could not publish the file " + url, e);
+			}
+			
+			return true;
+		}
+		return false;
 	}
 
 	public boolean overheadDetected(List<String> files) {
