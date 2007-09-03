@@ -1,0 +1,65 @@
+\chapter{Metodologia}
+
+\section{Aquisição do embasamento teórico}
+
+Por se tratar de um projeto voltado à pesquisa, as primeiras etapas do nosso trabalho foram dedicadas à execução de uma extensa revisão bibliográfica na qual levantamos as soluções existentes para disponibilização de conteúdo, bem como os problemas existentes nas mesmas. Essa revisão foi efetuada através da leitura de artigos, com o intuito de galgar o embasamento teórico necessário para que pudessemos implemetar nossa solução de maneira satisfatória.
+
+Ao longo das primeiras semanas do projeto, todos os integrantes foram responsáveis por ler um artigo e fazer o seu resumo. A cada encontro semanal, havia um seminário de nivelamento onde o responsável pelo artigo destacava pontos importantes a serem discutidos e levados em consideração para a composição da solução WebP2P. A equipe se reunia com o cliente, o professor Marco Aurélio Spohn, e discutia aspectos relevantes do artigo, além de possíveis soluções e abordagens semelhantes às estudadas. Neste cenário, o professor Marco teve o importante papel de orientador de nossa pesquisa por se tratar de um professor e que possui experiência nessa área. Instruindo-nos a efetuar um trabalho inicial de pesquisa de qualidade, nos apontando os aspectos que deveríamos focar e quais abordagens seriam interessantes de serem atacadas.
+
+Com o fim dos seminários de nivelamento e da atividade de revisão bibliográfica, propusemos ao cliente o desenvolvimento de um simulador que modelaria o sistema e validaria a nossa solução em ambiente simulado. A idéia da implementação do simulador surgiu da dificuldade de se ter acesso a um cenário realístico que serviria de base para a validação de nossa solução. Neste caso, um simulador que executasse os dois cenários diferentes (centralizado e distribuído) facilitaria a experimentação de nossa solução, uma vez que nos permitiria controlar uma quantidade maior de parâmetros relevantes.
+
+Além disso, a construção de um simulador nos daria uma visão mais detalhada e crítica do problema que estávamos atacando. De fato, o entendimento por parte dos integrantes em relação a técnica que adotaríamos foi sendo lapidado durante o desenvolvimento do mesmo. Ao término, pudemos chegar a um consenso em relação às abordagens que deveríamos utilizar, bem como à arquitetura a ser desenvolvida. Na seção \ref{desenvolvimento_simulador} descrevemos em detalhes como se deu o desenvolvimento do simulador.
+
+\section{Desenvolvimento do Simulador}
+\label{desenvolvimento_simulador}
+O desenvolvimento do simulador se deu durante o período da disciplina Projeto 1, se estendendo até parte da disciplina de Projeto 2. A equipe do nosso projeto não possuía conhecimentos aprofundados em simulação, tendo por esse motivo que buscar referências em livros como \cite{performance_by_design}. O desenvolvimento deu-se utilizando algumas técnicas do processo de desenvolvimento extreme programming, dentre as principais, destacamos programação em par. Acreditamos que fazendo uso desta técnica a qualidade do código aumenta por haver uma revisão contínua e duplicada do mesmo.
+
+Enquanto dois integrantes da equipe produziam o código, o outro procurava por uma forma de validar o simulador que estava sendo implementado. Reuniões semanais eram feitas afim de discutir a arquitetura do simulador e dividir as tarefas entre os integrantes da equipe. As abordagens e decisões tomadas nas reuniões técnicas eram discutidas com  a equipe e o cliente quinzenalmente.
+
+Para fins de documentação, usamos uma página web para registrar as decisões tomadas nas reuniões bem como o planejamento das atividades futuras. Escolhemos o dokuwiki (http://wiki.splitbrain.org/wiki:dokuwiki) como ferramenta de suporte a edição colaborativa da página web de nosso projeto (http://www.lsd.ufcg.edu.br/\~flaviov/webp2p).
+
+\section{Desenvolvimento da Solução}
+O desenvolvimento da solução WebP2P ocorreu, em sua maior parte, no laboratório de sistemas distribuídos (LSD). Por se tratar de uma equipe pequena, composta apenas por três integrantes, optamos por aplicar uma metodologia ágil de desenvolvimento do código. As atividades de desenvolvimento foram conduzidas usando algumas técnicas do processo ágil XP (Extreme Programming). Escolhemos esta metodologia por ser de conhecimento de todos os integrantes da equipe além de possuir uma vasta documentação de suporte e ser adequada ao tamanho de nossa equipe.
+
+Usamos o eclipse \ref{eclipse} como ambiente de desenvolvimento de nossa aplicação. Esta ferramenta é bem difundida entre os programadores e contém ínumeras características que facilitam o desenvolvimento de código fonte. Para sincronização do código produzido optamos pelo uso do SVN \cite{svn}, um sistema de controle de versões de código fonte que provê informações das mudanças efetuadas a cada submissão de código dos programadores. O plugin Subclipse \cite{subeclipse} nos permitiu trabalhar com o SVN dentro do ambiente eclipse.
+
+O design do código desenvolvido foi amplamente discutido antes da implementação. Quanto ao design do código, optamos por sempre aplicar os padrões de projetos descritos em \cite{gamma-gof}
+
+Diagramas de classes e figuras descrevendo a arquitetura foram gerados para que a implementação do código não entrasse em conflito com o especificado previamente nas reuniões técnicas. A Figura \ref{figura-arquitetura} e a Figura \ref{diagrama-de-classes} são exemplos dos artefatos. O uso dessas figuras foram úteis para manter a conformidade do código com o que era decidido nas reuniões.
+
+Pela documentação do código, ficou responsável o programador que o desenvolvia. Utilizamos javadoc para descrever o funcionamento dos principais métodos do sistema.
+
+Um aspecto importante do nosso sistema é o uso de arquivos de configuração. Esta técnica visa não manter parâmetros de configurações dentro do código fonte da aplicação. Desta maneira, quem for usar o sistema pode alterar os parâmetros sem ter que alterar o código fonte. Fizemos uso de arquivos denominados properties.
+
+\subsection{Testes e Depuração}
+Desde o princípio da atividade de desenvolvimento do código do WebP2P foram sendo construídos testes de unidade com o apoio do framework JUnit \cite{junit}. Por muitas vezes, mas não em sua totalidade, adotamos a técnica desenvolvimento dirigido a testes.
+
+Por ser distribuída, a nossa solução se mostrava difícil de ser testada fazendo apenas uso do framework JUnit. Testar uma simples funcionalidade de uma classe se tornava uma tarefa laboriosa, visto que o componente a ser testados dependia de troca de mensagens com outras entidades do software. Afim de isolar as entidades a serem testadas, fizemos uso da técnica Mock. Esta abordagem visa isolar a entidade a ser testada com o intuito de focar somente em seu funcionamento. Para aplicar a técnica Mock optamos pela biblioteca EasyMock que disponibiliza métodos de criação de mokcs para classes e interfaces.
+
+A depuração do sistema foi feita através de registro de eventos durante a execução do sistema. Para tanto, foi usado o Log4J \cite{log4j}, uma API que faz parte do projeto Jakarta de código aberto (Open Source) que tem como objetivo permitir ao desenvolvedor fazer logging em suas aplicações. Ela permite ao desenvolvedor controlar, de maneira flexível, cada saída de log apenas editando um arquivo de configuração. Como características deste framework podemos citar a flexibilidade e rapidez de geração de logging em tempo de execução, sem inserir grandes custos de performance para a aplicação.
+
+Testes de unidade combinados com a depuração permitiu a equipe seguir o desenvolvimento do sistema com confiança no código já desenvolvido. A cada funcionalidade adicionada, todos os testes eram novamente executados para assegurar que não foram introduzidas faltas no código da aplicação.
+
+\subsection{Automatização de tarefas}
+
+Ao longo do desenvolvimento, algumas atividades eram repetidas com grande frequência, entre elas, colocar o sistema no ar e experimentá-lo, analisar logs do sistema e gerar gráficos a partir deles etc. Essas tarefas possuem passos bem definidos para a sua execução. Desta maneira, usamos a linguagem Bash para a construção de scripts que automatizam as tarefas que se repetiam com maior frequência. Esta linguagem foi escolhida pois todos os integrantes são familiarizados com sistemas Unix e possuem conhecimento da lingaguem e de suas características.
+
+Além disso, integrado ao eclipse, usamos o projeto apache ant \cite{ant} para automatizar as tarefas de geração de \textit{deliverables} como arquivos jar, war e javadoc. Esta ferramenta é semalhante ao make, ou seja, tem por objetivo automatizar tarefas durante a construção do software. No entanto, o ant usa um arquivo xml para especificar as tarefas. Esta característica torna a ferramenta mais portável que o make, uma vez que arquivos xml são padronizados. Os arquivos usados pelo make, por sua vez, usam comandos de sistemas operacionais específicos, fato este que diminui sua portabilidade.
+
+\section{Experimentação}
+Para fins de medição da carga em um web server, usamos a ferramenta JMeter. O intuito era gerar inúmeros acessos a um servidor e ver qual o comportamento do mesmo em relação as requisições. JMeter é uma ferramenta open source que analisa o comportamento de servidores em relação a uma determinada carga de requisições. A ferramenta dá suporte ao controle de parâmetros da experimentação e gera gráficos com informações relavantes para a comparação entre servidores. No contexto do nosso projeto, analisar os gráficos relativos à apenas um servidor e compará-los com os gráficos relativos à nossa solução, seria uma forma de validar o projeto WebP2P. A figura \ref{grafico-jmeter} mostra um exemplo de gráfico gerado pela ferramenta.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=13cm]{img/grafico-jmeter.png}
+\caption{Gráfico gerado pelo JMeter}
+\label{grafico-jmeter}
+\end{figure}
+
+\section{Escrita de Relatórios}
+
+A escrita desta monografia, além dos relatórios parciais gerados durante a disciplina de projeto 1, foi feita em latex, usando o Kile \cite{kile} como ferramenta de edição. Latex é um sistema de tipografia de documentos baseado em comandos e adequado para a construção de documentos científicos, constituídos de fórmulas matemáticas etc. Para a nossa equipe, o grande trunfo de usar o latex foi não se preocupar com a formatação do texto e sim com o seu conteúdo. Usando um estilo pré-definido, bastou apenas escrever o conteúdo do documento e gerar o arquivo. Todas as formatações necessárias são efetuadas pelo estilo que usamos.
+
+A atividade de escrita foi desenvolvida não só no encerramento do projeto. Ela estendeu-se durante todo o andamento do cronograma. Por este fato, foi necessário controlar as várias versões produzidas ao longo do projeto fazendo uso do SVN. Este, foi importante também para manter as versões em sincronia, visto que a escrita era efetuada por todos os membros da equipe paralelamente e concomitantemente.
+
+Uma das atividades que impactaram de forma muito positiva na escrita foi a revisão bibliográfica. O embasamento que esta atividade nos deu, permitiu que escrevessemos com propriedade sobre o problema abordado e a solução que propusemos. A busca por trabalhos relacionados e o levantamento do estado da arte nos proporcionou o conhecimento desejável para que a escrita refletisse todos os aspectos englobados pelo projeto.
