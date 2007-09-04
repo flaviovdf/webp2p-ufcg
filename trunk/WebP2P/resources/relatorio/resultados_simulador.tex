@@ -1,17 +1,52 @@
 O planejamento inicial da disciplina Projeto-I tinha como uma das user story o desenvolvimento de um prototipo do WebP2P. Durante as reuniões com o professor Marco e discussões com membros do LSD, a equipe chegou a conclusão de que o desenvolvimentode um simulador seria mais vantajoso para a análise do sistema. Fazendo uso do simulador, a equipe foi capaz de analisar o comportamento do sistema em um ambiente configuravel. Com isto, alguns fatores que não seriam facilmente controlados, como a banda de um máquina, poderam ser manipulados.
 
-\subsection{Arquitetura}
+Fazendo uso dos conceitos adquiridos na disciplina Análise de Desempenho de Sistemas Discretos (ADSD), a arquitetura do simulador foi definida como sendo uma rede de filas. Cada entidade do sistema contém uma fila de requisições a serem processadas, estas requisições só são processadas após um certo intervalo de tempo, este intervalo é determinado por um distribuição de probabilidade. A figura~\ref{simulador-figura-top} demonstra uma visão alto nível do ambiente simulado, este ambiente segue a arquitetura do sistema descrita anteriormente. A figura mostra a overlay WebP2P sendo submetida a uma carga constante seguindo a distribuição de Pareto, o simulador foi feito de forma que esta carga submetida e a taxa de processamento das entidades fossem configuráveis. Requisições também são enviadas ao Navegador sendo simulado, com base no tempo de respostas destas requisições é que a avaliação do sistema foi feita.
 
-Fazendo uso dos conceitos adquiridos na disciplina Análise de Desempenho de Sistemas Discretos (ADSD), a arquitetura do simulador foi definida como sendo uma rede de filas. Cada entidade do sistema contém uma fila de requisições a serem processadas, o sistema como um todo é mapeado à uma rede de filas como demonstrado nas figuras~\ref{simulador-figura-top, simulador-figura-queues}. A figura~\ref{simulador-figura-top} demonstra uma visão alto nível do ambiente simulado, este ambiente segue a arquitetura do sistema descrita anteriormente. Na figura~\ref{simulador-figura-queues}, demonstramos uma visão baixno nível do simulador, como foi dito cada entidada tem uma fila de requisições que serão processadas. Após uma requisição ser enviada de uma entidade para outra, esta requisição tem um atraso até ser inserida na fila do receptor.
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=.5]{img/webp2psim.png}
+\caption{Ambiente Simulado}
+\label{simulador-figura-top}
+\end{figure}
 
-FIGURA AQUI
+Como foi dito cada entidada tem uma fila de requisições que serão processadas. Uma mensagem enviada de uma entidade para outra só aparece na fila receptora após um atraso definido pela camada de Abstração de Rede. O cálculo de atraso~\ref{sim-delay} leva em conta a largura de banda do emissor ($BW_e$), a largura de banda do receptor ($BW_r$)e a quantidade de informação sendo enviada ($D$). Basendo em~\cite{oversim}, o simulador foi feito de forma com que este cálculo de atraso fosse de fácil substituição.
 
-FIGURA AQUI
+\begin{equation}
+ delay = max(\frac{D}{BW_e}, \frac{D}{BW_r}) \label{sim-delay}
+\end{equation}
 
+\subsubsection{Arquitetura}
 
+As principais módulos que compõem o simulador são:
+\begin{description}
+ \item [Clock:] Faz a contagem do tempo de simulador, no nosso caso cada unidade de tempo simulada equivale a um segundo. O relógio notifica as entidades quando se passou uma unidade de tempo, estas tomam as devidas ações de acordo com seus respectivos estados.
+ \item [Entities:] Define o comportamento básico de uma entidade do sistema (Navegadores, Proxies, Servidores etc). Esta classe controla a fila de chegada e a taxa de processamento de uma entidade, quando uma requisição é processada um método da entidade é chamado.
+ \item [Network:] Representa a camada de abstração de rede, esta camada é responsável pela gerência do atraso de rede entre diferentes entidades. Só existe uma instância da Network no sistema.
+\end{description}
 
 \subsection{Validação}
 
+Para garantir que o simulador estava fazendo uma abstração correta da realidade, foi necessário fazer a validação do mesmo. Esta validação foi feita comparando os resultados obtidos no simulador com os resultados apresentados por outros autores. Para isto o simulador foi congurado com um servidor web apenas, uma carga constante é submetida ao servidor e o tempo de resposta médio é medido. 
+
+Mapeamos esete cenário de simulação para um sistema M/M/1. Como foi dito anteriormente a taxa de chegada ($\lambda$) e de processamento ($\beta$) de requisições no simulador seguem uma distribuição de probabilidade, configuramos o simulador de maneira que estas distribuições fosse exponenciais.
+
+Este cenário de simulação é bem simples, mas trabalhos passados~\cite{stochastic-models, 995032, apache-bursty} usam e afirmam que uma  modelagem do tempo de resposta de servidores web seguindo filas M/M/1 é uma representação aceitável do comportamento real. O comportamento esperado é que com o aumento de $\lambda$ o tempo de resposta creça lentamente enquanto $\lambda < \beta$, após este ponto o aumento de $\lambda$ implica em um crescimento exponencial do número de requisições atendidas. 
+
+Um dos primeiros trabalhos~\cite{model-performance} que modela o comportamento de um servidor web utiliza um sistemas de filas parecido com nosso ambiente simulado. Uma comparação do nosso tempo de resposta com o dos autores pode ser visto na Figura~\ref{simulador-validacao}.
+
+
+\begin{figure}[htbp]
+\centering
+\mbox{\subfigure[Tempo médio de resposta simulado]{\includegraphics[scale=.45]{img/sim_validacao.png}}
+
+      \subfigure[Tempo médio de resposta ~\cite{model-performance}]{\includegraphics[scale=.57]{img/sim_validacao_compare_modelgraph.png}}}
+\caption{Validação do Simulador}
+\label{simulador-validacao}
+\end{figure}
 
 
 \subsection{Desafios}
+
+O principal desfaio no desenvolvimento do simulador foi a validação do mesmo. A equipe fez um decisão errada de implementar um simulador sem se basear em trabalhos já existentes. Somente os conceitos da disciplina ADSD foram aplicados, estes servivram como base da implementação do simulador, mas como as versões iniciais do simulador eram muito simples não foi possível a fácil validação do mesmo. 
+
+Outro problema com a validação foi que os integrantes inicialmente tentaram validar o simulador comparando o mesmo com trabalhos complexos \cite{stochastic-models}. Somente após uma nova revisão bibliográfica foi que encontramos modelagens parecidas com a do simulador e argumentos de que estas eram válidas.
