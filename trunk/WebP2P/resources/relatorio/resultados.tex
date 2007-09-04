@@ -1,9 +1,10 @@
-\chapter{Resultados TODO}
-\section{Soluções Propostas}
+\chapter{Resultados}
 
-A solução proposta pela nossa equipe difere das demais citadas nas seções anteriores pelo fato de não abordar o problema sobre o âmbito de cache distribuído. Para fins de simplificação abordamos os participantes do sistema em duas classes: Usuários de Browser e Provedores de Conteúdo (Web Servers). A maneira que estas classes utilizam o sistema é descrita abaixo.
+\section{Solução Proposta}
 
-Visando ser o menos intrusivo possível para os usuários dos browser, para estes a solução aqui proposta é baseada em um intermediador (proxy\footnote{Um proxy é um conceito da computação utilizada em diversos contextos. Este é um intermediador entre duas entidades. Supondo que a entidade A deseja se comunicar com a entidade B, em alguns casos é mais vantajoso A falar com uma outra entidade C (proxy) e este se comunicar com B. Exemplos das necessidades de um proxy são quando A não tem conexão com B ou quando A não sabe falar a linguagem de B.}). A solução não requer alteração no código fonte de nenhum browser existente ou a criação de um browser que se adequa a nossa solução. O uso do WebP2P será transparente para os usuários caracterizando-a como pouco intrusiva.
+A solução proposta pela nossa equipe difere das demais citadas na Seção~\ref{teoria-relacionados} pelo fato de não abordar o problema sobre o âmbito de cache distribuído. Para fins de simplificação separamos os participantes do sistema em duas classes: Usuários de Navegadores e Provedores de Conteúdo (Web Servers). A maneira que estas classes utilizam o sistema é descrita abaixo.
+
+Visando ser o menos intrusivo possível para os usuários dos navegadores, a solução aqui proposta é baseada em um intermediador (proxy\footnote{Um proxy é um conceito da computação utilizada em diversos contextos. Este é um intermediador entre duas entidades. Supondo que a entidade A deseja se comunicar com a entidade B, em alguns casos é mais vantajoso A falar com uma outra entidade C (proxy) e este se comunicar com B. Exemplos das necessidades de um proxy são quando A não tem conexão com B ou quando A não sabe falar a linguagem de B.}). A solução não requer alteração no código fonte de nenhum navegador existente ou a criação de um navegador que se adequa a nossa solução. O uso do WebP2P será transparente para os usuários caracterizando-a como pouco intrusiva.
 
 Levando em consideração os provedores de conteúdo, a solução consiste em criar uma rede P2P de favores entre os Web Servers dos provedores onde um elemento dessa rede será capaz de prover o conteúdo de outro elemento caso seja necessário para fins de minimizar a carga deste outro. Para manter a solução pouco intrusiva, optamos por desenvolver uma camada de software acima dos Web Servers que usará as funcionalidades destes, como por exemplo, inserção conteúdo em tempo de execução, ao invés de modificar o código dos Web Server existentes.
 
@@ -69,3 +70,15 @@ A solução proposta ainda não aborda questões como segurança, confidencialidade, 
 No âmbito de segurança deve-se prevenir que os dados sejam alterados maliciosamente por usuários e ``contaminem´´ a rede com material corrompido. Além disso, os dados providos por um determinado consumidor devem ser armazenados criptografados a fim de evitar que usuários da máquina provedora saibam qual conteúdo está sendo fornecido pela mesma.
 
 Precisa-se lidar com diferentes versões de páginas na rede. Como o conteúdo pode ser distribuído por qualquer consumidor, é necessário que os arquivos fornecidos sejam sempre os mais recentes publicados.
+
+\section{Simulador}
+
+\input{resultados_simulador}
+
+\section{Desenvolvimento da Solução}
+
+\input{resultados_solucao}
+
+\section{Indicadores de Produção}
+
+\input{resultados_indicadores_producao}
