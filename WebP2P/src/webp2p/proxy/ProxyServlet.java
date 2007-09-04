@@ -31,7 +31,7 @@ public class ProxyServlet extends HttpServlet {
 		// TODO What about the status code??
 		// reading the HTTP response header from the array of bytes
 		BufferedReader byteReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(content)));
-		String line = null;
+		String line;
 		
 //System.out.println("Setting the HTTP response header...");
 		while ((line = byteReader.readLine()) != null && !"".equals(line)) {
@@ -44,7 +44,7 @@ public class ProxyServlet extends HttpServlet {
 		}
 		
 		// sending the content
-		int nextByte = -1;
+		int nextByte;
 //System.out.println("Setting the HTTP response content...");
 		while ((nextByte = byteReader.read()) != -1) {
 			response.getWriter().write(nextByte);

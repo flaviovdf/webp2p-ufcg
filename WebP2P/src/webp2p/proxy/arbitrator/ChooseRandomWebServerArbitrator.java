@@ -10,7 +10,7 @@ public class ChooseRandomWebServerArbitrator implements WebServerArbitrator {
 	 * @see webp2p.proxy.WebServerArbitrator#chooseWebServer(java.lang.String[])
 	 */
 	public String chooseWebServer(String[] wsAddrs) {
-		if (wsAddrs.length == 0) return null;
+		if (wsAddrs == null || wsAddrs.length == 0) return null;
 		
 		int index = (int) (Math.random() * wsAddrs.length);
 		
