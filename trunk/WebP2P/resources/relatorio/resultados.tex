@@ -16,7 +16,7 @@ Vamos explicar a arquitetura do WebP2P através de um exemplo simples. Esse exemp
 
 \begin{itemize}
 	 \item O usuário configura seu browser para utilizar um proxy WebP2P. Este proxy pode estar disponível publicamente ou ser configurado pelo usuário em sua própria máquina.
-	 \item Quando o usuário tenta acessa uma URL, o browser envia um requisição HTTP ao proxy.
+	 \item Quando o usuário tenta acessa uma URL, o browser envia uma requisição HTTP ao proxy.
 	 \item Este proxy efetua a busca pelo conteúdo na Internet e na rede WebP2P usando um serviço de descoberta de conteúdo.
 	 \item Conhecendo os servidores que provêem o conteúdo, o proxy aplica uma heurística para selecionar o servidor mais adequado (menos sobrecarregado, mais próximo, com maior largura de banda etc) para atender a requisição.
 	 \item O proxy contacta o Web Server escolhido para adquirir o conteúdo.
@@ -41,7 +41,7 @@ Uma visão geral da arquitetura é mostrada na figura \ref{fig-arquitetura_cliente
 	\item Um nó adjacente é escolhido de forma randômica para replicar o conteúdo com um determinado TTL. Isto é feito enviando um pedido de replicação para este nó e depois o nó se encarrega de fazer um cache do conteúdo utilizando HTTP. Ao fazer cache, o diretório de descoberta é atualizado por este nó.
 \end{itemize}
 
-A figura \ref{fig-arquitetura_server} ilustra uma rede de distribuição de conteúdo entre os servidores.
+A Figura \ref{fig-arquitetura_server} ilustra uma rede de distribuição de conteúdo entre os servidores.
 
 \begin{figure}[htbp]
 \centering
