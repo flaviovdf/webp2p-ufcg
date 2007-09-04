@@ -1,0 +1,17 @@
+O planejamento inicial da disciplina Projeto-I tinha como uma das user story o desenvolvimento de um prototipo do WebP2P. Durante as reuniões com o professor Marco e discussões com membros do LSD, a equipe chegou a conclusão de que o desenvolvimentode um simulador seria mais vantajoso para a análise do sistema. Fazendo uso do simulador, a equipe foi capaz de analisar o comportamento do sistema em um ambiente configuravel. Com isto, alguns fatores que não seriam facilmente controlados, como a banda de um máquina, poderam ser manipulados.
+
+\subsection{Arquitetura}
+
+Fazendo uso dos conceitos adquiridos na disciplina Análise de Desempenho de Sistemas Discretos (ADSD), a arquitetura do simulador foi definida como sendo uma rede de filas. Cada entidade do sistema contém uma fila de requisições a serem processadas, o sistema como um todo é mapeado à uma rede de filas como demonstrado nas figuras~\ref{simulador-figura-top, simulador-figura-queues}. A figura~\ref{simulador-figura-top} demonstra uma visão alto nível do ambiente simulado, este ambiente segue a arquitetura do sistema descrita anteriormente. Na figura~\ref{simulador-figura-queues}, demonstramos uma visão baixno nível do simulador, como foi dito cada entidada tem uma fila de requisições que serão processadas. Após uma requisição ser enviada de uma entidade para outra, esta requisição tem um atraso até ser inserida na fila do receptor.
+
+FIGURA AQUI
+
+FIGURA AQUI
+
+
+
+\subsection{Validação}
+
+
+
+\subsection{Desafios}
