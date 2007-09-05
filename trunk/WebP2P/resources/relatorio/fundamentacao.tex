@@ -1,50 +1,48 @@
-\chapter{Fundamentação Teórica}
+\chapter{Fundamentação Teórica} \label{sec-teoria}
 
-Nesta seção apresentaremos trabalhos relacionados ao WebP2P. Inicialmente, foram estudadas soluções de servidores web descentralizados, como também soluções de distribuição e busca de conteúdo. Antes da etapa de implementação, foi feito um novo levantamento bibliográfico cujo principal foco foi fazer um levantamento sobre técnologias utilizadas para o desenvolvimento de sistemas distribuídos.
+Nesta seção apresentaremos trabalhos relacionados ao WebP2P. Inicialmente, foram estudadas soluções de servidores web descentralizados, como também soluções de distribuição e descoberta de conteúdo. Antes da etapa de implementação, foi feito um novo levantamento bibliográfico cujo principal foco foi fazer um estudo de tecnologias que são utilizadas para o desenvolvimento de sistemas distribuídos.
 
 \section{Trabalhos Relacionados}\label{teoria-relacionados}
 
 \subsection{Servidores Web Descentralizados}
 
-O problema da sobrecarga de servidores web não é recente, um dos principais trabalhos encontrados com o levantamento deste problema datam de 1995 \cite{model-performance}. Outros trabalhos mais recentes como \cite{stochastic-models, httpperf} ainda estudam o problema e propõem melhoramentos. Como o nosso trabalho, alguns outros argumentam uma solução baseada na distribuição de conteúdo. Um levantamentos destes trabalhos é descrito a seguir.
+O problema da sobrecarga de servidores web não é recente, um dos principais trabalhos encontrados com o levantamento deste problema datam de 1995 \cite{model-performance}. Outros trabalhos mais recentes como \cite{stochastic-models, httpperf} ainda estudam o problema e propõem melhoramentos. Como o nosso trabalho, alguns outros argumentam uma solução baseada na distribuição de conteúdo. Um levantamento dos trabalhos com este argumento é descrito a seguir.
 
 \subsubsection{Coral Content Distribution Network}
 
 A meta do projeto \textit{Coral Content Distribution Network (CoralCDN)}~\cite{coral} é bem parecida com a do WebP2P. No CoralCDN, uma rede P2P é utilizada para disponibilizar caches de conteúdo web. Com este, sites que sofrem sobrecarga podem evitar este problema, pois o acesso ao conteúdo do site pode ser feito através de um dos vários caches mantidos na rede.
 
-O projeto aparenta ser bem maduro e já está disponível para uso gratuítamente. Os nós que compõem a overlay estão rodando no PlanetLab. Clientes utilizam o CoralCDN anexando \textit{.nyud.net} a URL de um conteúdo Web. Servidores de conteúdo podem também fazer uso do Coral anexando a mesma URL nos seus links. Abaixo segue uma explicação de como funciona o CoralCDN.
+O projeto aparenta ser bem maduro e já está disponível para uso gratuitamente. Os nós que compõem a overlay estão rodando no PlanetLab. Clientes utilizam o CoralCDN anexando \textit{.nyud.net} a URL de um conteúdo Web. Servidores de conteúdo podem também fazer uso do Coral anexando a mesma URL nos seus links. Abaixo segue uma explicação de como funciona o CoralCDN.
 
 \begin{enumerate}
 	\item Um cliente envia um pedido DNS para uma URL com \textit{.nyud.net} anexado a mesma, \textit{e.g. www.x.com.nyud.net}, para o seu resolvedor local.
 	
-	\item O resolvedor tenta localizar o host usando o DNS do Coral CDN (\textit{dnssrv}), isto deviado ao \textit{.nyud.net} anexado a url.
+	\item O resolvedor tenta localizar o host usando o DNS do Coral CDN (\textit{dnssrv}), isto devido ao \textit{.nyud.net} anexado a url.
 	
 	\item Ao receber o pedido o \textit{dnssrv} calcula o Round Trip Time (RTT) entre si mesmo e o cliente.
 	
 	\item Com base no RTT o \textit{dnssrv} procura na overlay Coral por proxies perto do cliente.
 	
-	\item O \textit{dnssrv} responde com os proxies mais próximos do cliente (baseado no RTT), ou um conjunto randomico caso os mais próximos não possam ser resolvidos.
+	\item O \textit{dnssrv} responde com os proxies mais próximos do cliente (baseado no RTT), ou um conjunto randômico caso os mais próximos não possam ser resolvidos.
 	
 	\item O resolvedor do cliente retorna o endereço de um dos proxies definido no passo anterior.
 	
 	\item O cliente pede o conteúdo para o proxy. Caso este tenha uma cópia do conteúdo esta é retornada, caso contrário o próximo passo é executado.
 	
-	\item O proxy procura por um cache na overlay.
-	
-	\item Caso seja encontrado um cache o proxy copia este e retorna para o cliente, caso contrário o conteúdo é retornado da Internet.
+	\item O proxy procura por um cache na overlay. Caso seja encontrado um cache o proxy copia este e retorna para o cliente, caso contrário o conteúdo é retornado da Internet.
 	
 	\item O proxy avisa a overlay que agora tem uma cópia do conteúdo.
 \end{enumerate}
 
-Para as ações de indexação (ex: busca e armazenamento) uma DHT é utilizada, esta DHT tem a propriedade de ser ``sloppy'', sendo assim chamada de Distributed Sloppy Hash Table (DSHT). Em uma DSHT os valores para uma determinada chave podem ser armazenadas e recuperadas em diversos nós. Desta forma, uma distribuição de carga é feita na rede.
+Para as ações de indexação (ex: busca e armazenamento) uma Distributed Hash Table. Em sistemas distribuídos o conceito de Distributed Hash Tables (DHT) tem funcionalidade similar, mas o conjunto de valores é distribuído pela rede. Esta distribuição serve para que que o sistema se torne escalável e tolerante a falhas. Caso a tabela fosse armazenada em um único nó (ou pequeno conjunto), na presença de falhas não seria possível recuperar os valores, este pequeno conjunto seria sobrecarregado de buscas em momentos de alta demanda.
 
-O projeto aparentemente é bem maduro e tem metas muito parecidas com as do WebP2P. Tentativas de utilizar o sistema não foram bem sucedidas. Acreditamos que o motivo está relacionado à reestruturação do PlanetLab que estava ocorrendo durante a escrita deste relatório.
+A DHT utilizada pelo CoralCDN tem a propriedade de ser ``sloppy'', sendo assim chamada de Distributed Sloppy Hash Table (DSHT). Em uma DSHT os valores para uma determinada chave podem ser armazenadas e recuperadas em diversos nós. Desta forma, uma distribuição de carga é feita na rede.
 
-Os experimentos feitos no artigo~\cite{coral} não levam em consideração taxas de churn, algo já levantado como problema em diversas DHTS~\cite{bamboo:usenix04}. Também não é mostrado no artigo como o sistema lida com tolerância a falhas.
+O projeto aparentemente é bem maduro e tem metas muito parecidas com as do WebP2P. Os experimentos feitos no artigo~\cite{coral} não levam em consideração taxas de churn, algo já levantado como problema em diversas DHTS~\cite{bamboo:usenix04}. Também não é mostrado no artigo como o sistema lida com tolerância a falhas.
 
 Outro problema aparente é o fato de que com o uso da DSHT várias cópias do conteúdo podem existir na rede, boa parte destas podem estar desatualizadas. Este problema é amenizado com o uso de TTLs. 
 
-Os pares baixando um conteúdo se inserem como dono deste a cada 10 segundos para diminuir a carga dos servidores. Acreditamos que este fator pode causar uma sobrecarga na overlay.
+Os pares baixando um conteúdo se notificam a overlay que os mesmo contém parte do conteúdo 10 segundos para diminuir a carga dos servidores. Acreditamos que este fator pode causar uma sobrecarga no serviço de indexação, a DHT.
 
 \subsubsection{Squirrel}
 
@@ -56,7 +54,7 @@ O funcionamento do Squirrel é bem simples. Um proxy usa uma DHT (Pastry \cite{pa
 
 Existe um segundo modo de funcionamento onde o nó dono da chave não retorna o conteúdo, mas sim uma lista de outro proxies que contêm caches do conteúdo. Este nó dono conhece os proxies pois sempre que um cache é feito a informação sobre quem tem este cache é atualizado na DHT. O proxy cliente contacta um dos proxies desta lista para adquirir o conteúdo da mesma forma como foi feito no modo de funcionamento anterior.
 
-O fato de usar Pastry pode causar diversos problemas com o sitema, pois esta DHT não funciona bem em diversos cenários \cite{bamboo:usenix04}. O sistema é simples e teoricamente resolve o problema, mas não existe maneira de utilizá-lo atualmente.
+O fato de usar Pastry pode causar diversos problemas com o sistema, pois esta DHT não funciona bem em diversos cenários \cite{bamboo:usenix04}. O sistema é simples e teoricamente resolve o problema, mas não existe maneira de utilizá-lo atualmente.
 
 \subsubsection{YOUSERV}
 
@@ -121,7 +119,7 @@ Há uma preocupação com a integridade dos dados e o anonimato entre os clientes. 
 
 O artigo lido é datado de 2002 e ainda se encontrava em fase de desenvolvimento. Não sabemos o estado atual do mesmo. Porém a idéia e a arquitetura proposta são bastante interessantes por explorarem vários níveis de cache e obter uma otimização na busca por conteúdo web.
 
-A forma como é implementada a segurança servirá como modelo para o WebP2P, que utilizará o esquema de chaves simétricas para comunicação entre entidades. Além disso, a indexação e checagem de integridade dos dados são funcionalidades indispensáveis ao WebP2P e certamente precisam ser consideradas.
+Este trabalho levanta questões importantes de segurança e integridade. Tais questões também abrangem o WebP2P, mas estão fora do escopo da sua versão inicial.
 
 \subsection{Soluções de Distribuição e Descoberta de Conteúdo}
 
@@ -129,7 +127,7 @@ A forma como é implementada a segurança servirá como modelo para o WebP2P, que u
 
 O \textit{BitTorrent}\cite{bittorrent-cohen} é um protocolo criado para distribuir conteúdo em grande escala. Trata-se de uma alternativa distribuída ao modelo clássico de cliente-servidor, onde tínhamos apenas o servidor centralizado provendo o arquivo para um conjunto de usuários. Essa arquitetura centralizada acarreta em uma série de problemas de performance: além de a banda do servidor ser limitada e dividida entre os consumidores de arquivos, ele torna-se um ponto único de falhas.
 
-Uma das propostas do protocolo é justamente de utilizar a banda dos consumidores de conteúdo para ajudar no andamento das transferências. Os clientes começam a obter partes de arquivos de outros clientes, que passam a agir também como servidores. O comportamento colaborativo é reforçado por uma rede de favores, onde quem doa aumenta suas chances de receber mais.
+Uma das propostas do protocolo é justamente de utilizar a banda dos consumidores de conteúdo para ajudar no andamento das transferências. Os clientes começam a obter partes de arquivos de outros clientes, que passam a agir também como servidores. O comportamento colaborativo é reforçado por uma rede de favores, onde usuários que doam aumentam suas chances de receber mais.
 
 Quanto mais consumidores interessados em um determinado arquivo disponível em um torrent, maior será a contribuição entre os mesmos e maiores serão as taxas de transferência\cite{bitcrowds-adar}. No entanto, o \textit{BitTorrent} tem uma peculiaridade: atrasos na conclusão de uma transferência em um torrent são aceitáveis. Diferentemente de uma distribuição de conteúdo como páginas web, onde o cliente faz uma requisição e não está disposto a esperar muito por uma resposta.
 
@@ -137,7 +135,7 @@ Quanto mais consumidores interessados em um determinado arquivo disponível em um
 
 \textit{NodeWiz}\cite{nodewiz-sujoy} é um Grid Information Service (GIS) escalável que permite o processamento eficiente e distribuído de buscas multi-atributo por faixas de valores. Isso é feito agregando-se diretórios de serviços individuais em um sistema P2P. Um GIS pode ser visto com um diretório onde provedores de serviço publicam anúncios e onde usuários submetem buscas. No \textit{NodeWiz}, o GIS é implementado por um conjunto de nós (peers) que armazenam anúncios dos provedores de serviço e respondem às buscas dos clientes.
 
-Buscas no \textit{NodeWiz} podem especificar valores para qualquer número de atributos e, além disso, podem especificar faixas de valores para esses atributos. Como exemplo, em um grid que provê CPU como serviço, um cliente pode especificar uma busca que requer uma máquina Linux com no mínimo 1024Mbytes de memória e baixa carga da seguinte maneira: $OS = linux \wedge Mem \leq 1024 \wedge Carga \leq 0.2$.
+Buscas no \textit{NodeWiz} podem especificar valores para qualquer número de atributos e, além disso, podem especificar faixas de valores para esses atributos. Como por exemplo, em um grid que provê CPU como serviço, um cliente pode especificar uma busca que requer uma máquina Linux com no mínimo 1024Mbytes de memória e baixa carga da seguinte maneira: $OS = linux \wedge Mem \leq 1024 \wedge Carga \leq 0.2$.
 
 Na arquitetura do \textit{NodeWiz}, os peers são entidades do GIS e não devem ser confundidos com os nós servidores que são mantidos pelos provedores de serviço onde está hospedado o serviço da aplicação. Clientes e provedores de serviço são vistos como usuários do sistema. Quando um usuário quer fazer uma operação (buscas ou anúncios) submete essa operação para algum peer que ele conhece no sistema, esse peer, digamos recipiente, é o encarregado de rotear a mensagem ao peer apropriado, digamos alvo.
 
@@ -149,81 +147,46 @@ Peers que recebem muitas requisições tornam-se sobrecarregados. O \textit{NodeWi
 
 \subsubsection{Bamboo}
 
-Tabelas hash são estruturas de dados que mapeam chaves $k$ para valores $v$. Em sistemas distribuídos o conceito de Distributed Hash Tables (DHT) tem funcionalidade similar, mas o conjunto de valores é distribuído pela rede. Esta distribuição serve para que que o sistema se torne escalável e tolerante a falhas. Caso a tabela fosse armazenda em um único nó (ou pequeno conjunto), na presença de falhas não seria possível recuperar os valores, este pequeno conjunto seria sobrecarregado de buscas em momentos de alta demanda.
+Distributed Hash Tables têm um design descentralizado onde um conjunto de chaves (dentro de um espaço possível bem definido) devem ser mapeadas em cada nodo do sistema. Quando uma busca não pode ser resolvida localmente por um nodo a mensagem é roteada para outro nodo do sistema. Muitas implementações de DHTs possuem esquemas de roteamento eficientes, geralmente com uma complexidade em $O(log N)$ onde N é o número de nodos da rede, ou seja escalável com o crescimento de nodos.
 
-DHTs têm um design descentralizado onde um conjunto de chaves (dentro de um espaço possível bem definido) devem ser mapeadas em cada nodo do sistema. Quando uma busca não pode ser resolvida localmente por um nodo a mensagem é roteada para outro nodo do sistema. Muitas implementações de DHTs possuem esquemas de roteamento eficientes, geralmente com uma complexidade em $O(log N)$ onde N é o número de nodos da rede, ou seja escalável com o crescimento de nodos.
-
-O \textit{OpenDHT}~\cite{bamboo:usenix04} é uma implementação que segue estes princípios, seu design é baseado em outra implementação de DHTs, \textit{Pastry}~\cite{past01}. Neste design estabelece-se em cada nodo tabelas de roteamento com identificadores e endereços IP  de uma porção de nodos do sistema, por exemplo:
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=5cm]{img/tabela2.png}
-\caption{Tabela de Roteamento do \textit{OpenDHT}}
-\label{fig:dht-tabela de roteamento}
-\end{figure}
-
-O \textit{Leaf-set} de um nodo é formado por um conjunto dos nodos com \textit{id} imediatamente maiores e menores que o \textit{id} do próprio.
-
-As entradas da tabela de roteamento são criadas de modo que as entradas da linha N compartilham um prefixo de tamanho N com o nodo que mantém a tabela. Sendo assim temos $\log_{2^b} N$ linhas cada uma com $2^b - 1$ colunas.
-
-O \textit{Neighborhood-set} é feito por nodos que são próximos ao nodo em questão, uma métrica de proximidade pode ser baseada no endereço IP dos nodos.
-
-Dado que já conhecemos as estruturas de dados mantidas por cada nodo, é importante saber os algoritmos responsáveis por manter o roteamento em $O(log N)$. Tanto em \textit{Pastry} como em \textit{OpenDHT} funcionam da seguinte forma:
-
-\begin{itemize}
-	\item Para cada busca que chega em um nodo é verificada a sua chave K.
-	\item Se K está contida no intervalo do \textit{leaf-set} o pedido é repassado diretamente para o nodo responsável, ou seja foi resolvida em apenas um passo.
-	\item Caso a chave K não esteja contida no \textit{leaf-set} busca-se na tabela de roteamento um nodo que compartilhe um id de um ou mais dígitos com a chave, e então o pedido é repassado para este nodo.
-	\item É possível que a entrada escolhida no passo anterior não esteja disponível ou acessível então é escolhido um nodo que no mínimo seja mais próximo da chave K do que o nodo que está fazendo o roteamento.
-\end{itemize}
-
-
-As características do design que garantem roteamento em $O(log N)$ estão principalmente na forma que a tabela de roteamento é montada e no passo 3 descrito acima. Como em cada passo do roteamento o conjunto de nodos que compartilham o mesmo prefixo é reduzido por um fator de $2^b$ garante-se  que chega-se em qualquer nodo com $\log_{2^b} N$ passos (desde que não ocorram falhas simultâneas em mais que $L/2$ vizinhos, onde $L$ é o tamanho do \textit{leaf-set}).
-
-Como dissemos o design do \textit{OpenDHT} é inspirado em \textit{Pastry}, na verdade seria mais correto dizer que os dois têm o mesmo design. Uma pergunta pode ocorrer: se o design é igual porque foi feito um clone?
-
-A resposta é direta, a implementação de Pastry não funcionava. Quando o deploy era feito em ambientes reais, onde possivelmente existiam faltas não esperadas, o desempenho do \textit{Pastry} era pior do que o esperado. Em~\cite{bamboo:usenix04} é demonstrado que a causa dos problemas que acontecem em outras DHTs como \textit{Pastry}, \textit{CAN}~\cite{can:sigcomm01} e \textit{Chord}~\cite{chord:sigccomm01} é o Churn, característica comum em sistemas P2P.
+O \textit{OpenDHT}~\cite{bamboo:usenix04} é uma implementação que segue estes princípios, seu design é baseado em outra implementação de DHTs, \textit{Pastry}~\cite{past01}. A implementação de Pastry não funcionava. Quando o deploy era feito em ambientes reais, onde possivelmente existiam faltas não esperadas, o desempenho do \textit{Pastry} era pior do que o esperado. Em~\cite{bamboo:usenix04} é demonstrado que a causa dos problemas que acontecem em outras DHTs como \textit{Pastry}, \textit{CAN}~\cite{can:sigcomm01} e \textit{Chord}~\cite{chord:sigccomm01} é o Churn, característica comum em sistemas P2P.
 
 Basicamente o que acontece é que em redes congestionadas a entrada de nodos e a recuperação após a saída no sistema era feita de forma imediata e acarretava o aumento de uso de banda o que congestionava mais ainda a rede e acarretava falhas que gerariam mais tráfego para serem corrigidas entrando num círculo vicioso até um ponto em que praticamente não era mais possível usar a DHT.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=5cm]{img/graphChurn.png}
+\includegraphics[width=7cm]{img/graphChurn.png}
 \caption{Porcentagem de lookups que retornam algum resultado (possivelmente incorreto)}
 \label{fig:graph-churn}
 \end{figure}
 
 A alternativa usada na implementação do \textit{OpenDHT} foi um esquema de manutenção da rede de forma periódica, ou seja, o tráfico gerado na rede física para manter a rede overlay consistente (tanto para entrada de novos nodos como para recuperação após saída) é proporcional apenas ao número de nodos na rede, ou seja, diferente da implementação anterior de \textit{Pastry} o perigo de derrubar uma rede já congestionada por aumento de banda consumida pelos algoritmos de manutenção de consistência é bem menor.
 
+O uso de uma DHT pode ser utilizada pelo WebP2P para a descoberta de conteúdo. Como foi demonstrado o Bamboo oferece uma solução estável e bem testada.
+
 \section{Tecnologias Estudadas}
 
-Para ser feita a implementação da nossa solução, uma pesquisa foi efetuada abrangendo diversas tecnologias de comunicação entre processos. Foram analisadas tecnologias das mais primitivas como Sockets até tecnólogias mais sofisticadas que utilizam conceitos de chamada remota de procedimentos (RPC) \cite{rpc}. Abaixo descrevemos algumas dessas tecnologias como também suas vantagens e desvantagens.
+Para ser feita a implementação da nossa solução, uma pesquisa foi efetuada abrangendo diversas tecnologias de comunicação entre processos. Foram analisadas tecnologias das mais primitivas como Sockets até tecnologias mais sofisticadas que utilizam conceitos de chamada remota de procedimentos (RPC) \cite{rpc}. Abaixo descrevemos algumas dessas tecnologias como também suas vantagens e desvantagens.
 
 \subsection{Sockets}
 
 Sockets e Datagramas são primitivas de comunicação TCP/UDP. Sockets podem ser vistos como a combinação de um endereço IP e uma porta, o sistema operacional se encarrega de associar os sockets aos processos. Os processos utilizam os sockets para se comunicarem com outros processos remotos. Sockets podem ser de dois tipos:
 \begin{enumerate}
 	\item Datagram Socket: Utilizado pelo protocolo UDP, envia mensagens contidas em Datagramas.
-	\item Stream Socket: Utilizado pelo protocolo TCP, são orientados a conexão, tratando o envio de mensagens como um stream.
+	\item Stream Socket: Utilizado pelo protocolo TCP, são orientados a conexão, tratando o envio de mensagens como uma corrente de dados.
 \end{enumerate}
 
-Socket é a tecnologia de comunicação mais primitiva dentre as estudadas. Para a utilização de Sockets o formato das mensagens enviadas precisa ser definido. Por este motivo, sua utilização pode ser complexa. A confiabilidade na entrega das mensagens pode ser comprometida com o uso de Datagram Sockets. A vantagem do uso de sockets é a obtenção de um maior controle das mensagens e o baixo overhead que estes causam na aplicação.
+Socket é a tecnologia de comunicação mais primitiva dentre as estudadas. Para a utilização de Sockets o formato das mensagens enviadas precisa ser definido. Por este motivo, sua utilização pode ser complexa. A confiabilidade na entrega das mensagens pode ser comprometida com o uso de Datagram Sockets. A vantagem do uso de sockets é a obtenção de um maior controle das mensagens e o baixa sobrecarga que estes causam na aplicação.
 
 Sockets são a base de comunicação remota entre processos e são utilizados nas outras tecnologias estudadas, mas o seu uso é transparente ao usuário.
-
-\subsection{XML-RPC}
-
-XML-RPC\cite{xml-rpc} é um protocolo simples de comunicação que utiliza mensagens HTTP para o envio de conteúdo em formato XML. O conteúdo XML das mensagens determina os procedimentos que devem ser chamados, assim como seus paramêtros e o valor de retorno.
-
-A maior vantagem do XML-RPC é o fato deste ser independente de linguagem, assim como os sockets, mas bibliotecas são necessárias para que as linguagens possam utilizar esta tecnologia. Boa parte das linguagens já têm bibliotecas disponíveis. A sua desvantagem é o overhead para a aplicação, pois para cada mensagem um conteúdo XML tem que ser interpretado.
 
 \subsection{RMI}
 
 Remote Method Invocation (RMI)\cite{rmi} é uma forma de comunicação (usando RPC) entre processos Java\cite{java}. As bibliotecas padrões do Java já contém os pacotes necessários para o uso de RMI. Esta tecnologia provê ferramentas para que seja possível para o programador desenvolver uma aplicação sem se preocupar com detalhes de comunicação entre os diversos elementos remotos de um sistema, pois estes são vistos dentro de um programa como objetos Java.
 
-Uma das características interessantes do RMI é o fato deste ser síncrono. Assim, ao ser feita uma chamada remota, o código só tem um retorno quando todo o trecho de código do procedimento remoto é executado. Esta característica já foi levantada como problema para alguns sistemas P2P \cite{jic-aliandro} devido ao overhead das mensagens síncronas do RMI.
+Uma das características interessantes do RMI é o fato deste ser síncrono. Assim, ao ser feita uma chamada remota, o código só tem um retorno quando todo o trecho de código do procedimento remoto é executado. Esta característica já foi levantada como problema para alguns sistemas P2P \cite{jic-aliandro} devido à sobrecarga das mensagens síncronas do RMI.
 
-O fato de ser de fácil uso é uma grande vantagem do RMI, porém somente aplicações Java podem utilizá-lo. Outros problemas já foram levantados, como o fato de que para cada chamada uma nova thread é criada podendo causar assim um grande overhead na aplicação \cite{jic-aliandro}.
+O fato de ser de fácil uso é uma grande vantagem do RMI, porém somente aplicações Java podem utilizá-lo. Outros problemas já foram levantados, como o fato de que para cada chamada uma nova thread é criada podendo causar assim uma grande sobrecarga na aplicação \cite{jic-aliandro}.
 
 \subsection{JIC}
 
@@ -231,11 +194,21 @@ Java Internet Communication (JIC)\cite{jic-aliandro} é uma alternativa ao RMI de
 
 O JIC visa ser de fácil uso como o RMI mas para comunicações assíncronas. Outra vantagem é que ele possui um detector de falhas embutido e não traz o problema de explosão de threads citado na subseção anterior.
 
+\subsection{XML-RPC}
+
+XML-RPC\cite{xml-rpc} é um protocolo de comunicação simples que utiliza mensagens HTTP para o envio de conteúdo em formato XML. O conteúdo XML das mensagens determina os procedimentos que devem ser chamados, assim como seus parâmetros e o valor de retorno.
+
+A maior vantagem do XML-RPC é o fato deste ser independente de linguagem, assim como os sockets, mas bibliotecas são necessárias para que as linguagens possam utilizar esta tecnologia. Boa parte das linguagens já têm bibliotecas disponíveis. A sua desvantagem é a sobrecarga para a aplicação, pois para cada mensagem um conteúdo XML tem que ser interpretado.
+
+XML-RPC foi a tecnologia escolhida para ser utiliza no projeto. A tecnologia aparenta ser estável e aceita em diversos projetos. Um dos fatores da escolha de XML-RPC foi o fato de ser possível fazer chamadas síncronas e assíncronas, dado que o sistema sendo desenvolvido precisa dos dois tipos de mensagens. Mensagens síncronas são necessárias para o envio de conteúdo aos navegadores e as mensagens assíncronas são necessárias para a descoberta e replicação de conteúdo, dado que o servidor já está sobrecarregado.
+
 \subsection{JXTA}
 
 O JXTA (do inglês juxtapose) é uma especificação independente de linguagem e plataforma para comunicação entre dispositivos sem considerar sua localização física e tecnologia de rede no qual se encontram instalados. É uma plataforma livre, tendo sido criada pela Sun Microsystems em 2001.
 
 A plataforma JXTA foi especificada na forma de uma arquitetura microkernel, ou seja, mesmo os serviços mais básicos estão implementados como módulos, restando para o kernel propriamente dito poucas funções, em geral, de comunicação entre os próprios módulos. Portanto, serviços básicos como a descoberta de peers ou de recursos na rede, comunicação entre dois ou mais peers, entre outros, são todos providos por módulos específicos.
+
+Apesar de ser bastante interessante, o JXTA não foi escolhido como tecnologia de comunicação pelo fato de ser muito complexo. Não era necessário um framework do porte do JXTA para o WebP2P.
 
 \subsubsection{Peer e Peer Group}
 

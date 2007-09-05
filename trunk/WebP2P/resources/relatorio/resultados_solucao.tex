@@ -1,14 +1,12 @@
 O sistema desenvolvido é composto de basicamente três entidades: Proxy, DiscoveryService e WebServerP2P.
 
-Vamos explicar como foi implementado e a função de cada um desses componentes.
-
 \subsection{Proxy}
 
-O Proxy é a entidade que mantem contato direto com o usuário. Trata-se de um servlet que responde requisições \textit{HTTP GET} por arquivos da rede WebP2P.
+O Proxy é a entidade que mantém contato direto com o usuário. Trata-se de um servlet que responde requisições \textit{HTTP GET} por arquivos da rede WebP2P.
 
 Ao receber um pedido, o Proxy pergunta ao DiscoveryService quem possui aquele arquivo. Após receber uma resposta com a lista de servidores hospedeiros (WebServerP2P), uma heurística é aplicada para selecionar qual dos servidores será contactado e então o arquivo é requisitado. O conteúdo retornado pelo servidor é encapsulado em uma resposta HTTP e então retornado para quem invocou o servlet.
 
-A heurística que está sendo utilizada escolhe um servidor randomicamente dentre os retornados pelo DiscoveryService. Caso o conteúdo não seja retornado pelo servidor, o servlet retorna uma mensagem informando que o conteúdo está indisponível. Uma melhora significativa neste procedimento seria tentar todos os servidores da lista retornada até que o primeiro responda com o conteúdo.
+A heurística que está sendo utilizada escolhe um servidor randomicamente dentre os retornados pelo DiscoveryService. Caso o conteúdo não seja retornado pelo servidor, o servlet retorna uma mensagem informando que o conteúdo está indisponível.
 
 \subsection{DiscoveryService}
 
@@ -16,18 +14,18 @@ Essa entidade é um serviço simples de descoberta e catálogo de recursos. Contém 
 
 \subsection{WebServerP2P}
 
-O WebServerP2P é a principal entidade do sistema. Sua fachada recebe requisições por arquivos, pedidos de replicação de conteúdo e notificações de sobrecargas no servidor web.
-
-Ao ser iniciado, o WebServerP2P publica no DiscoveryService quais arquivos ele possui. Esse servidor está disponível para receber requisições logo após este momento. Além de armazenar seus arquivos locais, o servidor também recebe pedidos de replicação de arquivos remotos de um outro servidor. Isso ocorre no momento em que o LoadMeter (agente monitorador do servidor web) detecta uma sobrecarga.
-
-Os arquivos remotos, assim como os locais, são armazenados em memória no DataManager. Isso é claramente um problema e precisa ser melhorado no futuro. Entretanto, como o escopo do projeto é limitado à difusão de pequenos arquivos (resultados dos aprovados em um concurso ou vestibular) esse problema não se torna aparente.
-
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=8cm]{img/webp2pserver.png}
 \caption{Detalhes do WebServerP2P}
 \label{fig-arquitetura_webp2pserver}
 \end{figure}
+
+O WebServerP2P é a principal entidade do sistema. Sua fachada recebe requisições por arquivos, pedidos de replicação de conteúdo e notificações de sobrecargas no servidor web.
+
+Ao ser iniciado, o WebServerP2P publica no DiscoveryService quais arquivos ele possui. Esse servidor está disponível para receber requisições logo após este momento. Além de armazenar seus arquivos locais, o servidor também recebe pedidos de replicação de arquivos remotos de um outro servidor. Isso ocorre no momento em que o LoadMeter (agente monitorador do servidor web) detecta uma sobrecarga.
+
+Os arquivos remotos, assim como os locais, são armazenados em memória no DataManager. Isso é claramente um problema e precisa ser melhorado no futuro. Entretanto, como o escopo do projeto é limitado à difusão de pequenos arquivos (resultados dos aprovados em um concurso ou vestibular), esse problema não se torna aparente.
 
 Quando o LoadMeter detecta um certo atraso na resposta de um servidor web, ele notifica o WebServerP2P, que por sua vez pede ao Replicator para replicar o arquivo do servidor que está sobrecarregado.
 
