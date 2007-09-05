@@ -17,7 +17,7 @@ Como foi dito cada entidada tem uma fila de requisições que serão processadas. U
 
 \subsubsection{Arquitetura}
 
-As principais módulos que compõem o simulador são:
+Os principais módulos que compõem o simulador são:
 \begin{description}
  \item [Clock:] Faz a contagem do tempo de simulador, no nosso caso cada unidade de tempo simulada equivale a um segundo. O relógio notifica as entidades quando se passou uma unidade de tempo, estas tomam as devidas ações de acordo com seus respectivos estados.
  \item [Entities:] Define o comportamento básico de uma entidade do sistema (Navegadores, Proxies, Servidores etc). Esta classe controla a fila de chegada e a taxa de processamento de uma entidade, quando uma requisição é processada um método da entidade é chamado.
@@ -28,9 +28,9 @@ As principais módulos que compõem o simulador são:
 
 Para garantir que o simulador estava fazendo uma abstração correta da realidade, foi necessário fazer a validação do mesmo. Esta validação foi feita comparando os resultados obtidos no simulador com os resultados apresentados por outros autores. Para isto o simulador foi congurado com um servidor web apenas, uma carga constante é submetida ao servidor e o tempo de resposta médio é medido. 
 
-Mapeamos esete cenário de simulação para um sistema M/M/1. Como foi dito anteriormente a taxa de chegada ($\lambda$) e de processamento ($\beta$) de requisições no simulador seguem uma distribuição de probabilidade, configuramos o simulador de maneira que estas distribuições fosse exponenciais.
+Mapeamos este cenário de simulação para um sistema M/M/1. Como foi dito anteriormente, a taxa de chegada ($\lambda$) e de processamento ($\beta$) de requisições no simulador seguem uma distribuição de probabilidade, configuramos o simulador de maneira que estas distribuições fossem exponenciais.
 
-Este cenário de simulação é bem simples, mas trabalhos passados~\cite{stochastic-models, 995032, apache-bursty} usam e afirmam que uma  modelagem do tempo de resposta de servidores web seguindo filas M/M/1 é uma representação aceitável do comportamento real. O comportamento esperado é que com o aumento de $\lambda$ o tempo de resposta creça lentamente enquanto $\lambda < \beta$, após este ponto o aumento de $\lambda$ implica em um crescimento exponencial do número de requisições atendidas. 
+Este cenário de simulação é bem simples, mas trabalhos passados~\cite{stochastic-models, 995032, apache-bursty} usam e afirmam que uma  modelagem do tempo de resposta de servidores web seguindo filas M/M/1 é uma representação aceitável do comportamento real. O comportamento esperado é que com o aumento de $\lambda$ o tempo de resposta aumenta lentamente enquanto $\lambda < \beta$, após este ponto o aumento de $\lambda$ implica em um crescimento exponencial do número de requisições atendidas. 
 
 Um dos primeiros trabalhos~\cite{model-performance} que modela o comportamento de um servidor web utiliza um sistemas de filas parecido com nosso ambiente simulado. Uma comparação do nosso tempo de resposta com o dos autores pode ser visto na Figura~\ref{simulador-validacao}.
 

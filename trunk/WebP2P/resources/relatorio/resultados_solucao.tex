@@ -1,4 +1,4 @@
-O sistema bolado é composto de basicamente três entidades: Proxy, DiscoveryService e WebServerP2P.
+O sistema desenvolvido é composto de basicamente três entidades: Proxy, DiscoveryService e WebServerP2P.
 
 Vamos explicar como foi implementado e a função de cada um desses componentes.
 
@@ -8,7 +8,7 @@ O Proxy é a entidade que mantem contato direto com o usuário. Trata-se de um ser
 
 Ao receber um pedido, o Proxy pergunta ao DiscoveryService quem possui aquele arquivo. Após receber uma resposta com a lista de servidores hospedeiros (WebServerP2P), uma heurística é aplicada para selecionar qual dos servidores será contactado e então o arquivo é requisitado. O conteúdo retornado pelo servidor é encapsulado em uma resposta HTTP e então retornado para quem invocou o servlet.
 
-A heurística que está sendo usada escolhe um servidor randomicamente dentre os retornados pelo DiscoveryService. Caso o conteúdo não seja retornado pelo servidor, o servlet retorna uma mensagem informando que o conteúdo está indisponível. Uma melhora significativa neste procedimento seria tentar todos os servidores da lista retornada até que o primeiro responda com o conteúdo.
+A heurística que está sendo utilizada escolhe um servidor randomicamente dentre os retornados pelo DiscoveryService. Caso o conteúdo não seja retornado pelo servidor, o servlet retorna uma mensagem informando que o conteúdo está indisponível. Uma melhora significativa neste procedimento seria tentar todos os servidores da lista retornada até que o primeiro responda com o conteúdo.
 
 \subsection{DiscoveryService}
 
@@ -29,6 +29,6 @@ Os arquivos remotos, assim como os locais, são armazenados em memória no DataMan
 \label{fig-arquitetura_webp2pserver}
 \end{figure}
 
-Quando o LoadMeter detecta um certo atraso na resposta de um servidores web, ele notifica o WebServerP2P que por sua vez pede ao Replicator que o arquivo com iminente problemas de disponibilidade seja replicado.
+Quando o LoadMeter detecta um certo atraso na resposta de um servidor web, ele notifica o WebServerP2P, que por sua vez pede ao Replicator para replicar o arquivo do servidor que está sobrecarregado.
 
 A Figura~\ref{fig-arquitetura_webp2pserver} ilustra a composição do WebServerP2P e como ele se integra com o restante do sistema.
