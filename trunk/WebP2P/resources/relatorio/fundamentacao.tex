@@ -1,123 +1,117 @@
 \chapter{Fundamentação Teórica} \label{sec-teoria}
 
-Nesta seção apresentaremos trabalhos relacionados ao WebP2P. Inicialmente, foram estudadas soluções de servidores web descentralizados, como também soluções de distribuição e descoberta de conteúdo. Antes da etapa de implementação, foi feito um novo levantamento bibliográfico cujo principal foco foi fazer um estudo de tecnologias que são utilizadas para o desenvolvimento de sistemas distribuídos.
+Nesta seção apresentaremos trabalhos relacionados ao WebP2P. Inicialmente, foram estudadas soluções de servidores \textit{web} descentralizados, como também soluções de distribuição e descoberta de conteúdo. Antes da etapa de implementação, foi feito um novo levantamento bibliográfico cujo principal foco foi fazer um estudo de tecnologias que são utilizadas para o desenvolvimento de sistemas distribuídos.
 
 \section{Trabalhos Relacionados}\label{teoria-relacionados}
 
 \subsection{Servidores Web Descentralizados}
 
-O problema da sobrecarga de servidores web não é recente, um dos principais trabalhos encontrados com o levantamento deste problema datam de 1995 \cite{model-performance}. Outros trabalhos mais recentes como \cite{stochastic-models, httpperf} ainda estudam o problema e propõem melhoramentos. Como o nosso trabalho, alguns outros argumentam uma solução baseada na distribuição de conteúdo. Um levantamento dos trabalhos com este argumento é descrito a seguir.
+O problema da sobrecarga de servidores web não é recente. Um dos principais trabalhos data de 1995 \cite{model-performance}. Outros trabalhos mais recentes \cite{stochastic-models, httpperf}, estudam o problema e propõem melhoramentos. Como o nosso trabalho, alguns outros argumentam uma solução baseada na distribuição de conteúdo. Um levantamento dos trabalhos com este argumento é descrito a seguir.
 
 \subsubsection{Coral Content Distribution Network}
 
-A meta do projeto \textit{Coral Content Distribution Network (CoralCDN)}~\cite{coral} é bem parecida com a do WebP2P. No CoralCDN, uma rede P2P é utilizada para disponibilizar caches de conteúdo web. Com este, sites que sofrem sobrecarga podem evitar este problema, pois o acesso ao conteúdo do site pode ser feito através de um dos vários caches mantidos na rede.
+A meta do projeto \textit{Coral Content Distribution Network (CoralCDN)}~\cite{coral} é bem parecida com a do WebP2P. No CoralCDN, uma rede P2P é utilizada para disponibilizar \textit{caches} de conteúdo \textit{web}. Com este, \textit{sites} que sofrem sobrecarga podem evitar este problema, pois o acesso ao conteúdo do mesmo pode ser feito através de um dos vários \textit{caches} mantidos na rede.
 
-O projeto aparenta ser bem maduro e já está disponível para uso gratuitamente. Os nós que compõem a overlay estão rodando no PlanetLab. Clientes utilizam o CoralCDN anexando \textit{.nyud.net} a URL de um conteúdo Web. Servidores de conteúdo podem também fazer uso do Coral anexando a mesma URL nos seus links. Abaixo segue uma explicação de como funciona o CoralCDN.
+O projeto aparenta ser bem maduro e já está disponível para uso gratuitamente. Os nós que compõem a rede sobreposta estão rodando no PlanetLab. Clientes utilizam o CoralCDN anexando \textit{.nyud.net} a URL de um conteúdo \textit{Web}. Servidores de conteúdo podem também fazer uso do Coral anexando a mesma URL nos seus links. Abaixo segue uma explicação de como funciona o CoralCDN.
 
 \begin{enumerate}
 	\item Um cliente envia um pedido DNS para uma URL com \textit{.nyud.net} anexado a mesma, \textit{e.g. www.x.com.nyud.net}, para o seu resolvedor local.
 	
 	\item O resolvedor tenta localizar o host usando o DNS do Coral CDN (\textit{dnssrv}), isto devido ao \textit{.nyud.net} anexado a url.
 	
-	\item Ao receber o pedido o \textit{dnssrv} calcula o Round Trip Time (RTT) entre si mesmo e o cliente.
+	\item Ao receber o pedido o \textit{dnssrv} calcula o \textit{Round Trip Time} (RTT) entre ele e o cliente.
 	
-	\item Com base no RTT o \textit{dnssrv} procura na overlay Coral por proxies perto do cliente.
+	\item Com base no RTT o \textit{dnssrv} procura na rede sobreposta Coral por \textit{proxies} perto do cliente.
 	
 	\item O \textit{dnssrv} responde com os proxies mais próximos do cliente (baseado no RTT), ou um conjunto randômico caso os mais próximos não possam ser resolvidos.
 	
-	\item O resolvedor do cliente retorna o endereço de um dos proxies definido no passo anterior.
+	\item O resolvedor do cliente retorna o endereço de um dos \textit{proxies} definido no passo anterior.
 	
-	\item O cliente pede o conteúdo para o proxy. Caso este tenha uma cópia do conteúdo esta é retornada, caso contrário o próximo passo é executado.
+	\item O cliente pede o conteúdo para o proxy. Caso este tenha uma cópia do conteúdo esta é retornada; caso contrário, o próximo passo é executado.
 	
-	\item O proxy procura por um cache na overlay. Caso seja encontrado um cache o proxy copia este e retorna para o cliente, caso contrário o conteúdo é retornado da Internet.
+	\item O proxy procura por um \textit{cache} na rede sobreposta. Caso seja encontrado um cache o proxy copia este e retorna para o cliente; caso contrário, o conteúdo é retornado da Internet.
 	
 	\item O proxy avisa a overlay que agora tem uma cópia do conteúdo.
 \end{enumerate}
 
-Para as ações de indexação (ex: busca e armazenamento) uma Distributed Hash Table. Em sistemas distribuídos o conceito de Distributed Hash Tables (DHT) tem funcionalidade similar, mas o conjunto de valores é distribuído pela rede. Esta distribuição serve para que que o sistema se torne escalável e tolerante a falhas. Caso a tabela fosse armazenada em um único nó (ou pequeno conjunto), na presença de falhas não seria possível recuperar os valores, este pequeno conjunto seria sobrecarregado de buscas em momentos de alta demanda.
+Para as ações de indexação (ex: busca e armazenamento) uma \textit{Distributed Hash Table} é utilizada. Em sistemas distribuídos o conceito de \textit{Distributed Hash Tables} (DHT) tem funcionalidade similar às \textit{Hash Tables} convencionais, mas o conjunto de valores é distribuído pela rede. Esta distribuição serve para que o sistema se torne escalável e tolerante a falhas. Caso a tabela fosse armazenada em um único nó (ou pequeno conjunto), na presença de falhas não seria possível recuperar os valores e este pequeno conjunto ficaria sobrecarregado em momentos de alta demanda.
 
-A DHT utilizada pelo CoralCDN tem a propriedade de ser ``sloppy'', sendo assim chamada de Distributed Sloppy Hash Table (DSHT). Em uma DSHT os valores para uma determinada chave podem ser armazenadas e recuperadas em diversos nós. Desta forma, uma distribuição de carga é feita na rede.
+A DHT utilizada pelo CoralCDN tem a propriedade de ser ``sloppy'', ou seja, uma chave pode estar armazenada em mais de um nó. Sendo assim, este tipo de DHT é denomindado \textit{Distributed Sloppy Hash Table} (DSHT). Em uma DSHT os valores para uma determinada chave podem ser armazenadas e recuperadas em diversos nós. Desta forma, uma distribuição de carga é feita na rede.
 
-O projeto aparentemente é bem maduro e tem metas muito parecidas com as do WebP2P. Os experimentos feitos no artigo~\cite{coral} não levam em consideração taxas de churn, algo já levantado como problema em diversas DHTS~\cite{bamboo:usenix04}. Também não é mostrado no artigo como o sistema lida com tolerância a falhas.
+O projeto aparentemente é bem maduro e tem metas muito parecidas com as do WebP2P, no entanto, os experimentos feitos ~\cite{coral} não levam em consideração taxas de \textit{churn}, o contínuo processo de entrada e saída dos nós em um sistemas distribuído. Além disso, não é mostrado como o sistema lida com tolerância a falhas.
 
-Outro problema aparente é o fato de que com o uso da DSHT várias cópias do conteúdo podem existir na rede, boa parte destas podem estar desatualizadas. Este problema é amenizado com o uso de TTLs. 
-
-Os pares baixando um conteúdo se notificam a overlay que os mesmo contém parte do conteúdo 10 segundos para diminuir a carga dos servidores. Acreditamos que este fator pode causar uma sobrecarga no serviço de indexação, a DHT.
+Outro problema aparente é o fato de que com o uso da DSHT várias cópias do conteúdo podem existir na rede, boa parte destas podem estar desatualizadas. Este problema é amenizado com o uso de TTLs.
 
 \subsubsection{Squirrel}
+O projeto Squirrel\cite{squirrel} é uma solução de distribuição de \textit{caches} similar ao CoralCDN, mas este foi feito para redes locais. O Squirrel difere do CoralCDN no sentido de que os clientes devem configurar manualmente um \textit{proxy} inicial no seu \textit{browser}.Aparentemente, o projeto está abandonado, nenhuma maneira de usá-lo está disponibilizada e apenas resultados de simulações foram publicados.
 
-O projeto Squirrel\cite{squirrel} é uma solução de distribuição de caches similar ao CoralCDN, mas este foi feito para redes locais. O Squirrel difere do CoralCDN no sentido de que os clientes devem configurar manualmente um proxy inicial no seu browser. Além disso, servidores de conteúdo não fazem o uso do sistema.
+Aparentemente, o funcionamento do Squirrel é bem simples. Um \textit{proxy} usa uma DHT (Pastry \cite{past01}) para pesquisar quem é o dono da chave (URL) daquele conteúdo. Caso este dono tenha um \textit{cache} este é retornado, caso contrário o dono adquire o conteúdo da Internet e retorna este conteúdo.
 
-O projeto aparenta ter sido abandonado, nenhuma maneira de usá-lo foi descoberta e só foram encontrados resultados de simulação.
+Existe um segundo modo de funcionamento onde o nó dono da chave não retorna o conteúdo, mas sim uma lista de outros \textit{proxies} que contêm \textit{caches} do conteúdo. Este nó dono conhece os \textit{proxies} pois sempre que um \textit{cache} é feito a informação sobre quem tem este \textit{cache} é atualizado na DHT. O \textit{proxy} cliente contacta um dos \textit{proxies} desta lista para adquirir o conteúdo da mesma forma como foi feito no modo de funcionamento anterior.
 
-O funcionamento do Squirrel é bem simples. Um proxy usa uma DHT (Pastry \cite{past01}) para pesquisar quem é o dono da chave (URL) daquele conteúdo. Caso este dono tenha um cache este é retornado, caso contrário o dono adquire o conteúdo da internet e retorna este conteúdo.
-
-Existe um segundo modo de funcionamento onde o nó dono da chave não retorna o conteúdo, mas sim uma lista de outro proxies que contêm caches do conteúdo. Este nó dono conhece os proxies pois sempre que um cache é feito a informação sobre quem tem este cache é atualizado na DHT. O proxy cliente contacta um dos proxies desta lista para adquirir o conteúdo da mesma forma como foi feito no modo de funcionamento anterior.
-
-O fato de usar Pastry pode causar diversos problemas com o sistema, pois esta DHT não funciona bem em diversos cenários \cite{bamboo:usenix04}. O sistema é simples e teoricamente resolve o problema, mas não existe maneira de utilizá-lo atualmente.
+O fato de usar Pastry pode causar diversos problemas com o sistema, pois esta DHT não funciona bem em diversos cenários \cite{bamboo:usenix04}. O sistema é simples e teoricamente resolve o problema, mas não existe implementações desta abordagem.
 
 \subsubsection{YOUSERV}
 
-YOUSERV \cite{youserv} trata-se de uma ferramenta que possibilita um usuário de uma intranet publicar seu conteúdo de maneira simples e sem grandes custos. Um usuário precisa apenas instalar o software YOUSERV para publicar conteúdo, fornecendo seu login e senha da intranet. O conteúdo é publicado e pode ser acessado através da Internet usando um browser, desde de que se tenha uma senha de acesso à intranet.
+YOUSERV \cite{youserv} trata-se de uma ferramenta que possibilita um usuário de uma intranet publicar seu conteúdo de maneira simples e sem grandes custos. Um usuário precisa apenas instalar o software YOUSERV para publicar conteúdo, fornecendo seu login e senha da intranet. O conteúdo é publicado e pode ser acessado através da Internet usando um \textit{browser}, desde de que se tenha uma senha de acesso à intranet.
 
-YOUSERV faz uso de uma rede P2P para publicar o conteúdo dos usuários com baixo custo
-e de maneira simples. Abaixo são listadas algumas das características da ferramenta:
+YOUSERV faz uso de uma rede P2P para publicar o conteúdo dos usuários com baixo custo e de maneira simples. Abaixo são listadas algumas das características da ferramenta:
 
 \begin{itemize}
  \item O usuário recebe um nome de domínio que mapeia para o seu site, onde está disponibilizado o seu conteúdo, não importando o fato do IP não ser estático.
  \item O conteúdo disponibilizado por um usuário pode ficar acessível mesmo quando este não se encontra conectado. Isso é possível fazendo uso de replicação do conteúdo.
- \item Mesmo estando atrás de um firewall é possível publicar conteúdo.
+ \item Mesmo estando atrás de um \textit{firewall} é possível publicar conteúdo.
 \end{itemize}
 
 Atualmente, YOUSERV não dá suporte a pesquisa por conteúdo dinâmico.
 
-YOUSERV faz uso de replicação para tornar o conteúdo acessível mesmo quando o provedor do conteúdo não está online. A replicação do conteúdo de um usuário é feita entre os sites que esse usuário escolhe. Este acordo deve ser feito por ambas as partes, ou seja, quando um usuário escolhe um site para replicar seu conteúdo, esse site deve aceitar a requisição.
+YOUSERV faz uso de replicação para tornar o conteúdo acessível mesmo quando o provedor do conteúdo não está em atividade. A replicação do conteúdo de um usuário é feita entre os sites que esse usuário escolhe. Este acordo deve ser feito por ambas as partes, ou seja, quando um usuário escolhe um site para replicar seu conteúdo, esse site deve aceitar a requisição.
 
-A ferramenta faz uso de proxy para que os usuários que não estão acessíveis através da porta 80 possam disponibilizar seus conteúdo através deste proxy. O uso de muitos proxies para um site pode também ser uma técnica que possibilite balancear a carga quando um site está sobrecarregado de conexões.
+A ferramenta faz uso de \textit{proxy} para que os usuários que não estão acessíveis através da porta 80 possam disponibilizar seus conteúdo através deste \textit{proxy}. O uso de muitos proxies para um site pode também ser uma técnica que possibilite balancear a carga quando um site está sobrecarregado de conexões.
 
 O sistema é composto por 4 componentes:
 
 \begin{itemize}
- \item Browsers - Qualquer máquina rodando um navegador e acessando o conteúdo disponibilizado.
-`\item Nós - São as máquinas que devem instalar o software. São os peers da rede onde os conteúdos estão distribuídos.
+ \item \textit{Browsers} - Qualquer máquina rodando um navegador e acessando o conteúdo disponibilizado.
+`\item Nós - São as máquinas que devem instalar o software. São os \textit{peers} da rede onde os conteúdos estão distribuídos.
  \item DNS Dinâmico - Uma entidade centralizada que faz uso do protocolo DNS para resolução dos nomes das máquinas para os respectivos IPs.
- \item Coordenador - Entidade centralizada que provê: autenticação de usuários, mapeamento das replicações e dos proxies, detecção de firewall etc. Esta entidade é o ponto de entrada da rede.
+ \item Coordenador - Entidade centralizada que provê: autenticação de usuários, mapeamento das replicações e dos \textit{proxies}, detecção de \textit{firewall} etc. Esta entidade é o ponto de entrada da rede.
 \end{itemize}
 
 Os protocolos utilizados pela ferramenta são o HTTP e o DNS, fazendo com que não seja preciso o desenvolvimento de clientes específicos que falem os protocolos usados.
 
-A seguir são descritos os passos necessários para que um peer publique conteúdo:
+A seguir são descritos os passos necessários para que um \textit{peer} publique conteúdo:
 
 \begin{enumerate}
  \item Um usuário instala o sistema e faz login no Coordenador.
  \item O Coordenador marca o site como publicado.
- \item O Coordenador registra no DNS Dinâmico (DynDNS) o IP do peer e mapeia para o site do usuário.
+ \item O Coordenador registra no DNS Dinâmico (DynDNS) o IP do \textit{peer} e mapeia para o \textit{site} do usuário.
 \end{enumerate}
 
 Agora, os passos para que este conteúdo seja acessado:
 
 \begin{enumerate}
- \item Um usuário com um web browser tenta acessar um determinado site através de um nome.
- \item O DynDNS resolve o nome para o IP do peer dono do site.
- \item O browser faz uma requisição HTTP para o peer daquele site.
- \item O peer responde usando o protocolo HTTP.
+ \item Um usuário com um \textit{web browser} tenta acessar um determinado \textit{site} através de um nome.
+ \item O DynDNS resolve o nome para o IP do \textit{peer} dono do \textit{site}.
+ \item O \textit{browser} faz uma requisição HTTP para o \textit{peer} daquele site.
+ \item O \textit{peer} responde usando o protocolo HTTP.
 \end{enumerate}
 
-O projeto mostra-se maduro e a forma com que efetua a distribuição e acesso ao conteúdo assemelha-se à proposta do WebP2P. As técnicas utilizadas para efetuar proxing e replicação podem ser muito úteis nas decisões de nossa equipe.
+O projeto mostra-se maduro e a forma com que efetua a distribuição e acesso ao conteúdo assemelha-se à proposta do WebP2P. As técnicas utilizadas para efetuar \textit{proxing} e replicação podem ser muito úteis nas decisões de nossa equipe.
 
-No ano de 2002 existiam cerca de 3000 usuários do YOUSERV e 1200 peers espalhados pela web. O sistema estava no ar na rede interna da IBM havia nove meses. Estes números são indícios de que a ferramenta funciona de maneira satisfatória para o que se propõe. Não temos informações do estado atual da rede.
+No ano de 2002 existiam cerca de 3000 usuários do YOUSERV e 1200 \textit{peers} espalhados pela web. O sistema estava no ar na rede interna da IBM havia nove meses. Estes números são indícios de que a ferramenta funciona de maneira satisfatória para o que se propõe. Não temos informações do estado atual da rede.
 
 Um dos pontos a se investigar é se o YOUSERV funciona somente para computadores com acesso a determinada intranet.
 
 \subsubsection{Browsers-Aware Proxy Server}
 
-\cite{browsers-aware} apresenta uma proposta para diminuir o tráfego com servidores web na Internet através do uso de um proxy que indexa arquivos residentes em caches de browsers de clientes em uma rede. O trabalho também faz uma análise para concluir se a quantidade de dados compartilhados entre os clientes é significativa o bastante para se utilizar a técnica na construção de um cache Web com alta performance e que seja escalável.
+Xiao et. al, apresenta uma proposta para diminuir o tráfego com servidores web na Internet através do uso de um proxy que indexa arquivos residentes em caches de browsers de clientes em uma rede  \cite{browsers-aware}. O trabalho também faz uma análise para concluir se a quantidade de dados compartilhados entre os clientes é significativa o bastante para se utilizar a técnica na construção de um \textit{cache Web} com alto desempenho e que seja escalável.
 
-O procedimento executado para um cliente obter um arquivo na Web parte de uma simples consulta ao cache local do seu navegador. Caso não encontre, um proxy é acionado e seu cache consultado. Se ainda assim o arquivo não for encontrado, antes de requisitar o arquivo ao servidor web, o proxy consulta uma tabela de índices que armazena caminhos para localização de arquivos em caches de clientes. Se encontrar, dois caminhos podem ser seguidos: (i) o cliente que possui o arquivo o envia diretamente ao usuário que fez a requisição ou (ii) o proxy baixa o arquivo do cliente e envia ao usuário que o requisitou.
+O procedimento executado para um cliente obter um arquivo na \textit{Web} parte de uma simples consulta ao \textit{cache} local do seu navegador. Caso não encontre, um \textit{proxy} é acionado e seu cache consultado. Se ainda assim o arquivo não for encontrado, antes de requisitar o arquivo ao servidor \textit{web}, o \textit{proxy} consulta uma tabela de índices que armazena caminhos para localização de arquivos em \textit{caches} de clientes. Se encontrar, dois caminhos podem ser seguidos: (i) o cliente que possui o arquivo o envia diretamente ao usuário que fez a requisição ou (ii) o \textit{proxy} baixa o arquivo do cliente e envia ao usuário que o requisitou.
 
-Há uma preocupação com a integridade dos dados e o anonimato entre os clientes. A integridade dos dados é resolvida através do armazenamento do MD5 dos arquivos nos índices do proxy, de forma que sempre que um arquivo for modificado no cliente e um outro cliente o requisitar, a checagem no proxy irá acusar e notificar mudança de conteúdo. Já o anonimato é garantido através do procedimento indicado em (ii).
+Há uma preocupação com a integridade dos dados e o anonimato entre os clientes. A integridade dos dados é resolvida através do armazenamento do Message Digest 5 (MD5) dos arquivos nos índices do \textit{proxy}, de forma que sempre que um arquivo for modificado no cliente e um outro cliente o requisitar, a checagem no \textit{proxy} irá acusar e notificar mudança de conteúdo. Já o anonimato é garantido através do procedimento indicado em (ii).
 
-O artigo lido é datado de 2002 e ainda se encontrava em fase de desenvolvimento. Não sabemos o estado atual do mesmo. Porém a idéia e a arquitetura proposta são bastante interessantes por explorarem vários níveis de cache e obter uma otimização na busca por conteúdo web.
+O artigo lido é datado de 2002 e ainda se encontrava em fase de desenvolvimento. Não sabemos o estado atual do mesmo. Porém a idéia e a arquitetura proposta são bastante interessantes por explorarem vários níveis de cache e obter uma otimização na busca por conteúdo \textit{web}.
 
 Este trabalho levanta questões importantes de segurança e integridade. Tais questões também abrangem o WebP2P, mas estão fora do escopo da sua versão inicial.
 
@@ -125,7 +119,7 @@ Este trabalho levanta questões importantes de segurança e integridade. Tais ques
 
 \subsubsection{BitTorrent}
 
-O \textit{BitTorrent}\cite{bittorrent-cohen} é um protocolo criado para distribuir conteúdo em grande escala. Trata-se de uma alternativa distribuída ao modelo clássico de cliente-servidor, onde tínhamos apenas o servidor centralizado provendo o arquivo para um conjunto de usuários. Essa arquitetura centralizada acarreta em uma série de problemas de performance: além de a banda do servidor ser limitada e dividida entre os consumidores de arquivos, ele torna-se um ponto único de falhas.
+O \textit{BitTorrent}\cite{bittorrent-cohen} é um protocolo criado para distribuir conteúdo em grande escala. Trata-se de uma alternativa distribuída ao modelo clássico de cliente-servidor, onde tínhamos apenas o servidor centralizado provendo o arquivo para um conjunto de usuários. Essa arquitetura centralizada acarreta em uma série de problemas de desempenho: além de a banda do servidor ser limitada e dividida entre os consumidores de arquivos, ele se torna um ponto único de falhas.
 
 Uma das propostas do protocolo é justamente de utilizar a banda dos consumidores de conteúdo para ajudar no andamento das transferências. Os clientes começam a obter partes de arquivos de outros clientes, que passam a agir também como servidores. O comportamento colaborativo é reforçado por uma rede de favores, onde usuários que doam aumentam suas chances de receber mais.
 
@@ -133,50 +127,49 @@ Quanto mais consumidores interessados em um determinado arquivo disponível em um
 
 \subsubsection{NodeWiz}
 
-\textit{NodeWiz}\cite{nodewiz-sujoy} é um Grid Information Service (GIS) escalável que permite o processamento eficiente e distribuído de buscas multi-atributo por faixas de valores. Isso é feito agregando-se diretórios de serviços individuais em um sistema P2P. Um GIS pode ser visto com um diretório onde provedores de serviço publicam anúncios e onde usuários submetem buscas. No \textit{NodeWiz}, o GIS é implementado por um conjunto de nós (peers) que armazenam anúncios dos provedores de serviço e respondem às buscas dos clientes.
+\textit{NodeWiz}\cite{nodewiz-sujoy} é um \textit{Grid Information Service} (GIS) escalável que permite o processamento eficiente e distribuído de buscas multi-atributo por faixas de valores. Isso é feito agregando-se diretórios de serviços individuais em um sistema P2P. Um GIS pode ser visto com um diretório onde provedores de serviço publicam anúncios e onde usuários submetem buscas. No \textit{NodeWiz}, o GIS é implementado por um conjunto de nós (peers) que armazenam anúncios dos provedores de serviço e respondem às buscas dos clientes.
 
-Buscas no \textit{NodeWiz} podem especificar valores para qualquer número de atributos e, além disso, podem especificar faixas de valores para esses atributos. Como por exemplo, em um grid que provê CPU como serviço, um cliente pode especificar uma busca que requer uma máquina Linux com no mínimo 1024Mbytes de memória e baixa carga da seguinte maneira: $OS = linux \wedge Mem \leq 1024 \wedge Carga \leq 0.2$.
+Buscas no \textit{NodeWiz} podem especificar valores para qualquer número de atributos e, além disso, podem especificar faixas de valores para esses atributos. Como por exemplo, em uma grade que provê CPU como serviço, um cliente pode especificar uma busca que requer uma máquina Linux com no mínimo 1024Mbytes de memória e baixa carga da seguinte maneira: $OS = linux \wedge Mem \geq 1024 \wedge Carga \leq 0.2$.
 
-Na arquitetura do \textit{NodeWiz}, os peers são entidades do GIS e não devem ser confundidos com os nós servidores que são mantidos pelos provedores de serviço onde está hospedado o serviço da aplicação. Clientes e provedores de serviço são vistos como usuários do sistema. Quando um usuário quer fazer uma operação (buscas ou anúncios) submete essa operação para algum peer que ele conhece no sistema, esse peer, digamos recipiente, é o encarregado de rotear a mensagem ao peer apropriado, digamos alvo.
+Na arquitetura do \textit{NodeWiz}, os \textit{peers} são entidades do GIS e não devem ser confundidos com os nós servidores que são mantidos pelos provedores de serviço onde está hospedado o serviço da aplicação. Clientes e provedores de serviço são vistos como usuários do sistema. Quando um usuário quer fazer uma operação (buscas ou anúncios) submete essa operação para algum \textit{peer} que ele conhece no sistema, esse peer, digamos recipiente, é o encarregado de rotear a mensagem ao peer apropriado, digamos alvo.
 
 A estrutura do substrato P2P no \textit{NodeWiz} é baseada em árvore, mais especificamente em uma \textit{KD-Tree}\footnote{K-D Tree (K Dimensional Tree) é uma Árvore Binária de Pesquisa (BST) que permite um eficiente processamento de chaves multidimencionais. A Árvore K-D difere da Árvore Binária de Pesquisa (BST) onde cada nível da árvore K-D se ramifica baseada numa pesquisa de chave para o nível, chamado discriminador. \cite{kd-tree}}. Essa abordagem foi uma solução para que o GIS fosse escalável e suportasse buscas multi-atributo por faixas de valores.
 
-Peers que recebem muitas requisições tornam-se sobrecarregados. O \textit{NodeWiz} permite qualquer peer que esteja sobrecarregado, dividir essa carga com peers menos sobrecarregados e assim manter o balanceamento da mesma.
+\textit{Peers} que recebem muitas requisições tornam-se sobrecarregados. O \textit{NodeWiz} permite qualquer peer que esteja sobrecarregado, dividir essa carga com \textit{peers} menos sobrecarregados e assim manter o balanceamento da mesma.
 
 \textit{NodeWiz} se encaixa no escopo da nossa solução de maneira a prover um mecanismo de busca eficiente do conteúdo distribuído. Os peers do \textit{NodeWiz} seriam os servidores web da overlay formada pelo WebP2P. Estes conteriam informações de qual servidor detêm o conteúdo procurado.
 
 \subsubsection{Bamboo}
 
-Distributed Hash Tables têm um design descentralizado onde um conjunto de chaves (dentro de um espaço possível bem definido) devem ser mapeadas em cada nodo do sistema. Quando uma busca não pode ser resolvida localmente por um nodo a mensagem é roteada para outro nodo do sistema. Muitas implementações de DHTs possuem esquemas de roteamento eficientes, geralmente com uma complexidade em $O(log N)$ onde N é o número de nodos da rede, ou seja escalável com o crescimento de nodos.
+\textit{Distributed Hash Tables} têm um design descentralizado onde um conjunto de chaves (dentro de um espaço possível bem definido) devem ser mapeadas em cada nodo do sistema. Quando uma busca não pode ser resolvida localmente por um nodo a mensagem é roteada para outro nodo do sistema. Muitas implementações de DHTs possuem esquemas de roteamento eficientes, geralmente com uma complexidade em $O(log N)$ onde N é o número de nodos da rede, ou seja escalável com o crescimento de nodos.
 
-O \textit{OpenDHT}~\cite{bamboo:usenix04} é uma implementação que segue estes princípios, seu design é baseado em outra implementação de DHTs, \textit{Pastry}~\cite{past01}. A implementação de Pastry não funcionava. Quando o deploy era feito em ambientes reais, onde possivelmente existiam faltas não esperadas, o desempenho do \textit{Pastry} era pior do que o esperado. Em~\cite{bamboo:usenix04} é demonstrado que a causa dos problemas que acontecem em outras DHTs como \textit{Pastry}, \textit{CAN}~\cite{can:sigcomm01} e \textit{Chord}~\cite{chord:sigccomm01} é o Churn, característica comum em sistemas P2P.
+O \textit{OpenDHT}~\cite{bamboo:usenix04} é uma implementação que segue estes princípios, seu \textit{design} é baseado em outra implementação de DHTs, \textit{Pastry}~\cite{past01}. A implementação de Pastry não funcionava. Quando o \textit{deploy} era feito em ambientes reais, onde possivelmente existiam faltas não esperadas, o desempenho do \textit{Pastry} era pior do que o esperado. É demonstrado que a causa dos problemas que acontecem em outras DHTs como \textit{Pastry}, \textit{CAN}~\cite{can:sigcomm01} e \textit{Chord}~\cite{chord:sigccomm01} é o \textit{Churn} ~\cite{bamboo:usenix04}, característica comum em sistemas P2P.
 
 Basicamente o que acontece é que em redes congestionadas a entrada de nodos e a recuperação após a saída no sistema era feita de forma imediata e acarretava o aumento de uso de banda o que congestionava mais ainda a rede e acarretava falhas que gerariam mais tráfego para serem corrigidas entrando num círculo vicioso até um ponto em que praticamente não era mais possível usar a DHT.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=7cm]{img/graphChurn.png}
-\caption{Porcentagem de lookups que retornam algum resultado (possivelmente incorreto)}
-\label{fig:graph-churn}
-\end{figure}
-
-A alternativa usada na implementação do \textit{OpenDHT} foi um esquema de manutenção da rede de forma periódica, ou seja, o tráfico gerado na rede física para manter a rede overlay consistente (tanto para entrada de novos nodos como para recuperação após saída) é proporcional apenas ao número de nodos na rede, ou seja, diferente da implementação anterior de \textit{Pastry} o perigo de derrubar uma rede já congestionada por aumento de banda consumida pelos algoritmos de manutenção de consistência é bem menor.
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics[width=7cm]{img/graphChurn.png}
+% \caption{Porcentagem de lookups que retornam algum resultado (possivelmente incorreto)}
+% \label{fig:graph-churn}
+% \end{figure}
+A alternativa usada na implementação do \textit{OpenDHT} foi um esquema de manutenção da rede de forma periódica, ou seja, o tráfico gerado na rede física para manter a rede sobreposta consistente (tanto para entrada de novos nodos como para recuperação após saída) é proporcional apenas ao número de nodos na rede, ou seja, diferente da implementação anterior de \textit{Pastry} o perigo de derrubar uma rede já congestionada por aumento de banda consumida pelos algoritmos de manutenção de consistência é bem menor.
 
 O uso de uma DHT pode ser utilizada pelo WebP2P para a descoberta de conteúdo. Como foi demonstrado o Bamboo oferece uma solução estável e bem testada.
 
 \section{Tecnologias Estudadas}
 
-Para ser feita a implementação da nossa solução, uma pesquisa foi efetuada abrangendo diversas tecnologias de comunicação entre processos. Foram analisadas tecnologias das mais primitivas como Sockets até tecnologias mais sofisticadas que utilizam conceitos de chamada remota de procedimentos (RPC) \cite{rpc}. Abaixo descrevemos algumas dessas tecnologias como também suas vantagens e desvantagens.
+Para ser feita a implementação da nossa solução, uma pesquisa foi efetuada abrangendo diversas tecnologias de comunicação entre processos. Foram analisadas tecnologias das mais primitivas como \textit{Sockets} até tecnologias mais sofisticadas que utilizam conceitos de chamada remota de procedimentos (RPC) \cite{rpc}. Abaixo descrevemos algumas dessas tecnologias como também suas vantagens e desvantagens.
 
 \subsection{Sockets}
 
 Sockets e Datagramas são primitivas de comunicação TCP/UDP. Sockets podem ser vistos como a combinação de um endereço IP e uma porta, o sistema operacional se encarrega de associar os sockets aos processos. Os processos utilizam os sockets para se comunicarem com outros processos remotos. Sockets podem ser de dois tipos:
 \begin{enumerate}
-	\item Datagram Socket: Utilizado pelo protocolo UDP, envia mensagens contidas em Datagramas.
-	\item Stream Socket: Utilizado pelo protocolo TCP, são orientados a conexão, tratando o envio de mensagens como uma corrente de dados.
+	\item \textit{Datagram Socket}: Utilizado pelo protocolo UDP, envia mensagens contidas em Datagramas.
+	\item \textit{Stream Socket}: Utilizado pelo protocolo TCP, são orientados a conexão, tratando o envio de mensagens como uma corrente de dados.
 \end{enumerate}
 
-Socket é a tecnologia de comunicação mais primitiva dentre as estudadas. Para a utilização de Sockets o formato das mensagens enviadas precisa ser definido. Por este motivo, sua utilização pode ser complexa. A confiabilidade na entrega das mensagens pode ser comprometida com o uso de Datagram Sockets. A vantagem do uso de sockets é a obtenção de um maior controle das mensagens e o baixa sobrecarga que estes causam na aplicação.
+Socket é a tecnologia de comunicação mais primitiva dentre as estudadas. Para a utilização de \textit{Sockets} o formato das mensagens enviadas precisa ser definido. Por este motivo, sua utilização pode ser complexa. A confiabilidade na entrega das mensagens pode ser comprometida com o uso de Datagram Sockets. A vantagem do uso de sockets é a obtenção de um maior controle das mensagens e a baixa sobrecarga que este causam na aplicação.
 
 Sockets são a base de comunicação remota entre processos e são utilizados nas outras tecnologias estudadas, mas o seu uso é transparente ao usuário.
 
@@ -204,26 +197,26 @@ XML-RPC foi a tecnologia escolhida para ser utiliza no projeto. A tecnologia apa
 
 \subsection{JXTA}
 
-O JXTA (do inglês juxtapose) é uma especificação independente de linguagem e plataforma para comunicação entre dispositivos sem considerar sua localização física e tecnologia de rede no qual se encontram instalados. É uma plataforma livre, tendo sido criada pela Sun Microsystems em 2001.
+O JXTA (do inglês juxtapose) é uma especificação independente de linguagem e plataforma para comunicação entre dispositivos sem considerar sua localização física e tecnologia de rede no qual se encontram instalados. É uma plataforma livre, tendo sido criada pela Sun Microsystems \cite{sun} em 2001.
 
-A plataforma JXTA foi especificada na forma de uma arquitetura microkernel, ou seja, mesmo os serviços mais básicos estão implementados como módulos, restando para o kernel propriamente dito poucas funções, em geral, de comunicação entre os próprios módulos. Portanto, serviços básicos como a descoberta de peers ou de recursos na rede, comunicação entre dois ou mais peers, entre outros, são todos providos por módulos específicos.
+A plataforma JXTA foi especificada na forma de uma arquitetura \textit{microkernel}, ou seja, mesmo os serviços mais básicos estão implementados como módulos, restando para o \textit{kernel} propriamente dito poucas funções, em geral, de comunicação entre os próprios módulos. Portanto, serviços básicos como a descoberta de peers ou de recursos na rede, comunicação entre dois ou mais peers, entre outros, são todos providos por módulos específicos.
 
-Apesar de ser bastante interessante, o JXTA não foi escolhido como tecnologia de comunicação pelo fato de ser muito complexo. Não era necessário um framework do porte do JXTA para o WebP2P.
+Apesar de ser bastante interessante, o JXTA não foi escolhido como tecnologia de comunicação pelo fato de ser muito complexo. Não era necessário um \textit{framework} do porte do JXTA para o WebP2P.
 
 \subsubsection{Peer e Peer Group}
 
-Uma rede virtual JXTA consiste de alguns tipos de peers, sendo que um peer conectado a rede pode, em teoria, assumir qualquer um destes papéis descritos a seguir:
+Uma rede virtual JXTA consiste de alguns tipos de \textit{peers}, sendo que um peer conectado a rede pode, em teoria, assumir qualquer um destes papéis descritos a seguir:
 
 \begin{itemize}
-\item Edge Peers - São os peers simples, podendo tanto ser computadores desktop, conectados por uma LAN ou modem à Internet, e outros dispositivos computacionais.
+\item \textit{Edge Peers} - São os peers simples, podendo tanto ser computadores desktop, conectados por uma LAN ou modem à Internet, e outros dispositivos computacionais.
 
-\item Minimal Peers - Dispositivos com restrições de recursos, como celulares e palms, são chamados minimal peers e, geralmente, não possuem toda a funcionalidade disponível pela plataforma JXTA aos peers.
+\item \textit{Minimal Peers} - Dispositivos com restrições de recursos, como celulares e palms, são chamados minimal peers e, geralmente, não possuem toda a funcionalidade disponível pela plataforma JXTA aos peers.
 
-\item Proxy Peers - Peers instalados em computadores que realizam funções de proxy (para mensagens da plataforma JXTA) para minimal peers que não possuem endereço IP público; para peers que, mesmo possuindo IP, não podem realizar operações intensivas em termos de recursos computacionais; ou para peers localizados atrás de um firewall (neste caso, todas as requisições são transmitidas através de HTTP.)
+\item \textit{Proxy Peers} - \textit{Peers} instalados em computadores que realizam funções de \textit{proxy} (para mensagens da plataforma JXTA) para minimal \textit{peers} que não possuem endereço IP público; para \textit{peers} que, mesmo possuindo IP, não podem realizar operações intensivas em termos de recursos computacionais; ou para \textit{peers} localizados atrás de um \textit{firewall} (neste caso, todas as requisições são transmitidas através de HTTP.)
 
-\item Rendezvous Peers - Papel que costuma ser assumido por peers com maior poder computacional, com endereço IP fixo, que atuam como cache de informação (advertisements) sobre os peers conectados, facilitando a descoberta de recursos e provendo operações de resolução, tal como resolução de nome de peer para endereço IP.
+\item \textit{Rendezvous Peers} - Papel que costuma ser assumido por \textit{peers} com maior poder computacional, com endereço IP fixo, que atuam como \textit{cache} de informação (\textit{advertisements}) sobre os \textit{peers} conectados, facilitando a descoberta de recursos e provendo operações de resolução, tal como resolução de nome de peer para endereço IP.
 
-\item Relay Peers - Peers que adquirem informação de roteamento, bem como realizam passagem de mensagens para outros peers atrás de um firewall, um NAT ou, simplesmente, através de roteador. Normalmente, os papéis de Rendezvous e Relay são assumidos por um mesmo peer.
+\item \textit{Relay Peers} - \textit{Peers} que adquirem informação de roteamento, bem como realizam passagem de mensagens para outros \textit{peers} atrás de um \textit{firewall}, um NAT ou, simplesmente, através de roteador. Normalmente, os papéis de \textit{Rendezvous} e \textit{Relay} são assumidos por um mesmo peer.
 
 \end{itemize}
 
@@ -231,9 +224,9 @@ Peers se organizam em grupos (Peer Groups). A especificação não define o que ess
 
 \subsubsection{Advertisements}
 
-Todas as entidades da plataforma JXTA, incluindo peers, groups, pipes e serviços, são representadas usando advertisements; documentos XML bem formados contendo informação à respeito dessas entidades (um metadado). Todas as entidades possuem um ID único e universal, além de informações adicionais específicas. Quando um recurso é disponibilizado na rede, na verdade, é porque seu advertisement foi criado e publicado, ou seja, enviado para os demais peers on-line.
+Todas as entidades da plataforma JXTA, incluindo \textit{peers}, \textit{groups}, \textit{pipes} e serviços, são representadas usando \textit{advertisements}; documentos XML bem formados contendo informação à respeito dessas entidades (um metadado). Todas as entidades possuem um ID único e universal, além de informações adicionais específicas. Quando um recurso é disponibilizado na rede, na verdade, é porque seu advertisement foi criado e publicado, ou seja, enviado para os demais peers on-line.
 
-Um advertisement possui um tempo de vida (lifetime) que visa evitar descrever entidades que já não existem na rede; uma vez que advertisements podem ser armazenados nos caches locais dos peers. A cada inicialização de um peer, os advertisements expirados são eliminados.
+Um advertisement possui um tempo de vida (\textit{lifetime}) que visa evitar descrever entidades que já não existem na rede; uma vez que advertisements podem ser armazenados nos caches locais dos peers. A cada inicialização de um peer, os advertisements expirados são eliminados.
 
 Note que um advertisement só existe enquanto algum peer on-line armazenar uma cópia do mesmo. Logo, o recurso associado a este advertisement só estará disponível se este também estiver.
 
@@ -243,28 +236,28 @@ A plataforma JXTA define seis adverstisements básicos: Peer, Peergroup, Pipe (ca
 
 Peers transmitem mensagens apenas através de pipes, canais virtuais que são, em geral, unidirecionais e não-confiáveis, anexáveis a um ponto de entrada e outro de saída (end points). Pipes possuem IDs únicos, e não são associados a nenhum dispositivo de rede real, havendo um serviço de resolução de IDs para dispositivos de rede. Também estão disponíveis pipes bi-direcionais ou confiáveis, implementados sobre os pipes convencionais.
 
-Mensagens são documentos XML bem formados, que possuem roteamento baseado no ID da fonte, carregando em seu cabeçalho (header) a informação de roteamento necessária, tal como a seqüência de peers a ser percorrida.
+Mensagens são documentos XML bem formados, que possuem roteamento baseado no ID da fonte, carregando em seu cabeçalho (\textit{header}) a informação de roteamento necessária, tal como a seqüência de \textit{peers} a ser percorrida.
 
 \subsubsection{Protocolos}
 
-São sete os serviços básicos fornecidos pela plataforma JXTA e, a princípio, providos por qualquer peer group criado.
+São sete os serviços básicos fornecidos pela plataforma JXTA e, a princípio, providos por qualquer \textit{peer group} criado.
 
 \begin{enumerate}
  \item \textit{Peer Discovery Protocol}
 
-	Peers utilizam este protocolo para descobrir recursos do JXTA dinamicamente. Em uma rede IP, a implementação deste protocolo consiste de duas tarefas: o envio de uma mensagem multicast através da rede local do peer e de Rendezvous Peers para a descoberta de peers além da rede local. Este protocolo é implementado pelo Discovery Service.
+	\textit{Peers} utilizam este protocolo para descobrir recursos do JXTA dinamicamente. Em uma rede IP, a implementação deste protocolo consiste de duas tarefas: o envio de uma mensagem multicast através da rede local do \textit{peer} e de \textit{Rendezvous Peers} para a descoberta de peers além da rede local. Este protocolo é implementado pelo \textit{Discovery Service}.
 
-	Alguns peers presentes na rede podem não responder uma mensagem de consulta a um recurso, pois o protocolo é não-confiável. Felizmente, quanto mais peers existirem na rede, mais rápida será a descoberta dos mesmos, pois quando um peer responde a consulta, ele envia todos os advertisements relacionados a mesma que ele tenha descoberto anteriormente.
+	Alguns \textit{peers} presentes na rede podem não responder uma mensagem de consulta a um recurso, pois o protocolo é não-confiável. Felizmente, quanto mais \textit{peers} existirem na rede, mais rápida será a descoberta dos mesmos, pois quando um peer responde a consulta, ele envia todos os advertisements relacionados a mesma que ele tenha descoberto anteriormente.
 
-	Os Rendezvous Peers são usados para armazenar advertisements de recursos que ele conhece, incluindo peers. Alguns Rendezvous são providos pela própria Sun com o objetivo de permitir a localização de Rendezvous dinâmicos, ou seja, aqueles que assumem dinamicamente este papel. Cada grupo pode, inclusive, fixar uma taxa de Rendezvous presentes, caso sirva a algum propósito específico.
+	Os \textit{Rendezvous Peers} são usados para armazenar advertisements de recursos que ele conhece, incluindo peers. Alguns \textit{Rendezvous} são providos pela própria Sun com o objetivo de permitir a localização de \textit{Rendezvous} dinâmicos, ou seja, aqueles que assumem dinamicamente este papel. Cada grupo pode, inclusive, fixar uma taxa de Rendezvous presentes, caso sirva a algum propósito específico.
 
  \item \textit{Peer Resolver Protocol}
 
-	Permite o envio de uma consulta genérica a outros peers (unicast ou multicast). Este protocolo serve de infra-estrutura para outros protocolos do JXTA, tais como o Peer Information (PIP) e o Peer Discovery (PDP).
+	Permite o envio de uma consulta genérica a outros \textit{peers} (unicast ou \textit{multicast}). Este protocolo serve de infra-estrutura para outros protocolos do JXTA, tais como o \textit{Peer Information} (PIP) e o \textit{Peer Discovery} (PDP).
 
  \item \textit{Peer Information Protocol}
 
-	Coleta informações sobre o estado de um peer, sendo útil para accounting (para consumo de serviços providos), monitoramento de desempenho da rede, execução de algoritmos que baseados em informação global, entre outras aplicações. O PIP provê uma funcionalidade de polling para checar se um dado peer está on-line, bem como solicitar o seu advertisement.
+	Coleta informações sobre o estado de um peer, sendo útil para informações sobre consumo de serviços providos, monitoramento de desempenho da rede, execução de algoritmos que baseados em informação global, entre outras aplicações. O PIP provê uma funcionalidade de polling para checar se um dado peer está on-line, bem como solicitar o seu advertisement.
 
  \item \textit{Rendezvous Protocol}
 
@@ -276,11 +269,11 @@ São sete os serviços básicos fornecidos pela plataforma JXTA e, a princípio, pro
 
  \item \textit{Pipe Binding Protocol}
 
-	É o protocolo responsável por conectar um pipe a seus dois endpoints. Uma mensagem de consulta é enviada pela rede para encontrar um pipe endpoint já conectado ao pipe desejado.
+	É o protocolo responsável por conectar um \textit{pipe} a seus dois \textit{endpoints}. Uma mensagem de consulta é enviada pela rede para encontrar um \textit{pipe endpoint} já conectado ao \textit{pipe} desejado.
 
  \item \textit{Endpoint Routing Protocol}
 
-	Estabelece um conjunto de mensagens de busca usadas para encontrar informações de roteamento, antes da execução do envio de uma mensagem entre peers. As rotas encontradas são armazenadas localmente, e incluem informações sobre o Peer ID do remetente, Peer ID do destinatário, o time-to-live (TTL) e a seqüência ordenada de peers na rota.
+	Estabelece um conjunto de mensagens de busca usadas para encontrar informações de roteamento, antes da execução do envio de uma mensagem entre pares. As rotas encontradas são armazenadas localmente, e incluem informações sobre o \textit{Peer ID} do remetente, \textit{Peer ID} do destinatário, o \textit{time-to-live} (TTL) e a seqüência ordenada de peers na rota.
 
  \item \textit{Membership Protocol}
 
