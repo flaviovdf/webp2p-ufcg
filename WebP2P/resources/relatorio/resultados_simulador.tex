@@ -1,6 +1,6 @@
-O planejamento inicial da disciplina Projeto 1 tinha como uma das User Stories o desenvolvimento de um protótipo do WebP2P. Durante as reuniões com o professor Marco e discussões com membros do LSD, a equipe chegou a conclusão de que o desenvolvimento de um simulador seria mais vantajoso para a análise do sistema. Fazendo uso do simulador, a equipe foi capaz de analisar o comportamento do sistema em um ambiente configurável. Com isto, alguns fatores que não seriam facilmente controlados, como a largura de banda de um máquina, puderam ser manipulados.
+O planejamento inicial da disciplina Projeto 1 tinha como uma das \textit{User Stories} o desenvolvimento de um protótipo do WebP2P. Durante as reuniões com o professor Marco e discussões com membros do LSD, a equipe chegou a conclusão de que o desenvolvimento de um simulador seria mais vantajoso para a análise do sistema. Fazendo uso do simulador, a equipe foi capaz de analisar o comportamento do sistema em um ambiente configurável. Com isto, alguns fatores que não seriam facilmente controlados, como a largura de banda de um máquina, puderam ser manipulados.
 
-Fazendo uso dos conceitos adquiridos na disciplina Análise de Desempenho de Sistemas Discretos (ADSD), a arquitetura do simulador foi definida como sendo uma rede de filas. Cada entidade do sistema contém uma fila de requisições a serem processadas, estas requisições só são processadas após um certo intervalo de tempo que é determinado por um distribuição de probabilidade. A Figura~\ref{simulador-figura-top} demonstra uma visão de alto nível do ambiente simulado e representa a arquitetura do sistema descrita anteriormente. A figura mostra a overlay WebP2P sendo submetida a uma carga constante seguindo a distribuição de Pareto, o simulador foi feito de forma que esta carga submetida e a taxa de processamento das entidades fossem configuráveis. Requisições também são enviadas ao navegador sendo simulado, com base no tempo de respostas destas requisições é que a avaliação do sistema foi feita.
+Fazendo uso dos conceitos adquiridos na disciplina Análise de Desempenho de Sistemas Discretos (ADSD), a arquitetura do simulador foi definida como sendo uma rede de filas. Cada entidade do sistema contém uma fila de requisições a serem processadas. Estas requisições são processadas após um certo intervalo de tempo que é determinado por um distribuição de probabilidade. A Figura~\ref{simulador-figura-top} demonstra uma visão de alto nível do ambiente simulado e representa a arquitetura do sistema descrita anteriormente. A figura mostra a rede sobreposta WebP2P sendo submetida a uma carga constante seguindo a distribuição de Pareto, o simulador foi feito de forma que esta carga submetida e a taxa de processamento das entidades fossem configuráveis. Requisições também são enviadas ao navegador sendo simulado, com base no tempo de respostas destas requisições é que a avaliação do sistema foi feita.
 
 \begin{figure}[htbp]
 \centering
@@ -9,7 +9,7 @@ Fazendo uso dos conceitos adquiridos na disciplina Análise de Desempenho de Sist
 \label{simulador-figura-top}
 \end{figure}
 
-Como citado anteriormente cada entidade tem uma fila de requisições que serão processadas. Uma mensagem enviada de uma entidade para outra só aparece na fila receptora após um atraso definido pela camada de Abstração de Rede. O cálculo de atraso está definido na Equação~\ref{sim-delay}, esse considera a largura de banda do emissor ($BW_e$), a largura de banda do receptor ($BW_r$)e a quantidade de informação sendo enviada ($D$). Baseado em~\cite{oversim}, o simulador foi feito de forma com que este cálculo de atraso fosse de fácil substituição.
+Como citado anteriormente cada entidade tem uma fila de requisições que serão processadas. Uma mensagem enviada de uma entidade para outra só aparece na fila receptora após um atraso definido pela camada de Abstração de Rede. O cálculo de atraso está definido na Equação~\ref{sim-delay}, esse considera a largura de banda do emissor ($BW_e$), a largura de banda do receptor ($BW_r$)e a quantidade de informação sendo enviada ($D$). Baseado em trabalhos relacionados ~\cite{oversim}, o simulador foi feito de forma com que este cálculo de atraso fosse de fácil substituição.
 
 \begin{equation}
  delay = max(\frac{D}{BW_e}, \frac{D}{BW_r}) \label{sim-delay}
@@ -26,14 +26,13 @@ Os principais módulos que compõem o simulador são:
 
 \subsection{Validação}
 
-Para garantir que o simulador estava fazendo uma abstração correta da realidade, foi necessário fazer a validação do mesmo. Esta validação foi feita comparando os resultados obtidos no simulador com os resultados apresentados por outros autores. Para isto, o sim foi submetida ao servidor e o tempo de resposta médio medido.
+Para garantir que o simulador está fazendo uma abstração próxima da realidade, foi necessário fazer a validação do mesmo. Esta validação foi feita comparando os resultados obtidos no simulador com os resultados apresentados por outros autores.
 
-Mapeamos este cenário de simulação para um sistema M/M/1. Como foi dito anteriormente, a taxa de chegada ($\lambda$) e de processamento ($\beta$) de requisições no simulador seguem uma distribuição de probabilidade. Configuramos o simulador de maneira que estas distribuições fossem exponenciais.
+Mapeamos este cenário de simulação para um sistema de filas. Como foi dito anteriormente, a taxa de chegada ($\lambda$) e de processamento ($\beta$) de requisições no simulador seguem uma distribuição de probabilidade. Configuramos o simulador de maneira que estas distribuições fossem exponenciais.
 
-Este cenário de simulação é bem simples, mas trabalhos anteriores~\cite{stochastic-models, 995032, apache-bursty} usam e afirmam que uma  modelagem do tempo de resposta de servidores web seguindo filas M/M/1 é uma representação aceitável do comportamento real. O comportamento esperado é que com o aumento de $\lambda$, o tempo de resposta aumenta lentamente enquanto $\lambda < \beta$, após este ponto o aumento de $\lambda$ implica em um crescimento exponencial do número de requisições atendidas. 
+Este cenário de simulação é bem simples, mas trabalhos anteriores~\cite{stochastic-models, 995032, apache-bursty} usam e afirmam que uma  modelagem do tempo de resposta de servidores web seguindo filas é uma representação aceitável do comportamento real. O comportamento esperado é que com o aumento de $\lambda$, o tempo de resposta aumenta lentamente enquanto $\lambda < \beta$, após este ponto o aumento de $\lambda$ implica em um crescimento exponencial do número de requisições atendidas.
 
 Um dos primeiros trabalhos~\cite{model-performance} que modela o comportamento de um servidor web utiliza um sistemas de filas parecido com nosso ambiente simulado. Uma comparação do nosso tempo de resposta com o dos autores pode ser visto na Figura~\ref{simulador-validacao}.
-
 
 \begin{figure}[htbp]
 \centering
@@ -47,6 +46,6 @@ Um dos primeiros trabalhos~\cite{model-performance} que modela o comportamento d
 
 \subsection{Desafios}
 
-O principal desafio no desenvolvimento do simulador foi a validação do mesmo. A equipe fez um decisão errada de implementar um simulador sem se basear em trabalhos já existentes. Somente os conceitos da disciplina ADSD foram aplicados, estes serviram como base da implementação do simulador, mas como as versões iniciais do simulador eram muito simples não foi possível a fácil validação do mesmo. 
+O principal desafio no desenvolvimento do simulador foi a validação do mesmo. A equipe fez um decisão errada de implementar um simulador sem se basear em trabalhos já existentes. Aplicamos fundamentos ensinados na disciplina de Avaliação de Sistemas Discretos. Estes serviram como base da implementação do simulador, mas como as versões iniciais do simulador eram muito simples não foi possível validá-o facilmente.
 
 Outro problema com a validação foi que os integrantes inicialmente tentaram validar o simulador comparando o mesmo com trabalhos complexos \cite{stochastic-models}. Somente após uma nova revisão bibliográfica foi que encontramos modelagens parecidas com a do simulador e argumentos de que estas eram válidas.
